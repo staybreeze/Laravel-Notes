@@ -1,0 +1,152 @@
+// 根目錄（The Root Directory）
+Laravel 專案的根目錄包含了所有應用程式的核心結構與設定檔。
+
+// app 目錄（The App Directory）
+app 目錄包含應用程式的核心程式碼。幾乎所有的類別都會定義在這裡。
+
+// bootstrap 目錄（The Bootstrap Directory）
+bootstrap 目錄包含用來啟動框架的 app.php 檔案。這個目錄中也有一個 cache 子目錄，裡面儲存由框架自動產生、用於提升效能的快取檔案，例如路由快取與服務快取等。
+
+// config 目錄（The Config Directory）
+config 目錄包含應用程式所有的設定檔。
+
+// database 目錄（The Database Directory）
+database 目錄包含資料庫的遷移檔（migrations）、模型工廠（factories）和種子檔（seeds）。
+
+// public 目錄（The Public Directory）
+public 目錄包含 index.php 檔案，這是所有進入應用程式請求的入口點，同時也設定了自動載入機制。這個目錄還包含靜態資源，例如圖片、JavaScript 和 CSS 檔案。
+
+// resources 目錄（The Resources Directory）
+resources 目錄包含應用程式的視圖（views），以及尚未編譯的原始資源，如 SCSS、JavaScript 等前端資源。
+
+// routes 目錄（The Routes Directory）
+routes 目錄包含應用程式所有的路由定義。Laravel 預設包含兩個路由檔案：web.php 與 console.php。
+
+1. web.php 檔案包含被 Laravel 分類在 web middleware 群組中的路由，這些路由會啟用 session 狀態、CSRF 保護與 Cookie 加密。如果應用程式不是提供無狀態（stateless）的 RESTful API，那麼大部分的路由應該都會寫在 web.php 中。
+
+2. console.php 檔案可以定義所有基於閉包（closure）的 Artisan 指令。每個 closure 都會綁定到一個 command 實體，這樣可以更簡單地與指令的輸入／輸出方法互動。儘管這個檔案不定義 HTTP 路由，但它定義了進入應用程式的「主控台入口（console routes）」。可以在這裡排定定時任務。
+也可以選擇使用 Artisan 指令 install:api 和 install:broadcasting 來新增額外的路由檔案，如 API 路由（api.php）與廣播頻道（channels.php）。
+
+3. api.php 檔案用來定義無狀態的 API 路由，這些進入應用程式的請求通常使用 Token 驗證，且不會存取 session 狀態。
+
+4. channels.php 檔案則用來註冊應用程式所支援的所有事件廣播頻道。
+
+
+// storage 目錄（The Storage Directory）
+storage 目錄包含應用程式的 日誌（logs）、已編譯的 Blade 模板、基於檔案的 session、檔案快取 以及其他由 Laravel 框架產生的檔案。
+
+這個目錄進一步細分為：
+
+1. app：可用來儲存應用程式產生的任何檔案（例如：使用者上傳的資料）。
+
+2. framework：用來存放框架自動產生的檔案與快取。
+
+3. logs：儲存應用程式的日誌記錄檔案。
+
+// storage/app/public
+這個目錄可以用來儲存像是使用者頭像等，應公開存取的檔案。在 public/storage 建立一個符號連結（symlink）指向這個目錄。
+可使用以下指令建立連結：
+
+php artisan storage:link
+
+// tests 目錄（The Tests Directory）
+tests 目錄包含自動化測試檔案。Laravel 預設提供使用 Pest 或 PHPUnit 撰寫的單元測試與功能測試（feature tests）。
+
+每個測試類別的命名應以 Test 為結尾，例如：UserTest.php
+
+執行測試的方式包括：
+
+./vendor/bin/phpunit
+
+./vendor/bin/pest
+
+或使用 Laravel 提供的美觀格式輸出指令：
+
+php artisan test
+
+// vendor 目錄（The Vendor Directory）
+vendor 目錄是由 Composer 管理的，裡面包含所有第三方套件與依賴程式碼（dependencies）。
+
+// app 目錄補充說明（The App Directory - Extended）
+大部分應用程式的程式碼都位於 app 目錄下。預設情況下，這個目錄使用 App 命名空間，並透過 Composer 的 PSR-4 autoloading 標準自動載入。
+
+預設子目錄有：
+
+1. Http：包含 controller、middleware、request 等
+
+2. Models：資料模型
+
+3. Providers：服務提供者
+
+當使用 Artisan 的 make 系列指令產生類別時，會逐漸增加其他子目錄。例如：
+
+執行 php artisan make:command 會自動建立 app/Console 目錄（如果尚未存在）
+
+------------------------------------------------------------
+
+可以這樣理解 Console 與 Http：
+
+它們都作為「與核心應用互動的界面」
+
+1. Http 代表透過 瀏覽器 / API 請求（HTTP 協議） 進入應用
+
+2. Console 則代表透過 指令列介面 CLI（Artisan 指令） 進入應用
+
+兩者本身不包含業務邏輯，而是讓使用者可以以不同方式「向你的應用下達命令」。
+
+Console 目錄 → 包含所有 Artisan 指令
+
+Http 目錄 → 包含 controllers、middleware、form requests 等
+
+// Broadcasting 目錄（The Broadcasting Directory）
+Broadcasting 目錄包含應用程式中所有的廣播頻道類別。這些類別是使用 make:channel 指令產生的。此目錄預設不存在，會在建立第一個 channel 時自動產生。
+
+// Console 目錄（The Console Directory）
+Console 目錄包含應用程式中所有自定義的 Artisan 指令。這些指令可透過 make:command 指令產生。
+
+// Events 目錄（The Events Directory）
+這個目錄預設不存在，但在執行 event:generate 或 make:event 指令後會自動建立。
+Events 目錄存放事件類別（event classes）。事件可用於通知應用中的其他部分某個動作已發生，讓應用更具彈性與低耦合。
+
+// Exceptions 目錄（The Exceptions Directory）
+Exceptions 目錄包含應用程式中所有的自定義例外類別。這些類別可以透過 make:exception 指令產生。
+
+// Http 目錄（The Http Directory）
+Http 目錄包含 controllers（控制器）、middleware（中介層） 和 form requests（表單請求驗證）。幾乎所有處理進入請求的邏輯都會放在這裡。
+
+// Jobs 目錄（The Jobs Directory）
+這個目錄預設不存在，當執行 make:job 指令時會自動建立。
+Jobs 目錄用來存放可排入佇列的任務（queueable jobs）。這些任務可以非同步執行，也可以在請求過程中同步執行。
+同步任務有時也被稱為「指令（commands）」，因為它們是命令模式（Command Pattern）的一種實作。
+
+// Listeners 目錄（The Listeners Directory）
+這個目錄預設不存在，但在執行 event:generate 或 make:listener 指令時會自動建立。
+Listeners 目錄包含所有處理事件的事件監聽器類別（listeners）。每個監聽器會接收一個事件實體，並根據事件進行對應處理。
+例如，UserRegistered 事件可以由 SendWelcomeEmail 監聽器來處理。
+
+// Mail 目錄（The Mail Directory）
+這個目錄預設不存在，但在執行 make:mail 指令時會自動建立。
+Mail 目錄包含所有代表應用程式發送的郵件類別（mailables）。這些類別可封裝寄送電子郵件的所有邏輯，並透過 Mail::send 方法發送。
+
+// Models 目錄（The Models Directory）
+Models 目錄包含所有 Eloquent 資料模型類別。
+Laravel 的 Eloquent ORM 提供簡潔優雅的 Active Record 風格，可輕鬆與資料表互動。每個資料表會對應一個模型類別，可用來查詢與插入資料。
+
+// Notifications 目錄（The Notifications Directory）
+這個目錄預設不存在，會在執行 make:notification 指令時建立。
+Notifications 目錄包含所有應用程式中使用的即時通知類別，例如事件發生時的提示訊息。
+Laravel 的通知系統可透過 email、Slack、簡訊或儲存到資料庫等方式傳送訊息。
+
+// Policies 目錄（The Policies Directory）
+這個目錄預設不存在，會在執行 make:policy 指令時自動建立。
+Policies 目錄包含應用程式的授權策略類別。這些策略用來判斷使用者是否有權執行某項資源操作。
+
+// Providers 目錄（The Providers Directory）
+Providers 目錄包含應用程式所有的服務提供者（Service Providers）。
+這些類別用來綁定服務、註冊事件、初始化應用所需設定，是應用啟動的關鍵組件。
+
+在新的 Laravel 專案中，這個目錄預設已包含 AppServiceProvider。也可以根據需求新增自己的服務提供者。
+
+// Rules 目錄（The Rules Directory）
+這個目錄預設不存在，會在執行 make:rule 指令時建立。
+Rules 目錄用來存放自定義的 驗證規則類別（validation rules），可將複雜的驗證邏輯封裝在一個簡單的物件中。

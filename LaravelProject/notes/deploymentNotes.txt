@@ -1,0 +1,120 @@
+
+// 伺服器設定（Server Configuration）
+
+Nginx
+// Nginx伺服器設定檔
+// 確保所有請求都導向到 public/index.php
+// 勿將 index.php 搬到專案根目錄，否則會暴露敏感設定檔給公網。
+server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com;
+    root /srv/example.com/public;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+
+// FrankenPHP
+
+frankenphp php-server -r public/
+
+//  目錄權限（Directory Permissions）
+
+Laravel 必須能寫入以下目錄：
+
+bootstrap/cache
+storage
+
+請確保這些目錄對 Web 伺服器執行者（如 www-data） 有寫入權限。
+
+// 優化（Optimization）
+部署至正式環境時，應使用 Laravel 提供的快取指令來提升效能。
+
+// 快取全部：
+
+php artisan optimize
+
+// 清除快取（設定、路由、事件、視圖、預設快取驅動）：
+
+php artisan optimize:clear
+
+// 快取設定檔：
+
+php artisan config:cache
+
+使用 config:cache 後，.env 不會再被載入，要確保 env() 只出現在設定檔中。
+
+// 快取事件與監聽器：
+
+php artisan event:cache
+
+// 快取路由：
+
+php artisan route:cache
+適合路由數量多的大型應用，能有效加速 route 註冊。
+
+// 快取視圖（Blade 編譯結果）：
+
+php artisan view:cache
+預先編譯 Blade 模板，避免每次請求都重新編譯。
+
+// 除錯模式（Debug Mode）
+config/app.php 中的 debug 設定值會依據 .env 中的 APP_DEBUG 變數控制錯誤顯示程度。
+
+// 正式環境請務必設定：
+
+APP_DEBUG=false
+否則可能導致機敏資訊洩漏給使用者。
+
+// 健康檢查路由（Health Route）
+Laravel 內建 /up 健康檢查路由，用於服務監控（如 uptime 檢查、Kubernetes 等）。
+
+狀態正常 → 回傳 HTTP 200
+
+有錯誤 → 回傳 HTTP 500
+
+也可以修改此路由路徑：
+
+->withRouting(
+    web: __DIR__.'/../routes/web.php',
+    commands: __DIR__.'/../routes/console.php',
+    health: '/status', // 自訂 URI
+)
+此外，Laravel 會在此路由觸發 Illuminate\Foundation\Events\DiagnosingHealth 事件，你可透過監聽器檢查資料庫、快取等狀況，並在異常時擲出例外。
+
+// 使用 Laravel 官方部署平台
+// Laravel Cloud
+Laravel 官方的全託管部署平台，支援自動擴展，可部署 Laravel 應用、資料庫、快取、物件儲存等。
+適合想專注寫 Laravel，不想煩惱伺服器細節的開發者。
+
+// Laravel Forge
+Laravel 為 VPS 設計的伺服器管理工具，適合希望自己控管主機但不想自己安裝一堆服務的團隊。
+
+可用於 DigitalOcean、AWS、Linode 等主機
+安裝並管理：Nginx、MySQL、Redis、Memcached、Beanstalk 等工具
+

@@ -1,0 +1,98 @@
+// Laravel 專案的基本資訊
+
+php artisan about
+php artisan about --only=environment
+php artisan config:show database
+
+------------------------------------------------------------
+
+// 從環境變數 APP_DEBUG 取得設定值，若未設定則預設為 false。
+// 公式說明：env('變數名稱', 預設值)→ 取得指定環境變數的值，若不存在則回傳預設值。
+'debug' => env('APP_DEBUG', false),
+
+------------------------------------------------------------
+
+// 使用 App::environment() 來判斷應用程式目前運行的環境，並根據不同環境執行不同的程式邏輯。
+
+use Illuminate\Support\Facades\App;
+
+// 取得目前應用程式的執行環境（例如：local、production、staging 等）
+$environment = App::environment();
+
+// 判斷目前環境是否為 'local'
+if (App::environment('local')) {
+    // 如果是 local 環境，會執行這裡的程式碼
+}
+
+// 判斷目前環境是否為 'local' 或 'staging'
+if (App::environment(['local', 'staging'])) {
+    // 如果是 local 或 staging 環境，會執行這裡的程式碼
+}
+
+------------------------------------------------------------
+
+// 可用Config facade或global config函式，透過「點語法」從任何地方讀取設定值，並可指定預設值。
+use Illuminate\Support\Facades\Config;
+
+$value = Config::get('app.timezone');
+
+$value = config('app.timezone');
+
+// 如果設定值不存在，則取得預設值
+$value = config('app.timezone', 'Asia/Seoul');
+
+------------------------------------------------------------
+
+Config::set('app.timezone', 'America/Chicago');
+// 陣列
+config(['app.timezone' => 'America/Chicago']);
+
+------------------------------------------------------------
+
+// 如果取得的設定值型別不符預期，會拋出例外
+
+Config::string('config-key');
+Config::integer('config-key');
+Config::float('config-key');
+Config::boolean('config-key');
+Config::array('config-key');
+
+------------------------------------------------------------
+
+// 清除cache殘存的config
+php artisan config:clear
+
+------------------------------------------------------------
+
+// 生成Laravel專案建立時沒有預設的config檔
+php artisan config:publish
+php artisan config:publish --all
+
+------------------------------------------------------------
+
+// 啟用維護模式
+php artisan down
+
+// 透過設定Refresh HTTP header時間確認是否維護完畢
+php artisan down --refresh=15
+
+// 另一種可以確認維護是否結束的指令
+php artisan down --retry=60
+
+// 使用https://example.com/1630542a-246b-4b66-afa1-dd72a4c43515網址可以跳過維護頁面到指定頁面
+php artisan down --secret="1630542a-246b-4b66-afa1-dd72a4c43515"
+
+// 生成secret token
+php artisan down --with-secret
+
+// 避免部分用戶因laravel渲染出錯導致error，直接標定好要導往的頁面
+php artisan down --render="errors::503"
+
+// 維護期間導網址定頁面
+php artisan down --redirect=/
+
+// 維護結束，重啟網站
+php artisan up
+
+// 將所有設定檔快取成一個檔案，加速載入
+php artisan config:cache 
