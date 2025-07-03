@@ -273,5 +273,21 @@
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif
+
+        {{--
+            【Form Method Spoofing 表單方法偽裝】
+            HTML 原生 form 只支援 GET/POST，無法直接送出 PUT、PATCH、DELETE。
+            在 RESTful 架構下，更新（PUT/PATCH）、刪除（DELETE）常用於資源操作。
+            Laravel 提供方法偽裝機制：
+            - 表單 method 設 POST，再加一個隱藏欄位 name="_method"，Laravel 會自動解析並當成你指定的方法。
+            - 推薦用 Blade 的 @method 指令自動產生隱藏欄位。
+            - @csrf 產生 CSRF 防護欄位。
+            實際用途：讓你能用表單安全地送出 PUT、PATCH、DELETE 請求，配合 RESTful 路由。
+        --}}
+        <form action="/example" method="POST">
+            @method('PUT') {{-- 產生 <input type="hidden" name="_method" value="PUT"> --}}
+            @csrf         {{-- 產生 <input type="hidden" name="_token" ... > --}}
+            <!-- 其他表單欄位 -->
+        </form>
     </body>
 </html>
