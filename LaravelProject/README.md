@@ -59,3 +59,32 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 路由快取（Route Caching）
+
+---
+
+### 什麼是 Route Caching？
+Route Caching（路由快取）是 Laravel 的效能優化機制，會將所有路由預先編譯成快取檔案，讓每次請求時不必重新解析 routes 檔案，大幅提升效能。適用於 production（正式環境），開發時不建議開啟。
+
+### 如何產生路由快取？
+```bash
+php artisan route:cache
+```
+- 執行後，Laravel 會將所有路由編譯成 `bootstrap/cache/routes-v*.php`。
+- 之後每次請求都會直接載入這個快取檔案。
+
+### 注意事項
+- 只要有新增、修改、刪除任何路由，都要重新執行一次 `php artisan route:cache`。
+- 建議只在「部署到正式環境」時執行。
+- 若有 closure（匿名函式）路由，會導致快取失敗，請改用 controller。
+
+### 清除路由快取
+```bash
+php artisan route:clear
+```
+- 清除快取後，Laravel 會回到每次請求時動態解析 routes 檔案。
+
+---
+
+> 正式環境建議在部署腳本最後加上 `php artisan route:cache`，確保效能最佳化。
