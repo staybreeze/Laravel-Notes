@@ -122,5 +122,18 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perDay(1000)->by('day:' . $key),
             ];
         });
+
+        // -----------------------------------------------------------------------------
+        // Resource Route Verbs 本地化（資源路由動詞本地化）
+        // -----------------------------------------------------------------------------
+        // 預設 Route::resource 會用英文 create/edit 動詞
+        // 可用 resourceVerbs 方法自訂本地語系（如西班牙文、中文等）
+        // 建議在 boot 方法開頭設定
+        Route::resourceVerbs([
+            'create' => 'crear', // 例如西班牙文
+            'edit' => 'editar',
+        ]);
+        // 註冊後，資源路由會產生 /publicacion/crear、/publicacion/{publicaciones}/editar 等本地化 URI
+        // Laravel 的 pluralizer 支援多語系，可依需求調整
     }
 }

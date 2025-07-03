@@ -19,7 +19,7 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array <string, mixed>
      */
     public function definition(): array
     {
@@ -37,6 +37,8 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
+        // state() 是 Laravel factory 的一個方法，可以暫時改變產生資料的某些欄位值。
+        // 這裡用「箭頭函式」fn，意思是「每次產生資料時，把 email_verified_at 設成 null」。
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);

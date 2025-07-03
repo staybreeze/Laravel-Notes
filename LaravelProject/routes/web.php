@@ -523,3 +523,211 @@ Route::get('/profile', function () {
 //     Route::get('/settings', ...);
 // });
 // -----------------------------------------------------------------------------
+
+// ------------------------------------------------------------
+// UserController 路由註冊範例
+// ------------------------------------------------------------
+
+// 顯示指定使用者的個人資料
+// 當請求符合 /user/{id}，會自動呼叫 UserController 的 show 方法，並將 id 傳入
+Route::get('/user/{id}', [UserController::class, 'show']);
+
+// ------------------------------------------------------------
+// ProvisionServer 單一動作控制器路由註冊範例
+// ------------------------------------------------------------
+use App\Http\Controllers\ProvisionServer;
+
+// 佈建新伺服器的單一動作控制器
+// 當收到 POST /server 請求時，會自動呼叫 ProvisionServer 的 __invoke 方法
+Route::post('/server', ProvisionServer::class);
+
+// ------------------------------------------------------------
+// PhotoController 部分資源路由註冊範例（僅允許查詢）
+// ------------------------------------------------------------
+use App\Http\Controllers\PhotoController;
+
+// 僅允許查詢照片列表與單一照片（不允許新增、編輯、刪除等敏感操作）
+// 適用於前台公開查詢、API 查詢等情境，提升安全性與維護性
+// 可用 only 或 except 寫法，效果相同，擇一註冊即可
+Route::resource('photos', PhotoController::class)->only(['index', 'show']);
+// 或：排除不需要的 action（效果相同，僅供參考）
+Route::resource('photos', PhotoController::class)->except(['create', 'store', 'update', 'destroy']);
+// 實務建議：團隊可根據語意偏好選擇 only 或 except，並加上註解說明。
+
+/*
+// 一行註冊所有 CRUD 路由，對應 PhotoController 的 index/create/store/show/edit/update/destroy 方法
+// Route::resource('photos', PhotoController::class); // 僅供參考，實務上請依需求註冊
+
+// 進階用法（僅供參考）：
+// - 若需自訂找不到模型時的行為，可用 missing
+// Route::resource('photos', PhotoController::class)
+//     ->missing(function (Request $request) {
+//         return Redirect::route('photos.index');
+//     });
+// - 若需支援軟刪除模型，可用 withTrashed
+// Route::resource('photos', PhotoController::class)->withTrashed();
+*/
+
+// ------------------------------------------------------------
+// Nested Resource（巢狀資源路由）註冊範例
+// ------------------------------------------------------------
+use App\Http\Controllers\PhotoCommentController;
+
+// 巢狀資源路由：讓每張照片可有多個留言
+// 產生 /photos/{photo}/comments/{comment} 等巢狀路由，並自動對應 PhotoCommentController
+Route::resource('photos.comments', PhotoCommentController::class);
+
+// ------------------------------------------------------------
+// Scoping Resource Routes（巢狀資源路由自動綁定）註冊範例
+// ------------------------------------------------------------
+// 使用 scoped 方法可自動將子資源綁定到父資源，並可指定子資源用哪個欄位查詢
+// 例如：/photos/{photo}/comments/{comment:slug}，會自動用 $photo->comments()->where('slug', ...) 查詢
+Route::resource('photos.comments', PhotoCommentController::class)->scoped([
+    'comment' => 'slug',
+]);
+// 若不指定欄位，預設用主鍵 id
+Route::resource('photos.comments', PhotoCommentController::class)->scoped();
+// 進階：可指定子資源用哪個欄位查詢
+Route::resource('photos.comments', PhotoCommentController::class)->scoped(['comment' => 'slug']);
+
+// ------------------------------------------------------------
+// Shallow Nesting（淺層巢狀路由）註冊範例
+// ------------------------------------------------------------
+use App\Http\Controllers\CommentController;
+
+// 淺層巢狀：只有 index/create/store 需要父層 ID，show/edit/update/destroy 只用子資源 ID
+// 產生：
+// GET    /photos/{photo}/comments           -> index
+// GET    /photos/{photo}/comments/create    -> create
+// POST   /photos/{photo}/comments           -> store
+// GET    /comments/{comment}                -> show
+// GET    /comments/{comment}/edit           -> edit
+// PUT    /comments/{comment}                -> update
+// DELETE /comments/{comment}                -> destroy
+Route::resource('photos.comments', CommentController::class)->shallow();
+
+// ------------------------------------------------------------
+// Naming Resource Routes（自訂資源路由名稱）註冊範例
+// ------------------------------------------------------------
+// 可用 names 陣列自訂部分或全部資源路由名稱
+// 例如將 create action 的路由名稱改為 photos.build，其餘維持預設
+// 這是說：「把 /photos/create 這條路由的名稱，從預設的 photos.create 改成 photos.build。」
+// 網址還是 /photos/create，controller 方法還是 create()，都沒變。
+// 只有「路由名稱」變成 photos.build。
+// 你在 Blade 或 PHP 裡要產生網址時：
+// route('photos.build') // 會得到 /photos/create 這個網址
+// 你要重導到新增照片頁時：
+// return redirect()->route('photos.build');
+Route::resource('photos', PhotoController::class)->names([
+    'create' => 'photos.build',
+]);
+// 也可同時自訂多個 action 名稱
+// Route::resource('photos', PhotoController::class)->names([
+//     'index' => 'photos.list',
+//     'create' => 'photos.build',
+//     'show' => 'photos.detail',
+// ]);
+
+// ------------------------------------------------------------
+// Naming Resource Route Parameters（自訂資源路由參數名稱）註冊範例
+// ------------------------------------------------------------
+use App\Http\Controllers\AdminUserController;
+
+// 預設 Route::resource 會用資源名稱的單數型作為路由參數（如 users -> {user}）
+// 可用 parameters 方法自訂參數名稱，例如改為 {admin_user}
+Route::resource('users', AdminUserController::class)->parameters([
+    'users' => 'admin_user',
+]);
+// 產生的 show 路由為 /users/{admin_user}
+
+// ------------------------------------------------------------
+// Singleton Resource Controllers（單例資源控制器）註冊範例
+// ------------------------------------------------------------
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ThumbnailController;
+
+// 單例資源：僅有一個實例（如 profile、thumbnail），不需帶 id
+// 只產生 show/edit/update 路由，不產生 create/store/destroy
+// 用在「某個資源在系統裡永遠只有一個」的情境，
+// 也就是「單例資源」的 RESTful 路由。
+Route::singleton('profile', ProfileController::class);
+// 每個使用者只有一份個人資料，不會有多份 profile
+// singleton 路由（如 /profile）適合用在「每個使用者有一份自己的單例資源」的情境，
+// 但不是「全站只有一個」，而是「每個登入者各自有一個」。
+// 產生：
+// GET    /profile           -> show   profile.show
+// GET    /profile/edit      -> edit   profile.edit
+// PUT    /profile           -> update profile.update
+
+// 單例資源可巢狀於標準資源下
+Route::singleton('photos.thumbnail', ThumbnailController::class);
+// 每張照片只有一個縮圖（thumbnail）
+// 產生：
+// GET    /photos/{photo}/thumbnail           -> show   photos.thumbnail.show
+// GET    /photos/{photo}/thumbnail/edit      -> edit   photos.thumbnail.edit
+// PUT    /photos/{photo}/thumbnail           -> update photos.thumbnail.update
+
+// 若需支援 create/store/destroy，可用 creatable/destroyable
+// Route::singleton('photos.thumbnail', ThumbnailController::class)->creatable();
+// 產生：
+// GET    /photos/{photo}/thumbnail/create    -> create  photos.thumbnail.create
+// POST   /photos/{photo}/thumbnail           -> store   photos.thumbnail.store
+// GET    /photos/{photo}/thumbnail           -> show    photos.thumbnail.show
+// GET    /photos/{photo}/thumbnail/edit      -> edit    photos.thumbnail.edit
+// PUT    /photos/{photo}/thumbnail           -> update  photos.thumbnail.update
+// DELETE /photos/{photo}/thumbnail           -> destroy photos.thumbnail.destroy
+// 若只需 destroy 路由，可用 destroyable
+// Route::singleton('photos.thumbnail', ThumbnailController::class)->destroyable();
+
+// ------------------------------------------------------------
+// API Singleton Resources（API 單例資源控制器）註冊範例
+// ------------------------------------------------------------
+// apiSingleton：註冊 API 專用單例資源，不產生 create/edit 路由
+Route::apiSingleton('profile', ProfileController::class);
+// 產生：
+// GET    /profile           -> show   profile.show
+// PUT    /profile           -> update profile.update
+// DELETE /profile           -> destroy profile.destroy
+
+// 若需支援 store/destroy，可用 creatable
+Route::apiSingleton('photos.thumbnail', ProfileController::class)->creatable();
+// 產生：
+// POST   /photos/{photo}/thumbnail           -> store   photos.thumbnail.store
+// GET    /photos/{photo}/thumbnail           -> show    photos.thumbnail.show
+// PUT    /photos/{photo}/thumbnail           -> update  photos.thumbnail.update
+// DELETE /photos/{photo}/thumbnail           -> destroy photos.thumbnail.destroy
+
+// ------------------------------------------------------------
+// Middleware and Resource Controllers（資源路由與中介層）註冊範例
+// ------------------------------------------------------------
+// use App\Http\Controllers\UserController; // 已於檔案前方 use，這裡不需重複 use
+
+// 1. 套用 middleware 於所有資源路由
+Route::resource('users', UserController::class)
+    ->middleware(['auth', 'verified']);
+Route::singleton('profile', ProfileController::class)
+    ->middleware('auth');
+
+// 2. 只套用 middleware 於特定 action
+Route::resource('users', UserController::class)
+    ->middlewareFor('show', 'auth');
+Route::apiResource('users', UserController::class)
+    ->middlewareFor(['show', 'update'], 'auth');
+Route::resource('users', UserController::class)
+    ->middlewareFor('show', 'auth')
+    ->middlewareFor('update', 'auth');
+Route::apiResource('users', UserController::class)
+    ->middlewareFor(['show', 'update'], ['auth', 'verified']);
+// singleton/apiSingleton 也可用 middlewareFor
+Route::singleton('profile', ProfileController::class)
+    ->middlewareFor('show', 'auth');
+Route::apiSingleton('profile', ProfileController::class)
+    ->middlewareFor(['show', 'update'], 'auth');
+
+// 3. 排除特定 action 的 middleware
+Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
+    Route::resource('users', UserController::class)
+        ->withoutMiddlewareFor('index', ['auth', 'verified'])
+        ->withoutMiddlewareFor(['create', 'store'], 'verified')
+        ->withoutMiddlewareFor('destroy', 'subscribed');
+});
