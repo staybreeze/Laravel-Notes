@@ -497,3 +497,29 @@ Route::fallback(function () {
     // 或直接回傳訊息
     // return '找不到頁面', 404;
 });
+
+// -----------------------------------------------------------------------------
+// 路由指定 middleware 範例
+// -----------------------------------------------------------------------------
+// 1. 單一路由：->middleware(EnsureTokenIsValid::class)
+use App\Http\Middleware\EnsureTokenIsValid;
+Route::get('/profile', function () {
+    // ...
+})->middleware(EnsureTokenIsValid::class);
+
+// 2. 多個 middleware：->middleware([First::class, Second::class])
+// Route::get('/', function () {
+//     // ...
+// })->middleware([First::class, Second::class]);
+
+// 3. 用註冊名稱（建議）：->middleware('token.valid')
+// Route::get('/profile', function () {
+//     // ...
+// })->middleware('token.valid');
+
+// 4. 路由群組：Route::middleware(['auth', 'token.valid'])->group(...)
+// Route::middleware(['auth', 'token.valid'])->group(function () {
+//     Route::get('/dashboard', ...);
+//     Route::get('/settings', ...);
+// });
+// -----------------------------------------------------------------------------
