@@ -234,6 +234,100 @@ return Application::configure(basePath: dirname(__DIR__))
         // - terminate 適合處理非同步、延遲、資源釋放等工作，避免阻塞主流程。
         // - 請於 middleware 註解 terminate 用途與注意事項，方便團隊維護。
         // -----------------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------------
+        // CSRF（跨站請求偽造）攻擊原理、攻擊流程、Laravel 防護機制、SPA、排除 URI、測試環境、Header 實作與安全層級說明
+        // -----------------------------------------------------------------------------
+        // [攻擊原理]
+        // CSRF（Cross-site request forgery，跨站請求偽造）是一種攻擊手法，
+        // 攻擊者會誘使已認證的使用者在不知情下，對受害網站發送未授權的請求。
+        // 例如：
+        //   - 攻擊者網站建立一個指向 https://your-application.com/user/email 的 POST 表單，
+        //     並自動提交，讓受害者在登入狀態下誤觸，導致 email 被竄改。
+        //   - 攻擊流程：
+        //     <form action="https://your-application.com/user/email" method="POST">
+        //         <input type="email" value="malicious-email@example.com">
+        //     </form>
+        //     <script>document.forms[0].submit();</script>
+        //   - 只要受害者登入且有權限，攻擊就能成功。
+        //
+        // [Laravel 防護機制]
+        // - Laravel 會為每個使用者 session 自動產生一組 CSRF token，並存於 session 內，攻擊者無法取得。
+        // - 每次 session 重生時，token 也會更新。
+        // - ValidateCsrfToken middleware（預設在 web group）會自動驗證請求中的 token 是否與 session 相符。
+        // - 若不符則拋出 419 錯誤，防止偽造請求。
+        //
+        // [取得 token]
+        // - $token = $request->session()->token();
+        // - $token = csrf_token();
+        //
+        // [表單防護]
+        // - 所有 POST、PUT、PATCH、DELETE 表單都必須帶有 _token 欄位。
+        // - 建議使用 Blade @csrf 指令自動產生隱藏欄位：
+        //   <form method="POST" action="/profile">
+        //       @csrf
+        //       <!-- 等同於： -->
+        //       <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        //   </form>
+        //
+        // [Header 實作：X-CSRF-TOKEN & X-XSRF-TOKEN]
+        // - 除了檢查 POST 參數，ValidateCsrfToken middleware 也會檢查 X-CSRF-TOKEN header。
+        // - 可將 token 存在 <meta name="csrf-token" content="{{ csrf_token() }}">，
+        //   並用 jQuery 自動帶入 header：
+        //   $.ajaxSetup({
+        //       headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        //   });
+        // - Laravel 也會在回應自動帶一個加密的 XSRF-TOKEN cookie，
+        //   前端可將其值設為 X-XSRF-TOKEN header（如 Angular、Axios 會自動處理）。
+        // - resources/js/bootstrap.js 預設已引入 Axios，會自動帶 X-XSRF-TOKEN header。
+        //
+        // [CSRF token 傳遞方式與定義]
+        // - form 欄位 _token：
+        //   來源：Blade @csrf 指令或 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        //   定義：HTML 表單隱藏欄位，傳統表單送出時自動帶入，Laravel 後端會驗證此值。
+        //   適用：傳統 HTML form 提交（POST/PUT/PATCH/DELETE）。
+        // - X-CSRF-TOKEN header：
+        //   來源：前端 JS 讀取 <meta name="csrf-token" ...>，用 jQuery、fetch、Axios 等自動帶入 header。
+        //   定義：AJAX 請求時，將 CSRF token 放在 HTTP header，Laravel 後端會驗證此值。
+        //   適用：AJAX、SPA、前端框架自訂請求。
+        // - X-XSRF-TOKEN header：
+        //   來源：Laravel 會自動在回應帶一個加密的 XSRF-TOKEN cookie，前端（如 Angular、Axios）自動讀取 cookie 並帶入 header。
+        //   定義：HTTP header，內容為 XSRF-TOKEN cookie 的值，Laravel 後端會驗證此值。
+        //   適用：支援自動 XSRF cookie 的前端框架（如 Angular、Axios 預設行為）。
+        //
+        // [安全層級與原理比較]
+        // - 不論是 form 欄位 _token、X-CSRF-TOKEN header、X-XSRF-TOKEN header，
+        //   本質都是將唯一、不可預測、與 session 綁定的 token 傳給後端驗證，安全性一致。
+        // - header 型態不是「更高層級」，而是「更彈性、現代化」的實作，特別適合 AJAX/SPA。
+        // - Laravel 會自動支援所有方式，三者只要有一個正確即可通過。
+        // - header 傳遞可避免瀏覽器自動填表、方便全域設定，對現代前端開發更友善。
+        //
+        // [SPA & API 專案]
+        // - 若前端為 SPA（如 Vue/React）且後端為 Laravel API，請參考 Laravel Sanctum 文件，
+        //   以正確方式處理 API 認證與 CSRF 防護。
+        //   https://laravel.com/docs/sanctum
+        //
+        // [排除特定 URI 的 CSRF 防護]
+        // - 某些情境（如第三方 webhook、外部服務 callback）無法帶 CSRF token，
+        //   可將這些 URI 排除於 CSRF 防護之外：
+        //   $middleware->validateCsrfTokens(except: [
+        //       'stripe/*',
+        //       'http://example.com/foo/bar',
+        //       'http://example.com/foo/*',
+        //   ]);
+        // - 建議這類路由盡量不要放在 web middleware group，或明確排除。
+        // - 請謹慎排除，避免誤將敏感路由暴露於 CSRF 風險。
+        //
+        // [測試環境]
+        // - 執行自動化測試時，Laravel 會自動停用 CSRF middleware，方便測試流程。
+        //
+        // [維護建議]
+        // - 團隊所有表單務必統一使用 @csrf，避免遺漏。
+        // - 若自訂前端框架，請確保 _token 欄位正確帶入。
+        // - 若遇 419 錯誤，請檢查 session、token 是否正確傳遞。
+        // - 若有自訂 middleware group，請確認 CSRF 防護已正確加入。
+        // - 團隊註解應說明 CSRF 防護原理與常見攻擊手法，方便新手理解。
+        // -----------------------------------------------------------------------------
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
