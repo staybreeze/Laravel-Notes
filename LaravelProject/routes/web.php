@@ -731,3 +731,197 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         ->withoutMiddlewareFor(['create', 'store'], 'verified')
         ->withoutMiddlewareFor('destroy', 'subscribed');
 });
+
+// ------------------------------------------------------------
+// Request 依賴注入於 route closure 範例
+// ------------------------------------------------------------
+// 你可以在路由閉包（closure）型別提示 Request，Laravel 會自動注入目前請求物件
+// 範例：
+// use Illuminate\Http\Request;
+// Route::get('/', function (Request $request) {
+//     // 這裡的 $request 會自動注入
+//     $ip = $request->ip(); // 取得用戶 IP
+//     $name = $request->input('name'); // 取得查詢字串或表單欄位
+// });
+
+// ------------------------------------------------------------
+// Request 物件常用方法與範例（擴充）
+// ------------------------------------------------------------
+// 這些方法的來源
+// Illuminate\Http\Request 是 Laravel 內建的「請求物件」。
+// 它繼承自 Symfony 的 Request 類別，並加上 Laravel 自己的擴充功能。
+// 你在 controller 或 route closure 注入 Request $request，就可以直接用這些方法。
+// 取得目前請求路徑（不含網域、不含 query string）
+// $uri = $request->path(); // 例如 foo/bar
+//
+// 判斷路徑是否符合指定模式（* 為萬用字元）
+// if ($request->is('admin/*')) { /* ... */ }
+//
+// 判斷路由名稱是否符合指定模式（常用於命名路由）
+// if ($request->routeIs('admin.*')) { /* ... */ }
+//
+// 取得完整網址
+// $url = $request->url(); // 不含 query string
+// $fullUrl = $request->fullUrl(); // 含 query string
+//
+// 加上/移除查詢參數
+// $newUrl = $request->fullUrlWithQuery(['type' => 'phone']);
+// $newUrl2 = $request->fullUrlWithoutQuery(['type']);
+//
+// 取得主機資訊
+// $host = $request->host(); // 只回傳主機名稱
+// $httpHost = $request->httpHost(); // 主機＋port
+// $schemeAndHost = $request->schemeAndHttpHost(); // http(s)://主機
+//
+// 取得與判斷 HTTP 方法
+// $method = $request->method(); // 取得 HTTP 動詞
+// if ($request->isMethod('post')) { /* ... */ }
+
+// ------------------------------------------------------------
+// Request Header 操作範例路由
+// ------------------------------------------------------------
+// [Request Header 操作範例路由]
+// 這個路由會呼叫 UserController 的 demoHeaderExample 方法，
+// 示範如何取得 request header、判斷 header 是否存在、取得 Bearer Token。
+Route::get('/user/header-demo', [UserController::class, 'demoHeaderExample']); 
+
+// [Request IP 取得範例路由]
+// 這個路由會呼叫 UserController 的 showIpExample 方法，
+// 示範如何取得 request 的 ip() 與 ips()，並提醒安全性。
+Route::get('/user/ip-demo', [UserController::class, 'showIpExample']);
+
+// ------------------------------------------------------------
+// Content Negotiation（內容協商）範例路由
+// ------------------------------------------------------------
+// 這個路由會呼叫 UserController 的 contentNegotiationExample 方法，
+// 示範如何檢查 Accept header、判斷用戶端可接受的內容型態。
+Route::get('/user/content-demo', [UserController::class, 'contentNegotiationExample']);
+
+// ------------------------------------------------------------
+// PSR-7 Request 實作範例路由
+// ------------------------------------------------------------
+// 這個路由會呼叫 UserController 的 psr7Example 方法，
+// 示範如何 type-hint PSR-7 request 並取得資訊。
+Route::get('/user/psr7-demo', [UserController::class, 'psr7Example']);
+
+// ------------------------------------------------------------
+// Request Input 取得範例路由
+// ------------------------------------------------------------
+// 這個路由會呼叫 UserController 的 inputExample 方法，
+// 示範如何取得各種輸入資料（all、input、query、json、string、integer、boolean、array、date、enum...）。
+Route::match(['get', 'post'], '/user/input-demo', [UserController::class, 'inputExample']);
+
+// ------------------------------------------------------------
+// Request Input Presence 取得與合併範例路由
+// ------------------------------------------------------------
+// 這個路由會呼叫 UserController 的 inputPresenceExample 方法，
+// 示範如何判斷 input 是否存在、是否為空、合併 input 等。
+Route::match(['get', 'post'], '/user/input-presence-demo', [UserController::class, 'inputPresenceExample']);
+
+// ------------------------------------------------------------
+// Old Input（舊輸入）範例路由
+// ------------------------------------------------------------
+// POST：送出表單並將 input 存入 session，重導回表單頁
+Route::post('/user/old-input-demo', [UserController::class, 'oldInputExample']);
+// GET：顯示表單頁，並用 old() 回填欄位
+Route::get('/user/old-input-demo', [UserController::class, 'showOldInputForm']);
+
+// ------------------------------------------------------------
+// Cookies 取得範例路由
+// ------------------------------------------------------------
+// 這個路由會呼叫 UserController 的 cookieExample 方法，
+// 示範如何取得加密 cookie。
+Route::get('/user/cookie-demo', [UserController::class, 'cookieExample']);
+
+// ------------------------------------------------------------
+// Files（檔案上傳）範例路由
+// ------------------------------------------------------------
+// 這個路由會呼叫 UserController 的 fileExample 方法，
+// 示範如何取得、驗證、儲存上傳檔案。
+Route::post('/user/file-demo', [UserController::class, 'fileExample']);
+
+// ------------------------------------------------------------
+// HTTP Responses（HTTP 回應）範例路由
+// ------------------------------------------------------------
+// 回傳字串
+Route::get('/user/response-demo/string', [UserController::class, 'responseString']);
+// 回傳陣列（自動轉 JSON）
+Route::get('/user/response-demo/array', [UserController::class, 'responseArray']);
+// 回傳 Eloquent 模型（自動轉 JSON）
+Route::get('/user/response-demo/model/{user}', [UserController::class, 'responseModel']);
+// 回傳自訂 Response 實例，含 header
+Route::get('/user/response-demo/custom', [UserController::class, 'responseCustom']);
+
+// ------------------------------------------------------------
+// Attaching Cookies to Responses（回應附加 Cookie）範例路由
+// ------------------------------------------------------------
+// 直接附加 cookie 到回應
+Route::get('/user/response-cookie', [UserController::class, 'responseCookie']);
+// 用 Cookie facade queue cookie
+Route::get('/user/response-cookie-queue', [UserController::class, 'responseCookieQueue']);
+// 讓 cookie 立即過期
+Route::get('/user/response-cookie-expire', [UserController::class, 'responseCookieExpire']);
+
+// ------------------------------------------------------------
+// Redirects（重導）範例路由
+// ------------------------------------------------------------
+// 最簡單的重導
+Route::get('/user/redirect-demo/simple', [UserController::class, 'redirectSimple']);
+// 重導回前一頁（常用於表單驗證失敗）
+Route::post('/user/redirect-demo/back', [UserController::class, 'redirectBack']);
+// 重導到命名路由
+Route::get('/user/redirect-demo/route', [UserController::class, 'redirectRoute']);
+// 重導到命名路由並帶參數
+Route::get('/user/redirect-demo/route-param/{id}', [UserController::class, 'redirectRouteParam']);
+// 重導到命名路由並帶 Eloquent 模型
+Route::get('/user/redirect-demo/route-model/{user}', [UserController::class, 'redirectRouteModel']);
+
+// ------------------------------------------------------------
+// Redirecting to Controller Actions / External Domains 範例路由
+// ------------------------------------------------------------
+// 重導到控制器 action
+Route::get('/user/redirect-demo/action', [UserController::class, 'redirectAction']);
+// 重導到控制器 action 並帶參數
+Route::get('/user/redirect-demo/action-param', [UserController::class, 'redirectActionParam']);
+// 重導到外部網址
+Route::get('/user/redirect-demo/away', [UserController::class, 'redirectAway']);
+
+// ------------------------------------------------------------
+// Redirecting With Flashed Session Data 範例路由
+// ------------------------------------------------------------
+// 重導並閃存訊息
+Route::post('/user/redirect-flash', [UserController::class, 'redirectWithFlash']);
+// 重導並閃存 input
+Route::post('/user/redirect-flash-input', [UserController::class, 'redirectWithInput']);
+
+// ------------------------------------------------------------
+// Other Response Types（View/JSON/Download/File）範例路由
+// ------------------------------------------------------------
+// 回傳 view 並自訂 header
+Route::get('/user/response-view', [UserController::class, 'responseView']);
+// 回傳 JSON
+Route::get('/user/response-json', [UserController::class, 'responseJson']);
+// 回傳 JSONP
+Route::get('/user/response-jsonp', [UserController::class, 'responseJsonp']);
+// 檔案下載
+Route::get('/user/response-download', [UserController::class, 'responseDownload']);
+// 檔案直接顯示
+Route::get('/user/response-file', [UserController::class, 'responseFile']);
+
+// ------------------------------------------------------------
+// Streamed Responses（串流回應）範例路由
+// ------------------------------------------------------------
+// 一般串流回應
+Route::get('/user/response-stream', [UserController::class, 'responseStream']);
+// 串流 JSON 回應
+Route::get('/user/response-stream-json', [UserController::class, 'responseStreamJson']);
+// SSE 事件串流
+Route::get('/user/response-event-stream', [UserController::class, 'responseEventStream']);
+// 串流下載
+Route::get('/user/response-stream-download', [UserController::class, 'responseStreamDownload']);
+
+// ------------------------------------------------------------
+// Response Macro（自訂回應輔助方法）範例路由
+// ------------------------------------------------------------
+// 回傳大寫字串（自訂 macro）
+Route::get('/user/response-caps', [UserController::class, 'responseCaps']);
