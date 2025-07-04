@@ -172,5 +172,14 @@ class AppServiceProvider extends ServiceProvider
         // 每次渲染 admin.profile.blade.php 時，會自動注入 count 變數
         // -----------------------------------------------------------------------------
         View::composer('admin.profile', ProfileComposer::class);
+
+        // --------------------------------------------------------------------------
+        // [Blade HTML Entity 雙重編碼設定]
+        // 預設情況下，Blade（與 e() 函式）會對 HTML Entity 進行雙重編碼，
+        // 例如 &amp; 會被編碼成 &amp;amp;，以防止 XSS 攻擊。
+        // 若需關閉雙重編碼（如顯示已編碼內容），可呼叫 withoutDoubleEncoding。
+        // 注意：僅建議在確定資料來源安全時使用，避免 XSS 風險。
+        // --------------------------------------------------------------------------
+        \Illuminate\Support\Facades\Blade::withoutDoubleEncoding();
     }
 }
