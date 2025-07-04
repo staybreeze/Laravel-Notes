@@ -481,10 +481,6 @@ Route::middleware(['throttle:uploads-segment'])->group(function () {
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-Route::get('/greeting', function () {
-    return 'Hello World';
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -925,3 +921,37 @@ Route::get('/user/response-stream-download', [UserController::class, 'responseSt
 // ------------------------------------------------------------
 // 回傳大寫字串（自訂 macro）
 Route::get('/user/response-caps', [UserController::class, 'responseCaps']);
+
+// -----------------------------------------------------------------------------
+// [View 範例路由] 回傳 greeting 視圖，傳遞 name 變數
+// -----------------------------------------------------------------------------
+Route::get('/greeting', function () {
+    // 傳遞資料給 greeting.blade.php，$name 會被渲染
+    return view('greeting', ['name' => 'James']);
+});
+
+// -----------------------------------------------------------------------------
+// [View Facade 實作範例]
+// -----------------------------------------------------------------------------
+use Illuminate\Support\Facades\View;
+Route::get('/greeting-facade', function () {
+    return View::make('greeting', ['name' => 'James']);
+});
+
+// -----------------------------------------------------------------------------
+// [巢狀視圖範例] resources/views/admin/profile.blade.php
+// -----------------------------------------------------------------------------
+Route::get('/admin/profile', function () {
+    $data = ['name' => 'Admin'];
+    return view('admin.profile', $data);
+});
+
+// -----------------------------------------------------------------------------
+// [判斷視圖是否存在範例]
+// -----------------------------------------------------------------------------
+Route::get('/check-view', function () {
+    if (View::exists('admin.profile')) {
+        return 'admin.profile 視圖存在';
+    }
+    return 'admin.profile 視圖不存在';
+});

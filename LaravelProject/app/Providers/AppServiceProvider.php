@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use App\Models\User;
+use Illuminate\Support\Facades\View;
+use App\View\Composers\ProfileComposer;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -156,5 +158,19 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Response::macro('caps', function (string $value) {
             return \Illuminate\Support\Facades\Response::make(strtoupper($value));
         });
+
+        // -----------------------------------------------------------------------------
+        // [全域共用資料範例]
+        // 用 View::share('key', 'value') 讓所有視圖都能取得 key 變數
+        // 建議放在 boot() 方法內，讓所有 Blade 視圖都能直接用 $key
+        // -----------------------------------------------------------------------------
+        View::share('key', '這是全域共用變數');
+
+        // -----------------------------------------------------------------------------
+        // [View Composer 註冊範例]
+        // 將 ProfileComposer 綁定到 admin.profile 視圖
+        // 每次渲染 admin.profile.blade.php 時，會自動注入 count 變數
+        // -----------------------------------------------------------------------------
+        View::composer('admin.profile', ProfileComposer::class);
     }
 }
