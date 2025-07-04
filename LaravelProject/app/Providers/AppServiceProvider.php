@@ -135,5 +135,26 @@ class AppServiceProvider extends ServiceProvider
         ]);
         // 註冊後，資源路由會產生 /publicacion/crear、/publicacion/{publicaciones}/editar 等本地化 URI
         // Laravel 的 pluralizer 支援多語系，可依需求調整
+
+        // -----------------------------------------------------------------------------
+        // [Response Macro（自訂回應輔助方法）]
+        // -----------------------------------------------------------------------------
+        // 1. 定義：
+        //    - 你可以用 Response::macro 定義自訂回應方法，方便在多個路由/控制器重複使用。
+        //    - macro 名稱為第一參數，closure 為第二參數，closure 內可自訂回應邏輯。
+        //
+        // 2. 實作範例：
+        //    Response::macro('caps', function (string $value) {
+        //        return Response::make(strtoupper($value));
+        //    });
+        //    // 使用：return response()->caps('foo'); // 回傳 'FOO'
+        //
+        // 3. 方法說明：
+        //    - Response::macro('name', fn...)：註冊自訂回應方法。
+        //    - response()->macroName(...)：呼叫自訂 macro。
+        // -----------------------------------------------------------------------------
+        \Illuminate\Support\Facades\Response::macro('caps', function (string $value) {
+            return \Illuminate\Support\Facades\Response::make(strtoupper($value));
+        });
     }
 }

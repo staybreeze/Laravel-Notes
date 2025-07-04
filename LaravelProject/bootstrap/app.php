@@ -379,6 +379,86 @@ return Application::configure(basePath: dirname(__DIR__))
         // 2. 你去瀏覽攻擊者網站，攻擊者網站只能發送偽造請求，無法取得正確 token
         // 3. 受害網站驗證失敗，拒絕請求
         // -----------------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------------
+        // [Input Trimming and Normalization（輸入自動去空白與轉 null）]
+        // -----------------------------------------------------------------------------
+        // 1. 定義：
+        //    - Laravel 預設全域 middleware 會自動將所有輸入字串去除前後空白（TrimStrings），
+        //      並將空字串自動轉為 null（ConvertEmptyStringsToNull）。
+        //    - 這樣你在 controller 或 service 層就不用再手動處理這些常見的資料正規化問題。
+        //
+        // 2. 實作範例：
+        //    - 若要停用這兩個 middleware，可在 bootstrap/app.php 移除：
+        //      use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+        //      use Illuminate\Foundation\Http\Middleware\TrimStrings;
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->remove([
+        //              ConvertEmptyStringsToNull::class,
+        //              TrimStrings::class,
+        //          ]);
+        //      })
+        //    - 若只想針對部分路徑停用，可用 except 條件：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->convertEmptyStringsToNull(except: [
+        //              fn (Request $request) => $request->is('admin/*'),
+        //          ]);
+        //          $middleware->trimStrings(except: [
+        //              fn (Request $request) => $request->is('admin/*'),
+        //          ]);
+        //      })
+        //
+        // 3. 方法說明：
+        //    - TrimStrings：自動將所有輸入字串去除前後空白。
+        //    - ConvertEmptyStringsToNull：自動將所有空字串轉為 null。
+        //    - $middleware->remove([...])：移除指定 middleware。
+        //    - $middleware->convertEmptyStringsToNull(except: [...])：指定哪些請求不自動轉 null。
+        //    - $middleware->trimStrings(except: [...])：指定哪些請求不自動去空白。
+        // -----------------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------------
+        // [Configuring Trusted Proxies & Hosts（信任代理與主機設定）]
+        // -----------------------------------------------------------------------------
+        // 1. 定義：
+        //    - 當應用部署在負載平衡器（如 AWS ELB）或反向代理後方時，Laravel 需正確信任代理 IP 與 Host，
+        //      才能正確判斷 HTTPS、產生正確網址、避免 Host header 攻擊。
+        //    - TrustProxies middleware 可設定哪些代理 IP/網段可信任，TrustHosts middleware 可限制允許的 Host。
+        //
+        // 2. 實作範例：
+        //    - 信任特定代理：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->trustProxies(at: [
+        //              '192.168.1.1',
+        //              '10.0.0.0/8',
+        //          ]);
+        //      })
+        //    - 信任所有代理（雲端環境常用）：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->trustProxies(at: '*');
+        //      })
+        //    - 設定信任的 Proxy Headers（如 AWS ELB）：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->trustProxies(headers: Request::HEADER_X_FORWARDED_AWS_ELB);
+        //      })
+        //    - 限制允許的 Host：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->trustHosts(at: ['laravel.test']);
+        //      })
+        //    - 禁止自動信任子網域：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->trustHosts(at: ['laravel.test'], subdomains: false);
+        //      })
+        //    - 動態從 config 取得允許 Host：
+        //      ->withMiddleware(function (Middleware $middleware) {
+        //          $middleware->trustHosts(at: fn () => config('app.trusted_hosts'));
+        //      })
+        //
+        // 3. 方法說明：
+        //    - $middleware->trustProxies(at: [...])：設定信任的代理 IP 或網段。
+        //    - $middleware->trustProxies(headers: ...)：設定信任哪些 Proxy Headers。
+        //    - $middleware->trustHosts(at: [...])：設定允許的 Host。
+        //    - $middleware->trustHosts(subdomains: false)：是否自動信任子網域。
+        // -----------------------------------------------------------------------------
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
