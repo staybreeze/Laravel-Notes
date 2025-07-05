@@ -963,3 +963,18 @@ Route::get('/check-view', function () {
 Route::get('/blade-demo', function () {
     return view('blade-demo', ['name' => 'Blade 用戶']);
 });
+
+
+// =========================
+// 驗證教學範例路由
+// =========================
+use App\Http\Controllers\ValidationDemoController;
+Route::get('/demo/validation/create', [ValidationDemoController::class, 'create']);
+Route::post('/demo/validation', [ValidationDemoController::class, 'store']);
+
+// =========================
+// 手動 Validator 教學範例路由
+// =========================
+use App\Http\Controllers\ManualValidatorDemoController;
+Route::get('/demo/validator/create', [ManualValidatorDemoController::class, 'create']);
+Route::post('/demo/validator', [ManualValidatorDemoController::class, 'store']); 
