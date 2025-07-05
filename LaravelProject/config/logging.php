@@ -2,7 +2,7 @@
 
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Handler\SyslogHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
@@ -12,9 +12,9 @@ return [
     | Default Log Channel
     |--------------------------------------------------------------------------
     |
-    | This option defines the default log channel that is utilized to write
-    | messages to your logs. The value provided here should match one of
-    | the channels present in the list of "channels" configured below.
+    | This option defines the default log channel that gets used when writing
+    | messages to the logs. The name specified in this option should match
+    | one of the channels defined in the "channels" configuration array.
     |
     */
 
@@ -33,7 +33,7 @@ return [
 
     'deprecations' => [
         'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
-        'trace' => env('LOG_DEPRECATIONS_TRACE', false),
+        'trace' => false,
     ],
 
     /*
@@ -41,20 +41,20 @@ return [
     | Log Channels
     |--------------------------------------------------------------------------
     |
-    | Here you may configure the log channels for your application. Laravel
-    | utilizes the Monolog PHP logging library, which includes a variety
-    | of powerful log handlers and formatters that you're free to use.
+    | Here you may configure the log channels for your application. Out of
+    | the box, Laravel uses the Monolog PHP logging library. This gives
+    | you a variety of powerful log handlers / formatters to utilize.
     |
-    | Available drivers: "single", "daily", "slack", "syslog",
-    |                    "errorlog", "monolog", "custom", "stack"
+    | Available Drivers: "single", "daily", "slack", "syslog",
+    |                    "errorlog", "monolog",
+    |                    "custom", "stack", "null"
     |
     */
 
     'channels' => [
-
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', env('LOG_STACK', 'single')),
+            'channels' => ['single', 'daily'],
             'ignore_exceptions' => false,
         ],
 
@@ -69,7 +69,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'days' => env('LOG_DAILY_DAYS', 14),
+            'days' => 14,
             'replace_placeholders' => true,
         ],
 
@@ -85,7 +85,7 @@ return [
         'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
+            'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogHandler::class),
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
@@ -98,10 +98,13 @@ return [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
+            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'formatter_with' => [
+                'format' => '[%datetime%] %channel%.%level_name%: %message% %context% %extra%',
+            ],
             'handler_with' => [
                 'stream' => 'php://stderr',
             ],
-            'formatter' => env('LOG_STDERR_FORMATTER'),
             'processors' => [PsrLogMessageProcessor::class],
         ],
 
@@ -127,15 +130,75 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        // 自訂 orders log channel
-        'orders' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/orders.log'),
-            'level' => 'debug',
-            'days' => 30,
+        // 示範用的自訂 channels
+        'custom_single' => [
+            'driver' => 'single',
+            'tap' => [App\Logging\CustomizeFormatter::class],
+            'path' => storage_path('logs/custom.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
+        'orders' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/orders.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
+        'payments' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/payments.log'),
+            'level' => 'info',
+            'days' => 90,
+        ],
+
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => 'notice',
+            'days' => 365,
+        ],
+
+        'performance' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'handler_with' => [
+                'stream' => storage_path('logs/performance.log'),
+            ],
+            'formatter' => \Monolog\Formatter\JsonFormatter::class,
+            'level' => 'info',
+        ],
+
+        'web' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'handler_with' => [
+                'stream' => storage_path('logs/web.log'),
+            ],
+            'processors' => [
+                \Monolog\Processor\WebProcessor::class,
+                \Monolog\Processor\MemoryUsageProcessor::class,
+            ],
+            'level' => 'debug',
+        ],
+
+        'custom_logger' => [
+            'driver' => 'custom',
+            'via' => App\Logging\CreateCustomLogger::class,
+        ],
+
+        'stack_production' => [
+            'driver' => 'stack',
+            'channels' => ['daily', 'slack', 'papertrail'],
+            'ignore_exceptions' => true,
+        ],
+
+        'stack_development' => [
+            'driver' => 'stack',
+            'channels' => ['single', 'daily'],
+            'ignore_exceptions' => false,
+        ],
     ],
 
 ];

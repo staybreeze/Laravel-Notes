@@ -481,6 +481,7 @@ Route::middleware(['throttle:uploads-segment'])->group(function () {
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ErrorHandlingDemoController;
+use App\Http\Controllers\LoggingDemoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -998,4 +999,16 @@ Route::get('/test-404', function () {
 // 測試自訂錯誤頁面
 Route::get('/test-invalid-order', function () {
     throw new App\Exceptions\InvalidOrderException('測試無效訂單', 'TEST-123', 422);
+});
+
+// 日誌示範路由
+Route::prefix('logging-demo')->group(function () {
+    Route::get('/', [LoggingDemoController::class, 'index'])->name('logging.demo');
+    Route::get('/basic', [LoggingDemoController::class, 'basicLogging'])->name('logging.basic');
+    Route::get('/contextual', [LoggingDemoController::class, 'contextualLogging'])->name('logging.contextual');
+    Route::get('/channel', [LoggingDemoController::class, 'channelLogging'])->name('logging.channel');
+    Route::get('/exception', [LoggingDemoController::class, 'exceptionLogging'])->name('logging.exception');
+    Route::get('/performance', [LoggingDemoController::class, 'performanceLogging'])->name('logging.performance');
+    Route::get('/business', [LoggingDemoController::class, 'businessLogging'])->name('logging.business');
+    Route::get('/test-levels', [LoggingDemoController::class, 'testAllLevels'])->name('logging.test-levels');
 }); 
