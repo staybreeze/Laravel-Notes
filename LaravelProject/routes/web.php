@@ -480,6 +480,7 @@ Route::middleware(['throttle:uploads-segment'])->group(function () {
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ErrorHandlingDemoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -977,4 +978,24 @@ Route::post('/demo/validation', [ValidationDemoController::class, 'store']);
 // =========================
 use App\Http\Controllers\ManualValidatorDemoController;
 Route::get('/demo/validator/create', [ManualValidatorDemoController::class, 'create']);
-Route::post('/demo/validator', [ManualValidatorDemoController::class, 'store']); 
+Route::post('/demo/validator', [ManualValidatorDemoController::class, 'store']);
+
+// 錯誤處理示範路由
+Route::prefix('demo')->group(function () {
+    Route::get('/basic-error-handling', [ErrorHandlingDemoController::class, 'basicErrorHandling']);
+    Route::get('/custom-exception', [ErrorHandlingDemoController::class, 'customException']);
+    Route::get('/non-reportable', [ErrorHandlingDemoController::class, 'nonReportableException']);
+    Route::get('/abort', [ErrorHandlingDemoController::class, 'abortDemo']);
+    Route::get('/conditional', [ErrorHandlingDemoController::class, 'conditionalErrorHandling']);
+    Route::get('/best-practices', [ErrorHandlingDemoController::class, 'bestPractices']);
+});
+
+// 測試 404 錯誤頁面
+Route::get('/test-404', function () {
+    abort(404, '這是測試的 404 錯誤');
+});
+
+// 測試自訂錯誤頁面
+Route::get('/test-invalid-order', function () {
+    throw new App\Exceptions\InvalidOrderException('測試無效訂單', 'TEST-123', 422);
+}); 
