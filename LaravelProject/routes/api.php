@@ -21,3 +21,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::get('chat/{roomId}/messages', [App\Http\Controllers\ChatController::class, 'index']);
+Route::post('chat/{roomId}/messages', [App\Http\Controllers\ChatController::class, 'store']);
