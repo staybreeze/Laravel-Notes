@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\URL;
 use App\Models\User;
 use Illuminate\Support\Facades\View;
 use App\View\Composers\ProfileComposer;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Event;
+use App\Events\PodcastProcessed;
+use App\Events\PodcastPublished;
+use App\Listeners\SendPodcastNotification;
+use function Illuminate\Events\queueable;
+use Throwable;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -18,9 +27,6 @@ use App\View\Composers\ProfileComposer;
 // - 'uploads'：VIP 不限流，一般用戶每分鐘 100 次
 // 超過限制時自動回傳 429，可自訂回應內容
 // -----------------------------------------------------------------------------
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Route、URL、View、RateLimiter、Response、Blade 等設定
         Route::pattern('id', '[0-9]+'); // 全專案所有 {id} 參數都只允許數字
         URL::defaults(['locale' => 'zh-TW']); // 全專案所有 {locale} 參數預設為 zh-TW
 
