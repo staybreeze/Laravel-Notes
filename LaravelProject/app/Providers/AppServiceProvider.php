@@ -188,5 +188,32 @@ class AppServiceProvider extends ServiceProvider
         // 注意：僅建議在確定資料來源安全時使用，避免 XSS 風險。
         // --------------------------------------------------------------------------
         \Illuminate\Support\Facades\Blade::withoutDoubleEncoding();
+
+        // Event 相關註冊
+        // 1. 手動註冊事件與監聽器
+        Event::listen(
+            PodcastProcessed::class,
+            SendPodcastNotification::class,
+        );
+
+        // 2. Closure 監聽器
+        Event::listen(function (PodcastPublished $event) {
+            // 這裡直接寫處理邏輯
+        });
+
+        // 3. Queueable 匿名監聽器（非同步）
+        Event::listen(queueable(function (PodcastProcessed $event) {
+            // 非同步處理事件
+        })->onConnection('redis')->onQueue('podcasts')->delay(now()->addSeconds(10))
+          ->catch(function (PodcastProcessed $event, Throwable $e) {
+              // 監聽器失敗時的處理
+          })
+        );
+
+        // 4. Wildcard 萬用字元監聽器
+        Event::listen('event.*', function (string $eventName, array $data) {
+            // $eventName 事件名稱
+            // $data 事件資料
+        });
     }
-}
+} 
