@@ -17,6 +17,9 @@ use App\Events\PodcastPublished;
 use App\Listeners\SendPodcastNotification;
 use function Illuminate\Events\queueable;
 use Throwable;
+use App\Extensions\MongoStore;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Cache;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -35,7 +38,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // 註冊自訂 mongo 快取驅動
+        $this->app->booting(function () {
+            Cache::extend('mongo', function (Application $app) {
+                return Cache::repository(new MongoStore);
+            });
+        });
     }
 
     /**
