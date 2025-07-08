@@ -24,3 +24,16 @@ Route::get('/user', function (Request $request) {
 
 Route::get('chat/{roomId}/messages', [App\Http\Controllers\ChatController::class, 'index']);
 Route::post('chat/{roomId}/messages', [App\Http\Controllers\ChatController::class, 'store']);
+
+// ------------------------------------------------------------
+// 文章管理 RESTful API 路由
+// ------------------------------------------------------------
+use App\Http\Controllers\Api\ArticleController;
+
+// 使用 Route::apiResource 自動生成 API 專用的 RESTful 路由
+// 會產生：GET、POST、GET、PUT、DELETE 五個路由，不包含 create/edit（因為 API 不需要表單頁面）
+Route::apiResource('articles', ArticleController::class);
+
+// 額外的文章相關 API 路由
+Route::patch('articles/{id}/publish', [ArticleController::class, 'publish']);   // 發布文章
+Route::patch('articles/{id}/unpublish', [ArticleController::class, 'unpublish']); // 取消發布文章

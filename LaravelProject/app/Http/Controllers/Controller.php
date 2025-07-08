@@ -8,7 +8,7 @@ abstract class Controller
 {
     // 範例：在 controller 裡判斷目前請求是否為某條命名路由
     // use Illuminate\Http\Request;
-    public function show(Request $request)
+    public function showRouteInfo(Request $request)
     {
         if ($request->route()->named('profile')) {
             // 如果是 profile 這條路由，做特別處理
