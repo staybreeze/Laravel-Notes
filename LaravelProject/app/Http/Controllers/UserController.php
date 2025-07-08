@@ -87,7 +87,7 @@ class UserController extends Controller implements HasMiddleware
     /**
      * 顯示指定使用者的個人資料
      */
-    public function show(string $id): View
+    public function showUser(string $id): View
     {
         return view('user.profile', [
             'user' => User::findOrFail($id)
