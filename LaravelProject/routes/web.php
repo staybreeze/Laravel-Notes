@@ -1011,4 +1011,40 @@ Route::prefix('logging-demo')->group(function () {
     Route::get('/performance', [LoggingDemoController::class, 'performanceLogging'])->name('logging.performance');
     Route::get('/business', [LoggingDemoController::class, 'businessLogging'])->name('logging.business');
     Route::get('/test-levels', [LoggingDemoController::class, 'testAllLevels'])->name('logging.test-levels');
-}); 
+});
+
+// Cache 快取測試路由
+use App\Http\Controllers\CacheDemoController;
+
+Route::get('/cache/put', [CacheDemoController::class, 'putCache']); // 寫入快取
+Route::get('/cache/get', [CacheDemoController::class, 'getCache']); // 讀取快取
+Route::get('/cache/remember', [CacheDemoController::class, 'rememberUsers']); // remember 快取查詢
+Route::get('/cache/forget', [CacheDemoController::class, 'forgetCache']); // 刪除快取
+Route::get('/cache/tag', [CacheDemoController::class, 'tagCache']); // tags 快取
+Route::get('/cache/tag/flush', [CacheDemoController::class, 'flushTagCache']); // 清除 tag 快取 
+
+// Cache Usage 官方用法測試路由
+use App\Http\Controllers\CacheUsageDemoController;
+
+Route::get('/cache-usage/store', [CacheUsageDemoController::class, 'storeDemo']); // store 切換
+Route::get('/cache-usage/get', [CacheUsageDemoController::class, 'getDemo']); // get/closure
+Route::get('/cache-usage/has', [CacheUsageDemoController::class, 'hasDemo']); // has
+Route::get('/cache-usage/incdec', [CacheUsageDemoController::class, 'incDecDemo']); // increment/decrement/add
+Route::get('/cache-usage/remember', [CacheUsageDemoController::class, 'rememberDemo']); // remember/forever
+Route::get('/cache-usage/flexible', [CacheUsageDemoController::class, 'flexibleDemo']); // flexible
+Route::get('/cache-usage/pull', [CacheUsageDemoController::class, 'pullDemo']); // pull
+Route::get('/cache-usage/putaddforever', [CacheUsageDemoController::class, 'putAddForeverDemo']); // put/add/forever
+Route::get('/cache-usage/forgetflush', [CacheUsageDemoController::class, 'forgetFlushDemo']); // forget/flush
+Route::get('/cache-usage/memo', [CacheUsageDemoController::class, 'memoDemo']); // memo driver
+Route::get('/cache-usage/helper', [CacheUsageDemoController::class, 'helperDemo']); // cache 輔助函式 
+
+// Cache Lock 原子鎖測試路由
+use App\Http\Controllers\CacheLockDemoController;
+
+Route::get('/cache-lock/get', [CacheLockDemoController::class, 'getLock']); // 取得鎖
+Route::get('/cache-lock/get-closure', [CacheLockDemoController::class, 'getLockWithClosure']); // closure 自動釋放
+Route::get('/cache-lock/block', [CacheLockDemoController::class, 'blockLock']); // block 等待鎖
+Route::get('/cache-lock/block-closure', [CacheLockDemoController::class, 'blockLockWithClosure']); // block+closure
+Route::get('/cache-lock/get-owner', [CacheLockDemoController::class, 'getLockWithOwner']); // owner token 取得
+Route::post('/cache-lock/release-owner', [CacheLockDemoController::class, 'releaseLockWithOwner']); // owner token 釋放
+Route::get('/cache-lock/force-release', [CacheLockDemoController::class, 'forceReleaseLock']); // 強制釋放 

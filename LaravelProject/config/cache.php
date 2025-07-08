@@ -1,4 +1,6 @@
 <?php
+// 路徑：config/cache.php
+// Laravel 快取系統設定檔，支援多種 driver，含詳細中文註解
 
 use Illuminate\Support\Str;
 
@@ -15,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'database'),
+    'default' => env('CACHE_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,24 +34,26 @@ return [
     */
 
     'stores' => [
+        'apc' => [
+            'driver' => 'apc',
+        ],
 
         'array' => [
-            'driver' => 'array',
+            'driver' => 'array', // 只存在記憶體，適合測試
             'serialize' => false,
         ],
 
         'database' => [
-            'driver' => 'database',
-            'connection' => env('DB_CACHE_CONNECTION'),
-            'table' => env('DB_CACHE_TABLE', 'cache'),
-            'lock_connection' => env('DB_CACHE_LOCK_CONNECTION'),
-            'lock_table' => env('DB_CACHE_LOCK_TABLE'),
+            'driver' => 'database', // 用資料庫存快取
+            'table' => 'cache', // 資料表名稱
+            'connection' => null, // 預設連線
+            'lock_connection' => null,
+            // 'events' => true, // 可設 false 關閉事件提升效能
         ],
 
         'file' => [
-            'driver' => 'file',
+            'driver' => 'file', // 存於 storage/framework/cache/data
             'path' => storage_path('framework/cache/data'),
-            'lock_path' => storage_path('framework/cache/data'),
         ],
 
         'memcached' => [
@@ -73,8 +77,7 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => env('REDIS_CACHE_CONNECTION', 'cache'),
-            'lock_connection' => env('REDIS_CACHE_LOCK_CONNECTION', 'default'),
+            'connection' => 'cache', // 對應 config/database.php 的 redis 連線
         ],
 
         'dynamodb' => [
@@ -84,12 +87,17 @@ return [
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
             'table' => env('DYNAMODB_CACHE_TABLE', 'cache'),
             'endpoint' => env('DYNAMODB_ENDPOINT'),
+            'attributes' => [
+                'key' => 'key', // Partition key 名稱
+                'expires_at' => 'expires_at', // TTL 屬性
+            ],
         ],
 
-        'octane' => [
-            'driver' => 'octane',
+        // MongoDB 快取驅動（需自訂實作）
+        'mongo' => [
+            'driver' => 'mongo',
+            // 其他連線設定可自訂
         ],
-
     ],
 
     /*
@@ -103,6 +111,6 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
 ];
