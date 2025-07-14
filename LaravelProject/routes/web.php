@@ -482,6 +482,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ErrorHandlingDemoController;
 use App\Http\Controllers\LoggingDemoController;
+use App\Http\Controllers\HttpDemoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -1055,3 +1056,7 @@ use App\Http\Controllers\FileManagerController;
 Route::resource('files', FileManagerController::class);
 // 或只開放你需要的 action，例如：
 Route::resource('files', FileManagerController::class)->only(['index', 'store', 'show', 'destroy']);
+
+Route::get('/http/post', [HttpDemoController::class, 'getPost']);
+Route::post('/http/user', [HttpDemoController::class, 'createUser']);
+Route::get('/http/multi', [HttpDemoController::class, 'multiRequest']); 
