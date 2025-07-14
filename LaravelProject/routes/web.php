@@ -1048,3 +1048,10 @@ Route::get('/cache-lock/block-closure', [CacheLockDemoController::class, 'blockL
 Route::get('/cache-lock/get-owner', [CacheLockDemoController::class, 'getLockWithOwner']); // owner token 取得
 Route::post('/cache-lock/release-owner', [CacheLockDemoController::class, 'releaseLockWithOwner']); // owner token 釋放
 Route::get('/cache-lock/force-release', [CacheLockDemoController::class, 'forceReleaseLock']); // 強制釋放 
+
+use App\Http\Controllers\FileManagerController;
+
+// RESTful 路由（自動對應 index, store, show, update, destroy 等方法）
+Route::resource('files', FileManagerController::class);
+// 或只開放你需要的 action，例如：
+Route::resource('files', FileManagerController::class)->only(['index', 'store', 'show', 'destroy']);
