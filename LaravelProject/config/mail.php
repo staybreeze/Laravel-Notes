@@ -97,6 +97,12 @@ return [
             'retry_after' => 60,
         ],
 
+        'mailchimp' => [
+            'transport' => 'mailchimp', // 對應自訂 transport 名稱
+            'key' => env('MAILCHIMP_API_KEY'), // Mailchimp API 金鑰
+            // ...其他自訂參數
+        ],
+
     ],
 
     /*

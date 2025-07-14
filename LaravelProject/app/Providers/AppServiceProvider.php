@@ -20,6 +20,9 @@ use Throwable;
 use App\Extensions\MongoStore;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Cache;
+use App\Mail\MailchimpTransport;
+use Illuminate\Support\Facades\Mail;
+use MailchimpTransactional\ApiClient;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -222,6 +225,13 @@ class AppServiceProvider extends ServiceProvider
         Event::listen('event.*', function (string $eventName, array $data) {
             // $eventName 事件名稱
             // $data 事件資料
+        });
+
+        // 註冊自訂的 mailchimp transport
+        Mail::extend('mailchimp', function (array $config = []) {
+            $client = new ApiClient;
+            $client->setApiKey($config['key']);
+            return new MailchimpTransport($client);
         });
     }
 } 
