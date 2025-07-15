@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Cache;
 use App\Mail\MailchimpTransport;
 use Illuminate\Support\Facades\Mail;
 use MailchimpTransactional\ApiClient;
+use Illuminate\Support\Facades\Lang;
+use Money\Money;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -232,6 +234,11 @@ class AppServiceProvider extends ServiceProvider
             $client = new ApiClient;
             $client->setApiKey($config['key']);
             return new MailchimpTransport($client);
+        });
+
+        // 讓 Money 物件在語系字串中自動格式化為台幣
+        Lang::stringable(function (Money $money) {
+            return $money->formatTo('zh_TW');
         });
     }
 } 
