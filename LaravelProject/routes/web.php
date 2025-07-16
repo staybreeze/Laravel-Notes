@@ -483,6 +483,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ErrorHandlingDemoController;
 use App\Http\Controllers\LoggingDemoController;
 use App\Http\Controllers\HttpDemoController;
+// use App\Http\Controllers\AuthDemoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -1060,3 +1061,20 @@ Route::resource('files', FileManagerController::class)->only(['index', 'store', 
 Route::get('/http/post', [HttpDemoController::class, 'getPost']);
 Route::post('/http/user', [HttpDemoController::class, 'createUser']);
 Route::get('/http/multi', [HttpDemoController::class, 'multiRequest']); 
+
+use App\Http\Controllers\AuthDemoController;
+
+// 顯示登入表單
+Route::get('/login-demo', [AuthDemoController::class, 'showLogin'])->name('login.demo');
+// 處理登入
+Route::post('/login-demo', [AuthDemoController::class, 'login']);
+// 登出
+Route::post('/logout-demo', [AuthDemoController::class, 'logout'])->middleware('auth');
+// 取得目前用戶
+Route::get('/me-demo', [AuthDemoController::class, 'currentUser'])->middleware('auth');
+// 密碼確認
+Route::post('/confirm-password-demo', [AuthDemoController::class, 'confirmPassword'])->middleware('auth');
+// 登出其他裝置
+Route::post('/logout-other-devices-demo', [AuthDemoController::class, 'logoutOtherDevices'])->middleware(['auth', 'auth.session']);
+// HTTP Basic Auth 範例
+Route::get('/basic-auth-demo', [AuthDemoController::class, 'basicAuthDemo'])->middleware('auth.basic'); 
