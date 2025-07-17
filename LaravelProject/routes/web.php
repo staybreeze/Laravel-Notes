@@ -1124,3 +1124,20 @@ Route::get('/token/show', [DigitalOceanTokenController::class, 'show'])->middlew
 Route::post('/secret/store', [SecretController::class, 'store'])->middleware('auth');
 // 顯示解密資料
 Route::get('/secret/{id}', [SecretController::class, 'show'])->middleware('auth');
+
+// Laravel 密碼雜湊與驗證範例路由
+use App\Http\Controllers\PasswordController;
+
+// 顯示密碼雜湊/驗證表單
+Route::get('/password/demo', function () {
+    return view('auth.password');
+})->name('password.demo');
+
+// 更新密碼（會自動雜湊）
+Route::post('/password/update', [PasswordController::class, 'update'])->name('password.update');
+
+// 驗證明文密碼是否正確
+Route::post('/password/check', [PasswordController::class, 'check'])->name('password.check');
+
+// 檢查密碼是否需要重新雜湊
+Route::post('/password/needs-rehash', [PasswordController::class, 'needsRehash'])->name('password.needsRehash');
