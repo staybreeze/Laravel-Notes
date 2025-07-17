@@ -62,6 +62,10 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
+            // - 這裡的 model 設定為 env('AUTH_MODEL', App\Models\User::class)
+            //   代表會優先讀取 .env 檔案的 AUTH_MODEL 變數（可彈性切換 user model）
+            //   若 .env 沒有設定，預設就是 App\Models\User
+            // - 所以 $request->user()、auth()->user() 會自動回傳這個 model 的實例
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 

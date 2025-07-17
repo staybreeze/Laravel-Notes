@@ -100,4 +100,9 @@ class User extends Authenticatable implements MustVerifyEmail
         // 範例：假設管理員或 categoryId=1 可更新
         return $this->isAdmin() || $categoryId === 1;
     }
+
+    public function secrets()
+    {
+        return $this->hasMany(Secret::class);
+    }
 }

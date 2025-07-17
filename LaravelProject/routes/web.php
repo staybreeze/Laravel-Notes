@@ -1113,3 +1113,14 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// Laravel Encryption 加密範例路由 
+use App\Http\Controllers\DigitalOceanTokenController;
+use App\Http\Controllers\SecretController;
+
+Route::post('/token/store', [DigitalOceanTokenController::class, 'store'])->middleware('auth');
+Route::get('/token/show', [DigitalOceanTokenController::class, 'show'])->middleware('auth');
+// 儲存加密資料
+Route::post('/secret/store', [SecretController::class, 'store'])->middleware('auth');
+// 顯示解密資料
+Route::get('/secret/{id}', [SecretController::class, 'show'])->middleware('auth');
