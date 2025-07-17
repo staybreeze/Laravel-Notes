@@ -13,6 +13,9 @@ class DigitalOceanTokenController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // - fill() 是 Eloquent 的批量賦值方法，可一次性設定多個欄位的值（如 token）
+        // - fill() 只會改物件屬性，不會自動存進資料庫，需搭配 save() 才會寫入
+        // - 只有 $fillable 屬性中列出的欄位才能被 fill，防止批量賦值漏洞
         $request->user()->fill([
             'token' => Crypt::encryptString($request->token),
         ])->save();
