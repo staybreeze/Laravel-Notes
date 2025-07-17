@@ -983,6 +983,20 @@ use App\Http\Controllers\ManualValidatorDemoController;
 Route::get('/demo/validator/create', [ManualValidatorDemoController::class, 'create']);
 Route::post('/demo/validator', [ManualValidatorDemoController::class, 'store']);
 
+// =========================
+// 授權（Gate/Policy）教學範例路由
+// =========================
+use App\Http\Controllers\ArticleController;
+
+// Gate 範例：更新文章
+Route::put('/articles/{article}/update-gate', [ArticleController::class, 'updateWithGate']);
+// Policy 範例：更新文章
+Route::put('/articles/{article}/update-policy', [ArticleController::class, 'updateWithPolicy']);
+// 建立文章（Policy create 範例）
+Route::post('/articles', [ArticleController::class, 'store']);
+// 更新文章（Policy 支援額外參數）
+Route::put('/articles/{article}/update-extra', [ArticleController::class, 'updateWithExtra']);
+
 // 錯誤處理示範路由
 Route::prefix('demo')->group(function () {
     Route::get('/basic-error-handling', [ErrorHandlingDemoController::class, 'basicErrorHandling']);

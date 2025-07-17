@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Mail;
 use MailchimpTransactional\ApiClient;
 use Illuminate\Support\Facades\Lang;
 use Money\Money;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Article;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -240,5 +242,14 @@ class AppServiceProvider extends ServiceProvider
         Lang::stringable(function (Money $money) {
             return $money->formatTo('zh_TW');
         });
+
+        // Gate 定義範例：只有文章作者才能更新文章
+        Gate::define('update-article', function (User $user, Article $article) {
+            return $user->id === $article->user_id;
+        });
+
+        // Policy 註冊範例（假設有 ArticlePolicy）
+        // Gate::policy(Article::class, \App\Policies\ArticlePolicy::class);
+
     }
 } 

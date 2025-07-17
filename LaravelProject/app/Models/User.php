@@ -78,4 +78,21 @@ class User extends Authenticatable
     {
         return parent::resolveChildRouteBinding($childType, $value, $field);
     }
+
+    /**
+     * 判斷是否為管理員
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * 判斷是否可更新指定分類
+     */
+    public function canUpdateCategory(int $categoryId): bool
+    {
+        // 範例：假設管理員或 categoryId=1 可更新
+        return $this->isAdmin() || $categoryId === 1;
+    }
 }
