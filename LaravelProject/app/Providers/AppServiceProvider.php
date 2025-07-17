@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Lang;
 use Money\Money;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Article;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -251,5 +253,12 @@ class AppServiceProvider extends ServiceProvider
         // Policy 註冊範例（假設有 ArticlePolicy）
         // Gate::policy(Article::class, \App\Policies\ArticlePolicy::class);
 
+        // Email Verification 驗證信自訂內容 
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new MailMessage)
+                ->subject('驗證您的電子郵件地址')
+                ->line('請點擊下方按鈕完成驗證。')
+                ->action('驗證電子郵件', $url);
+        });
     }
 } 

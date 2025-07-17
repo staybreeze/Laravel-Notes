@@ -1092,3 +1092,24 @@ Route::post('/confirm-password-demo', [AuthDemoController::class, 'confirmPasswo
 Route::post('/logout-other-devices-demo', [AuthDemoController::class, 'logoutOtherDevices'])->middleware(['auth', 'auth.session']);
 // HTTP Basic Auth 範例
 Route::get('/basic-auth-demo', [AuthDemoController::class, 'basicAuthDemo'])->middleware('auth.basic'); 
+
+// Laravel Email Verification 驗證相關路由
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+
+// 顯示驗證提示頁
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+// 驗證處理路由
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// 重新寄送驗證信
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

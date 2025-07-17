@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// 這行引用 Laravel 內建的 User 基底類別
+// Authenticatable 提供認證、登入、密碼等功能
+// 通常 User 模型會繼承這個類別，才能用 Laravel 的 Auth 系統
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+// User 模型繼承 Authenticatable，代表這個模型具備 Laravel 認證、登入、密碼等功能
+// 這是 Laravel Auth 系統運作的基礎，讓 User 可以被當作可認證的使用者
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
