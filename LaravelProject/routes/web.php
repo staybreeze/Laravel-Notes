@@ -1141,3 +1141,15 @@ Route::post('/password/check', [PasswordController::class, 'check'])->name('pass
 
 // 檢查密碼是否需要重新雜湊
 Route::post('/password/needs-rehash', [PasswordController::class, 'needsRehash'])->name('password.needsRehash');
+
+// 密碼重設常見實作路由
+use App\Http\Controllers\Auth\PasswordResetController;
+
+// 顯示忘記密碼表單
+Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->middleware('guest')->name('password.request');
+// 處理忘記密碼表單送出（寄送重設信）
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->middleware('guest')->name('password.email');
+// 顯示密碼重設表單（帶 token）
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
+// 處理密碼重設表單送出
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('guest')->name('password.update');
