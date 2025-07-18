@@ -47,7 +47,7 @@ class PodcastProcessingException extends Exception implements ShouldntReport
             ], 503);
         }
 
-        return response()->view('errors.podcast-processing', [
+        return response()->view('errors.podcast_processing', [
             'podcastId' => $this->podcastId,
             'processingStep' => $this->processingStep,
             'message' => $this->getMessage(),

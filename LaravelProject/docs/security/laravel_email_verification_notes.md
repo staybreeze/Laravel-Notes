@@ -51,7 +51,7 @@ event(new Registered($user));
 ### (1) **顯示驗證提示頁**
 ```php
 Route::get('/email/verify', function () {
-    return view('auth.verify-email');
+    return view('auth.verify_email');
 })->middleware('auth')->name('verification.notice');
 // - name('verification.notice') 是這個路由的名稱，方便用 route('verification.notice') 取得網址
 // - Laravel 內建的 verified middleware 會自動檢查用戶 email 是否已驗證

@@ -56,7 +56,7 @@ class InvalidOrderException extends Exception
             ], 422);
         }
 
-        return response()->view('errors.invalid-order', [
+        return response()->view('errors.invalid_order', [
             'orderId' => $this->orderId,
             'message' => $this->getMessage(),
         ], 422);

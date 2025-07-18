@@ -652,7 +652,7 @@ class UserController extends Controller implements HasMiddleware
         // 取得 old input（可用於自訂邏輯，通常 Blade 模板直接用 old('欄位') 較方便）
         $oldUsername = $request->old('username');
         // 回傳表單頁面，欄位會自動用 old() 回填
-        return view('user.old-input-demo', [
+        return view('user.old_input_demo', [
             'oldUsername' => $oldUsername,
         ]);
     }

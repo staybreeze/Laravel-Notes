@@ -584,7 +584,7 @@ if (Auth::attempt($credentials, $remember = false)) {
      // 顯示密碼確認表單的路由
      Route::get('/confirm-password', function () {
          // 回傳密碼確認的 Blade 視圖（auth/confirm-password.blade.php）
-         return view('auth.confirm-password');
+         return view('auth.confirm_password');
      })->middleware('auth')->name('password.confirm');
      // middleware('auth')：只有已登入用戶才能進入
      // name('password.confirm')：方便在其他地方用 route('password.confirm') 產生網址

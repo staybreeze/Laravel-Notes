@@ -22,7 +22,7 @@ Laravel 內建**密碼重設服務**，能**自動**寄送重設連結並安全�
 // 定義「忘記密碼」頁面的 GET 路由
 Route::get('/forgot-password', function () {
     // 回傳 resources/views/auth/forgot-password.blade.php 視圖，顯示忘記密碼表單
-    return view('auth.forgot-password');
+    return view('auth.forgot_password');
 })
 // 只允許未登入（訪客）使用此路由，已登入者會被導向其他頁面
 ->middleware('guest')
@@ -61,7 +61,7 @@ Route::post('/forgot-password', function (Request $request) {
 
 ```php
 Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', ['token' => $token]);
+    return view('auth.reset_password', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
 ```
 - 表單需有 email、password、password_confirmation、token 欄位。

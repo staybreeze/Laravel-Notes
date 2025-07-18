@@ -441,7 +441,7 @@
     use Illuminate\Http\Request;
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (InvalidOrderException $e, Request $request) {
-            return response()->view('errors.invalid-order', status: 500);
+            return response()->view('errors.invalid_order', status: 500);
         });
     })
 

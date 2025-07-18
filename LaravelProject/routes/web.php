@@ -965,7 +965,7 @@ Route::get('/check-view', function () {
 // 傳遞 name 變數給 Blade 視圖，供前端顯示與測試
 // --------------------------------------------------------------------------
 Route::get('/blade-demo', function () {
-    return view('blade-demo', ['name' => 'Blade 用戶']);
+    return view('blade_demo', ['name' => 'Blade 用戶']);
 });
 
 
@@ -1099,7 +1099,7 @@ use Illuminate\Http\Request;
 
 // 顯示驗證提示頁
 Route::get('/email/verify', function () {
-    return view('auth.verify-email');
+    return view('auth.verify_email');
 })->middleware('auth')->name('verification.notice');
 
 // 驗證處理路由
