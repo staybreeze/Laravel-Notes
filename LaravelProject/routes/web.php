@@ -1187,3 +1187,11 @@ Route::get('/psr', function (ContainerInterface $container) {
     $userService = $container->get(UserService::class);
     return $userService->notifyUser('psr@example.com', 'PSR-11 測試');
 });
+
+// DemoService 路由範例
+use App\Services\DemoService;
+
+Route::get('/demo', function (DemoService $demoService) {
+    // 透過依賴注入自動取得 DemoService 實例
+    return $demoService->hello();
+});

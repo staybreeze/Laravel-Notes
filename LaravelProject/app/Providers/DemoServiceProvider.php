@@ -31,6 +31,13 @@ class DemoServiceProvider extends ServiceProvider
             ->give(function ($app) {
                 return new Transistor(new PodcastParser());
             });
+
+        // DemoService 綁定範例（
+        if (!class_exists('App\\Services\\DemoService')) return;
+        $this->app->singleton(\App\Services\DemoService::class, function ($app) {
+            // 這裡可以注入依賴
+            return new \App\Services\DemoService();
+        });
     }
 
     public function boot()

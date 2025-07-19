@@ -29,6 +29,11 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Article;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Services\ServerProvider;
+use App\Services\DigitalOceanServerProvider;
+use App\Services\ServerToolsProvider;
+use App\Services\DowntimeNotifier;
+use App\Services\PingdomDowntimeNotifier;
 
 // -----------------------------------------------------------------------------
 // Rate Limiting（速率限制）
@@ -42,6 +47,16 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
+    // 一般綁定：每次解析都會產生新實例
+    public $bindings = [
+        ServerProvider::class => DigitalOceanServerProvider::class,
+    ];
+    // 單例綁定：每次解析都回傳同一個實例
+    public $singletons = [
+        DowntimeNotifier::class => PingdomDowntimeNotifier::class,
+        ServerProvider::class => ServerToolsProvider::class,
+    ];
+
     /**
      * Register any application services.
      */
@@ -52,6 +67,12 @@ class AppServiceProvider extends ServiceProvider
             Cache::extend('mongo', function (Application $app) {
                 return Cache::repository(new MongoStore);
             });
+        });
+        // DemoService 綁定範例
+        if (!class_exists('App\\Services\\DemoService')) return;
+        $this->app->singleton(\App\Services\DemoService::class, function ($app) {
+            // 這裡可以注入依賴
+            return new \App\Services\DemoService();
         });
     }
 
