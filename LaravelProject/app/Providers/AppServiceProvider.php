@@ -35,16 +35,6 @@ use App\Services\ServerToolsProvider;
 use App\Services\DowntimeNotifier;
 use App\Services\PingdomDowntimeNotifier;
 
-// -----------------------------------------------------------------------------
-// Rate Limiting（速率限制）
-// -----------------------------------------------------------------------------
-// 定義全域與 API 速率限制器
-// - 'api'：每分鐘 60 次，依 user id 或 IP 區分
-// - 'global'：每分鐘 1000 次，所有請求共用
-// - 'uploads'：VIP 不限流，一般用戶每分鐘 100 次
-// 超過限制時自動回傳 429，可自訂回應內容
-// -----------------------------------------------------------------------------
-
 class AppServiceProvider extends ServiceProvider
 {
     // 一般綁定：每次解析都會產生新實例
