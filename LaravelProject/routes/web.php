@@ -1153,3 +1153,37 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
 // 處理密碼重設表單送出
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('guest')->name('password.update');
+
+use Illuminate\Support\Facades\App;
+use App\Services\UserService;
+use App\Services\Mailer;
+use App\Contracts\EventPusher;
+use App\Http\Controllers\MusicController;
+use Psr\Container\ContainerInterface;
+use App\Http\Controllers\DemoController;
+
+// 手動解析服務
+Route::get('/manual', function () {
+    $mailer = app(Mailer::class);
+    return $mailer->send('test@example.com', 'Hello!');
+});
+
+// 介面綁定實作
+Route::get('/event', function () {
+    $pusher = app(EventPusher::class);
+    return $pusher->push('TestEvent');
+});
+
+// Controller 自動注入
+Route::get('/music', [MusicController::class, 'play']);
+
+// Contextual Binding
+Route::get('/demo', function(DemoController $controller) {
+    return $controller->upload('feed.xml');
+});
+
+// PSR-11 介面
+Route::get('/psr', function (ContainerInterface $container) {
+    $userService = $container->get(UserService::class);
+    return $userService->notifyUser('psr@example.com', 'PSR-11 測試');
+});
