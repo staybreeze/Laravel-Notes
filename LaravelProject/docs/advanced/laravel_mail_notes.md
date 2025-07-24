@@ -1,34 +1,34 @@
-# Laravel Mail 筆記
+# *Laravel Mail 筆記*
 
 ---
 
 ## **介紹**
-Laravel Mail 提供簡潔、現代的郵件 API，底層採用 Symfony Mailer，支援 SMTP、Mailgun、Postmark、Resend、Amazon SES、sendmail 等多種驅動，讓你能快速整合本地或雲端郵件服務。
+Laravel Mail 提供簡潔、現代的郵件 API，底層採用 *Symfony Mailer*，支援 SMTP、Mailgun、Postmark、Resend、Amazon SES、sendmail 等多種驅動，讓你能快速整合本地或雲端郵件服務。
 
 
 【名詞註解】
-- **Laravel Mail**：Laravel 框架內建的寄送電子郵件功能。
-- **API**：應用程式介面，讓你用簡單的程式語法呼叫寄信功能。
-- **Symfony Mailer**：一個專門處理郵件寄送的 PHP 函式庫，Laravel Mail 的底層就是用它。
-- **SMTP**：最傳統的郵件傳送協定，像 Gmail、Yahoo 都支援。
-- **Mailgun**：雲端郵件服務，適合大量寄信與追蹤信件狀態。
-- **Postmark**：另一種雲端郵件服務，主打高送達率與速度。
-- **Resend**：新興的郵件 API 服務，主打簡單、現代化。
-- **Amazon SES**：Amazon 提供的大量郵件寄送服務。
-- **sendmail**：伺服器內建的寄信程式，常見於 Linux 主機。
-- **本地郵件服務**：在自己主機上直接寄信（如 SMTP、sendmail）。
-- **雲端郵件服務**：用第三方服務商幫你寄信（如 Mailgun、Postmark、Amazon SES、Resend）。
+- *Laravel Mail*：Laravel 框架**內建**的寄送電子郵件功能。
+- *API*：應用程式介面，讓你用簡單的程式語法呼叫寄信功能。
+- *Symfony Mailer*：一個專門處理郵件寄送的 **PHP 函式庫**，Laravel Mail 的底層就是用它。
+- *SMTP*：**最傳統的郵件傳送協定**，像 Gmail、Yahoo 都支援。
+- *Mailgun*：**雲端郵件服務**，適合大量寄信與追蹤信件狀態。
+- *Postmark*：另一種**雲端郵件服務**，主打高送達率與速度。
+- *Resend*：新興的郵件 API 服務，主打簡單、現代化。
+- *Amazon SES*：Amazon 提供的大量郵件寄送服務。
+- *sendmail*：**伺服器內建的寄信程式**，常見於 Linux 主機。
+- *本地郵件服務*：在**自己主機上**直接寄信（如 SMTP、sendmail）。
+- *雲端郵件服務*：用**第三方服務商**幫你寄信（如 Mailgun、Postmark、Amazon SES、Resend）。
 
 ---
 
 ## **設定檔重點**
 
-### **config/mail.php**
+### *config/mail.php*
 - `default`：預設 mailer 名稱（如 smtp、mailgun、failover...）。
 - `mailers`：每個 mailer 可有獨立設定與 transport。
 - 可同時設定多組 mailer，並用 failover/roundrobin 實現高可用或負載平衡。
 
-**範例：**
+*範例*：
 ```php
 // config/mail.php
 return [
@@ -57,10 +57,10 @@ return [
 ];
 ```
 
-### **config/services.php**
+### *config/services.php*
 - 各雲端郵件服務（Mailgun、Postmark、SES、Resend 等）API 金鑰、domain、endpoint 設定。
 
-**範例：**
+*範例*：
 ```php
 // config/services.php
 return [
@@ -84,9 +84,9 @@ return [
 
 ## **各大主流 Driver 安裝與設定**
 
-### **1. SMTP**
+### *1. SMTP*
 - Laravel 預設支援，無需額外安裝。
-- 設定 **.env**：
+- 設定 *.env*：
 <!--
 這是在 .env 檔案裡設定 SMTP 伺服器的連線資訊：
 - MAIL_MAILER：指定使用 smtp 驅動
@@ -96,17 +96,18 @@ return [
 - MAIL_FROM_ADDRESS/MAIL_FROM_NAME：預設寄件人信箱與名稱
 -->
 ```php
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
+// 這是在 .env 檔案裡設定 SMTP 伺服器的連線資訊：
+MAIL_MAILER=smtp           // MAIL_MAILER：指定使用 smtp 驅動
+MAIL_HOST=smtp.mailtrap.io // MAIL_HOST/MAIL_PORT：SMTP 伺服器主機與連接埠
 MAIL_PORT=2525
-MAIL_USERNAME=xxx
+MAIL_USERNAME=xxx          // MAIL_USERNAME/MAIL_PASSWORD：登入帳號密碼
 MAIL_PASSWORD=xxx
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=hello@example.com
+MAIL_ENCRYPTION=tls        // MAIL_ENCRYPTION：加密方式（通常用 tls）
+MAIL_FROM_ADDRESS=hello@example.com // MAIL_FROM_ADDRESS/MAIL_FROM_NAME：預設寄件人信箱與名稱
 MAIL_FROM_NAME="Example"
 ```
 
-### **2. Mailgun**
+### *2. Mailgun*
 <!--
 Mailgun 是一個雲端郵件發送服務，適合大量寄送應用程式郵件（如註冊、通知、行銷信），主打 API 操作簡單、信件追蹤、彈性高。
 你只要註冊 Mailgun，取得 API 金鑰，並在 Laravel 設定好，就能用 Laravel Mail 直接寄信。
@@ -148,7 +149,7 @@ composer require symfony/mailgun-mailer symfony/http-client
 ],
 ```
 
-### **3. Postmark**
+### *3. Postmark*
 <!--
 Postmark 是一個雲端郵件發送服務，主打高送達率、速度快、API 操作簡單，適合寄送系統通知信、驗證信等重要郵件。
 你只要註冊 Postmark，取得 API 金鑰，並在 Laravel 設定好，就能用 Laravel Mail 直接寄信。
@@ -189,7 +190,7 @@ composer require symfony/postmark-mailer symfony/http-client
 ],
 ```
 
-### **4. Resend**
+### *4. Resend*
 <!--
 Resend 是一個新興的雲端郵件 API 服務，主打簡單、現代化、易於整合，適合開發者快速串接應用程式郵件發送。
 -->
@@ -225,7 +226,7 @@ composer require resend/resend-php
 ],
 ```
 
-### **5. Amazon SES**
+### *5. Amazon SES*
 <!--
 Amazon SES（Simple Email Service）是 AWS 提供的大量郵件發送服務，適合企業、SaaS、平台大量寄送通知、行銷郵件，主打高可靠性、彈性、低成本。
 -->
@@ -273,7 +274,7 @@ composer require aws/aws-sdk-php
 ],
 ```
 
-### **6. MailerSend**
+### *6. MailerSend*
 <!--
 MailerSend 是一個現代化雲端郵件 API 服務，主打簡單整合、彈性高、支援豐富的郵件功能，適合開發者與企業寄送應用程式郵件。
 -->
@@ -309,7 +310,7 @@ MAILERSEND_API_KEY=your-api-key
 
 ## **Failover 與 Round Robin 配置**
 
-### **Failover**
+### *Failover*
 - 可設定多個 mailer，主 mailer 失敗時自動切換備援。
 <!--
 Failover（備援）是一種高可用機制，當主要 mailer 寄信失敗時，會自動切換到備用 mailer 繼續嘗試寄信，確保信件不會因單一服務異常而遺失。
@@ -335,7 +336,7 @@ Failover（備援）是一種高可用機制，當主要 mailer 寄信失敗時�
 'default' => env('MAIL_MAILER', 'failover'),
 ```
 
-### **Round Robin**
+### *Round Robin*
 - 多個 mailer 輪流分擔寄信（負載平衡）。
 <!--
 Round Robin（輪詢）是一種負載平衡機制，會讓多個 mailer 輪流分擔寄信工作，平均分散流量，減少單一服務壓力。
@@ -393,7 +394,7 @@ php artisan make:mail OrderShipped
 envelope() 用來設定主旨、寄件人、標籤等信件屬性；content() 用來設定郵件內容樣板與傳遞資料。
 -->
 
-### 1. **envelope()** 方法
+### 1. *envelope()* 方法
 - 設定主旨、寄件人（from）、回覆地址（replyTo）、標籤（tags）、元資料（metadata）、自訂 Symfony Message（using）。
 - 範例：
 ```php
@@ -436,15 +437,15 @@ public function envelope(): Envelope
     'name' => 'App Name',
 ],
 ```
-## 其他補充
-- **API 驅動**（Mailgun、Postmark、Resend、MailerSend）通常比 **SMTP** 更快更穩。
+## **其他補充**
+- *API 驅動*（Mailgun、Postmark、Resend、MailerSend）通常比 *SMTP* 更快更穩。
 - 可於 mailable 的 headers() 方法自訂郵件 header（如 SES List Management）。
 - 參考官方文件可設定更多細節（如超時、區域、憑證、標籤等）。 
 
 <!--
 content() 方法同樣定義在 mailable 類別（如 app/Mail/OrderShipped.php）裡，用來設定郵件內容樣板與傳遞資料。
 -->
-### 2. **content()** 方法
+### 2. *content()* 方法
 - 設定 HTML 與純文字模板、傳遞資料（public 屬性或 with 參數）。
 - 範例：
 ```php
@@ -478,7 +479,7 @@ public function content(): Content
 // Blade 用 $orderName、$orderPrice
 ```
 
-### 3. **attachments()** 方法
+### 3. *attachments()* 方法
 - 支援本地檔案、Storage、原始資料、Attachable 物件。
 - 範例：
 ```php
@@ -504,7 +505,7 @@ public function attachments(): array
 }
 ```
 
-### 4. **內嵌圖片（Inline Attachments）**
+### 4. *內嵌圖片（Inline Attachments）*
 - Blade 模板內：
 ```blade
 <img src="{{ $message->embed($inlineImagePath) }}">
@@ -512,7 +513,7 @@ public function attachments(): array
 ```
 - $message 變數自動注入於 Blade 模板。
 
-### 5. **Attachable 物件**
+### 5. *Attachable 物件*
 - 只要物件實作 **Illuminate\Contracts\Mail\Attachable** 介面，即可直接傳入 attachments。
 - 範例：
 ```php
@@ -528,7 +529,7 @@ class Photo extends Model implements Attachable
 }
 ```
 
-### 6. **headers()**方法
+### 6. *headers()*方法
 - 可自訂郵件標頭（Message-Id、References、任意自訂標頭）。
 - 範例：
 ```php
@@ -548,7 +549,7 @@ public function headers(): Headers
 
 ---
 
-### 小結
+### *小結*
 - **envelope()**：寄件人、回覆、主旨、標籤、元資料、自訂 Message
 - **content()**：HTML/純文字模板、資料傳遞
 - **attachments()**：多種附件型態
@@ -560,18 +561,18 @@ public function headers(): Headers
 
 ## **Markdown Mailables（Markdown 郵件）**
 
-### 1. 介紹
+### 1. *介紹*
 - Markdown mailable 讓你在郵件中直接使用 Laravel 內建的 Markdown 樣板與元件，快速產生美觀、響應式的郵件。
 - 自動產生 HTML 與純文字版本，支援 Blade + Markdown 語法。
 
-### 2. 產生 Markdown Mailable
+### 2. *產生 Markdown Mailable*
 - 使用 Artisan 指令：
 ```bash
 php artisan make:mail OrderShipped --markdown=mail.orders.shipped
 ```
 - 會建立 `app/Mail/OrderShipped.php`，並自動產生 `resources/views/mail/orders/shipped.blade.php`。
 
-### 3. **content()** 使用 markdown 參數
+### 3. *content() 使用 markdown 參數*
 ```php
 use Illuminate\Mail\Mailables\Content;
 
@@ -587,10 +588,10 @@ public function content(): Content
 ```
 - `markdown` 參數取代 `view`，指定 Markdown 樣板路徑。
 
-### 4. Markdown 樣板語法與元件
+### 4. *Markdown 樣板語法與元件*
 - 樣板檔案：`resources/views/mail/orders/shipped.blade.php`
 - 範例：
-```blade
+```html
 <x-mail::message>
 # 訂單已出貨
 
@@ -620,7 +621,7 @@ public function content(): Content
 - **x-mail::panel**：突顯區塊。
 - **x-mail::table**：Markdown 表格自動轉為 HTML 表格。
 
-### 5. **匯出元件與自訂主題、CSS**
+### 5. *匯出元件與自訂主題、CSS*
 - 匯出元件：
 ```bash
 php artisan vendor:publish --tag=laravel-mail
@@ -642,11 +643,10 @@ php artisan vendor:publish --tag=laravel-mail
 public $theme = 'mytheme';
 ```
 
-### 6. **完整實作範例**
+### 6. *完整實作範例*
 
-#### app/Mail/OrderShipped.php
+#### **app/Mail/OrderShipped.php**
 ```php
-<?php
 
 namespace App\Mail;
 
@@ -698,7 +698,7 @@ class OrderShipped extends Mailable
 }
 ```
 
-#### resources/views/mail/orders/shipped.blade.php
+#### **resources/views/mail/orders/shipped.blade.php**
 ```blade
 <x-mail::message>
 # 訂單已出貨
@@ -722,7 +722,7 @@ class OrderShipped extends Mailable
 
 ## **Sending Mail（寄送郵件）**
 
-### 1. **基本寄信**
+### 1. *基本寄信*
 - 使用 Mail facade 的 **to 方法**指定收件人，send 方法傳入 mailable 實例。
 - 可接受 email、user 實例或 user 集合。
 ```php
@@ -738,21 +738,21 @@ Mail::to($user)
     ->send(new OrderShipped($order));
 ```
 
-### 2. **迴圈寄信注意事項**
-- 每次都要 new 一個 mailable 實例，避免收件人累積：
+### 2. *迴圈寄信注意事項*
+- **每次都要 new 一個 mailable 實例，避免收件人累積**：
 ```php
 foreach (["a@example.com", "b@example.com"] as $recipient) {
     Mail::to($recipient)->send(new OrderShipped($order));
 }
 ```
 
-### 3. **指定 mailer**
+### 3. *指定 mailer*
 - 可用 mailer 方法指定特定 mailer（如 postmark）：
 ```php
 Mail::mailer('postmark')->to($user)->send(new OrderShipped($order));
 ```
 
-### 4. **佇列寄信（Queueing Mail）**
+### 4. *佇列寄信（Queueing Mail）*
 - 使用 **queue** 方法將郵件推送到背景佇列：
 ```php
 Mail::to($user)->queue(new OrderShipped($order));
@@ -774,15 +774,15 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class OrderShipped extends Mailable implements ShouldQueue { /* ... */ }
 ```
 
-### 5. **afterCommit（交易後寄信）**
-- 若資料庫交易尚未提交，佇列郵件可能讀不到最新資料。
+### 5. *afterCommit（交易後寄信）*
+- **若資料庫交易尚未提交，佇列郵件可能讀不到最新資料**。
 - 可用 afterCommit 方法確保交易完成後才寄信：
 ```php
 Mail::to($user)->send((new OrderShipped($order))->afterCommit());
 ```
 - 也可在建構子呼叫 $this->afterCommit()。
 
-### 6. **佇列失敗處理**
+### 6. *佇列失敗處理*
 - mailable 可定義 failed(Throwable $exception) 方法處理失敗：
 ```php
 public function failed(Throwable $exception) {
@@ -790,7 +790,7 @@ public function failed(Throwable $exception) {
 }
 ```
 
-### 7. **渲染 mailable 內容**
+### 7. *渲染 mailable 內容*
 - 可用 **render()** 取得 mailable 的 HTML 字串內容：
 ```php
 // 產生一個新的 OrderShipped mailable 實例，並傳入 $order 物件
@@ -798,7 +798,7 @@ public function failed(Throwable $exception) {
 $html = (new OrderShipped($order))->render();
 ```
 
-### 8. **預覽 mailable**
+### 8. *預覽 mailable*
 - 路由或 controller 直接 return mailable，可在瀏覽器預覽設計：
 ```php
 Route::get('/mailable', function () {
@@ -807,7 +807,7 @@ Route::get('/mailable', function () {
 });
 ```
 
-### 9. **多語系寄信**
+### 9. *多語系寄信*
 - 可用 locale 方法切換語系：
 ```php
 Mail::to($user)->locale('ja')->send(new OrderShipped($order));
@@ -825,7 +825,7 @@ Mail::to($user)->send(new OrderShipped($order)); // 自動用 $user->locale
 
 ## **Testing（郵件測試）**
 
-### 1. **Mailable 內容測試**
+### 1. *Mailable 內容測試*
 - 可直接對 mailable 實例斷言內容、收件人、主旨、附件、標籤、元資料等。
 ```php
 // 定義一個測試，名稱為 'mailable content'
@@ -867,7 +867,7 @@ test('mailable content', function () {
 });
 ```
 
-### 2. **Mail fake 寄送測試**
+### 2. *Mail fake 寄送測試*
 - 使用 Mail::fake() 可防止實際寄信，並可斷言寄送行為。
 ```php
 // 啟用 Mail fake，所有寄信動作都不會真的寄出，而是被攔截下來
@@ -917,7 +917,7 @@ Mail::assertSent(OrderShipped::class, function (OrderShipped $mail) {
 });
 ```
 
-### 3. **斷言未寄送/未佇列**
+### 3. *斷言未寄送/未佇列*
 ```php
 // 斷言沒有任何信件被寄出或推送到佇列
 Mail::assertNothingOutgoing();
@@ -927,7 +927,7 @@ Mail::assertNotOutgoing(function (OrderShipped $mail) use ($order) {
 });
 ```
 
-### 4. **mailable render 預覽**
+### 4. *mailable render 預覽*
 - 可直接取得 mailable 的 HTML 字串內容：
 ```php
 // 產生一個新的 OrderShipped mailable 實例，並傳入 $order 物件
@@ -935,9 +935,9 @@ Mail::assertNotOutgoing(function (OrderShipped $mail) use ($order) {
 $html = (new OrderShipped($order))->render();
 ```
 
-### 5. **測試用 log/mailtrap/mailpit 驅動**
+### 5. *測試用 log/mailtrap/mailpit 驅動*
 
-log、mailtrap、mailpit 都是開發與測試時常用的郵件驅動，讓你不會真的把信寄出去，而是方便你檢查信件內容。
+log、mailtrap、mailpit 都是開發與測試時常用的郵件驅動，**讓你不會真的把信寄出去，而是方便你檢查信件內容**。
 - **log 驅動**：把信件內容寫到 log 檔案（如 storage/logs/laravel.log），不會真的寄出，適合只想檢查內容格式。
 - **mailtrap**：線上郵件沙盒，信件只會進 mailtrap，不會寄到真實用戶，適合團隊協作與集中管理測試信件。
 - **mailpit**：本地郵件測試伺服器，信件可在本機網頁即時預覽，適合本地開發與 Laravel Sail 預設環境。
@@ -945,7 +945,7 @@ log、mailtrap、mailpit 都是開發與測試時常用的郵件驅動，讓你�
 
 - Laravel Sail 預設支援 mailpit，瀏覽 http://localhost:8025 可預覽。
 
-### 6. **alwaysTo 全域收件人**
+### 6. *alwaysTo 全域收件人*
 - 可於 ServiceProvider boot 方法設定本地開發時所有信件都寄到指定信箱：
 ```php
 if ($this->app->environment('local')) {
@@ -953,7 +953,7 @@ if ($this->app->environment('local')) {
 }
 ```
 
-### 7. 郵件事件
+### 7. *郵件事件*
 <!--
 郵件事件是 Laravel 提供的事件系統，讓你可以在郵件寄出前後「攔截」或「監聽」郵件行為，執行自訂邏輯。
 常見事件：
@@ -980,7 +980,7 @@ class LogMessage {
 }
 ```
 
-### 8. **自訂 transport 擴充**
+### 8. *自訂 transport 擴充*
 - 可自訂**郵件傳送驅動**，繼承 Symfony\Component\Mailer\Transport\AbstractTransport，並於 ServiceProvider 註冊。
 ```php
 Mail::extend('mailchimp', function (array $config = []) {
@@ -993,7 +993,7 @@ Mail::extend('mailchimp', function (array $config = []) {
 
 --- 
 
-### 9. 自訂郵件傳送驅動（Custom Transport）
+### 9. *自訂郵件傳送驅動（Custom Transport）*
 <!--
 有時你需要串接 Laravel 預設未支援的郵件服務（如 Mailchimp Transactional），可以自訂 Transport 並註冊於 ServiceProvider。
 自訂 transport 的情境：
@@ -1006,7 +1006,7 @@ Mail::extend('mailchimp', function (array $config = []) {
 之後即可用 Mail::mailer('自訂名稱') 寄信
 -->
 
-#### **步驟一**：自訂 Transport 類別
+#### **步驟一：自訂 Transport 類別**
 ```php
 // app/Mail/MailchimpTransport.php
 
@@ -1059,7 +1059,7 @@ class MailchimpTransport extends AbstractTransport
 }
 ```
 
-#### **步驟二**：於 ServiceProvider 註冊自訂 Transport
+#### **步驟二：於 ServiceProvider 註冊自訂 Transport**
 ```php
 // app/Providers/AppServiceProvider.php
 
@@ -1081,7 +1081,7 @@ public function boot(): void
 }
 ```
 
-#### **步驟三**：config/mail.php 設定 mailer
+#### **步驟三：config/mail.php 設定 mailer**
 ```php
 // config/mail.php
 
@@ -1108,7 +1108,7 @@ Symfony 官方維護的郵件服務（如 Mailgun、Postmark、Brevo/Sendinblue 
 以下為共通整合模板，後面針對各服務補充差異。
 -->
 
-##### **共通整合步驟**
+##### *共通整合步驟*
 1. **安裝對應套件**
 ```bash
 composer require symfony/brevo-mailer symfony/http-client
@@ -1171,7 +1171,7 @@ Mail::mailer('brevo')->to($user)->send(new OrderShipped($order));
 
 ---
 
-##### **各服務差異補充**
+##### *各服務差異補充*
 
 - **Mailgun**
   - 套件名稱：`symfony/mailgun-mailer`

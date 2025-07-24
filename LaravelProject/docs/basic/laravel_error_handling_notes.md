@@ -1,4 +1,4 @@
-# Laravel Error Handling 錯誤處理完整教學
+# *Laravel Error Handling 錯誤處理完整教學*
 
 ---
 
@@ -31,7 +31,7 @@
 3. **環境適應**：開發和生產環境有不同的錯誤顯示策略
 4. **記錄完整**：自動記錄錯誤資訊供除錯使用
 
-#### *生活化比喻**
+#### **生活化比喻**
 - 錯誤處理就像「醫院急診室」：有預設流程、可自訂、分環境、完整記錄
 - 錯誤處理就像「汽車安全系統」：安全氣囊、故障燈、備用系統、維修手冊
 
@@ -86,7 +86,7 @@ use App\Exceptions\InvalidOrderException;
 > 生活化比喻：報告就像「醫院遇到特殊病例時，會通知專科醫師或上報衛生局」。
 
 #### **停止預設 log 行為**
-預設自訂 report callback 執行後，Laravel 還是會照 logging 設定記錄一次。
+*預設*自訂 report callback 執行後，Laravel 還是會照 logging 設定記錄一次。
 如果你想「只自訂，不要預設 log」，可以：
 - 用 ->stop() 或 callback return false
 
@@ -101,7 +101,7 @@ $exceptions->report(function (InvalidOrderException $e) {
 ```
 
 #### **reportable 例外**
-你也可以在 Exception 類別內直接定義 report() 方法，Laravel 會自動呼叫。
+你也可以在 *Exception 類別內*直接定義 report() 方法，Laravel 會自動呼叫。
 
 ---
 
@@ -109,7 +109,7 @@ $exceptions->report(function (InvalidOrderException $e) {
 
 ### *全域 Log Context*
 Laravel 會自動把目前登入用戶的 ID 加到每個 log（如果有登入）。
-你也可以用 context() 方法，加入自訂全域 context：
+你也可以用 *context()* 方法，加入自訂*全域 context*：
 
 ```php
 ->withExceptions(function (Exceptions $exceptions) {
@@ -194,7 +194,7 @@ use Psr\Log\LogLevel;
 | **alert**    | 需立即處理，否則系統會嚴重受損（如：主要服務掛掉、資料庫全斷）                                       |
 | **emergency**| 系統完全無法運作（如：整個網站掛掉、核心服務崩潰）                                                   |
 
-> **註解：**
+> **註解**：
 > - 這些層級是 PHP 生態圈的通用標準，方便與各種 log/監控/警報系統整合。
 > - 你可以根據訊息嚴重性選擇適合的層級，讓 log 更有層次，方便日後查詢與自動警報。
 
@@ -226,7 +226,7 @@ Log::alert('主資料庫離線', ['db_host' => $host]);
 Log::emergency('網站全站無法存取');
 ```
 
-> **註解：**
+> **註解**：
 > - `debug`、`info` 適合日常追蹤與營運分析。
 > - `warning` 以上建議設監控，`error` 以上可考慮自動通知工程師。
 > - `critical`、`alert`、`emergency` 通常會觸發即時警報（如 Slack、Email、SMS）。

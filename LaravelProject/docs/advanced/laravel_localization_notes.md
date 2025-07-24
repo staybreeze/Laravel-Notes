@@ -1,52 +1,52 @@
-# Laravel 語系（Localization）完整筆記
+# *Laravel 語系（Localization）完整筆記*
 
 ---
-在 Laravel 中，localization（本地化）指的是讓你的應用程式能夠支援多語系，根據使用者的語言或地區顯示不同的文字內容。這通常包含「翻譯字
+在 Laravel 中，localization（本地化）指的是讓你的應用程式 **能夠支援多語系**，根據使用者的語言或地區顯示不同的文字內容。這通常包含「翻譯字
 串」、「日期/時間格式」、「數字/貨幣格式」等，讓同一個網站能自動切換成繁體中文、英文、日文等不同語言。
 
 
-## 1. 什麼是 *Localization*？
--  本地化（localization, l10n）：讓你的系統根據「使用者的語言、地區」自動切換顯示內容。
+## 1. **什麼是 Localization？**
+-  *本地化（localization, l10n）*：讓你的系統根據「使用者的語言、地區」自動切換顯示內容。
 -  例如：中文用戶看到「歡迎！」，英文用戶看到「Welcome!」。
 -  國際化（internationalization, i18n）：讓系統具備多語系能力，localization 則是實際切換與顯示。
 
-## 2. Laravel 如何做 Localization？
+## 2. **Laravel 如何做 Localization？**
 
-### (1) **語言檔**（Language Files）
--  所有翻譯字串都放在 *resources/lang/{語系}/* 目錄下。
+### (1) *語言檔*（Language Files）
+-  所有翻譯字串都放在 `resources/lang/{語系}/` 目錄下。
 -  每個語系目錄下有多個 PHP 檔案，每個檔案回傳一個 key=>value 陣列。
 
-### (2) **取得翻譯字串**
--  用 __('messages.welcome') 或 @lang('messages.welcome') 取得對應語系的翻譯。
+### (2) *取得翻譯字串*
+-  用 **__('messages.welcome')** 或 **@lang('messages.welcome')** 取得對應語系的翻譯。
 -  例如：
--  resources/lang/zh_TW/messages.php: return ['welcome' => '歡迎！'];
+-  **resources/lang/zh_TW/messages.php**: return ['welcome' => '歡迎！'];
     這是 Laravel 語言檔的「繁體中文」版本，檔案放在 resources/lang/zh_TW/messages.php，內容是 key 為 'welcome'，value 為『歡迎！』。
     只要系統語言設定為 zh_TW，__('messages.welcome') 會顯示『歡迎！』。
--  resources/lang/en/messages.php: return ['welcome' => 'Welcome!'];
+-  **resources/lang/en/messages.php**: return ['welcome' => 'Welcome!'];
     這是 Laravel 語言檔的「英文」版本，檔案放在 resources/lang/en/messages.php，內容是 key 為 'welcome'，value 為 'Welcome!'。
     只要系統語言設定為 en，__('messages.welcome') 會顯示 'Welcome!'。
--  在 Blade 或 Controller：echo __('messages.welcome');
+-  **在 Blade 或 Controller**：echo __('messages.welcome');
     用 __('messages.welcome') 這個方法，Laravel 會根據目前語系自動選擇正確的語言檔，顯示對應語言內容。
     例如：
       - 當語系為 zh_TW，畫面會顯示『歡迎！』
       - 當語系為 en，畫面會顯示 'Welcome!'
     這是 Laravel 多語系最基本、最常用的做法，讓你輕鬆支援多國語言。
 
-### (3) **切換語系**
--  預設語系在 *config/app.php* 的 locale 設定。
--  也可用 App::setLocale('en') 動態切換語系。
+### (3) *切換語系*
+-  預設語系在 **config/app.php** 的 locale 設定。
+-  也可用 **App::setLocale('en')** 動態切換語系。
 
-### (4) **複數、參數替換**
--  支援*複數型態*（如 apple/apples）、*動態參數*（如 :count、:name）。
+### (4) *複數、參數替換*
+-  支援**複數型態**（如 apple/apples）、**動態參數**（如 :count、:name）。
 -  例如：trans_choice('messages.apples', 5, ['count' => 5]);
 
-### (5) **系統訊息本地化**
--  Laravel 內建的驗證、認證、密碼重設等訊息都可在 *resources/lang/{語系}/* 下找到並自訂。
+### (5) *系統訊息本地化*
+-  Laravel 內建的驗證、認證、密碼重設等訊息都可在 **resources/lang/{語系}/** 下找到並自訂。
 
 ## 3. **實際應用場景**
 -  多國語系網站、後台管理系統、API 回應、日期/時間/貨幣格式自動切換。
 
-## 4. 小結
+## 4. **小結**
 -  localization 在 Laravel 就是「讓你的系統能多語系顯示、在地化所有內容」。
 -  只要維護好語言檔，程式就能自動根據語系切換所有訊息。
 -  這對國際化、台灣/香港/大陸/海外多語網站都非常重要。
@@ -59,7 +59,7 @@
 
 Laravel 支援兩種語系檔案管理方式：
 
-- **陣列語系檔（短鍵）**：
+- *陣列語系檔（短鍵）*：
   - `lang/{locale}/messages.php`
   - 適合結構化、分群管理
   - 範例：
@@ -73,8 +73,8 @@ Laravel 支援兩種語系檔案管理方式：
         'welcome' => '歡迎使用本系統！',
     ];
     ```
-- **JSON 語系檔（以原文為 key）**：
-  Laravel 也支援 JSON 格式的語言檔，key 為原文（通常是英文），value 為翻譯內容。
+- *JSON 語系檔（以原文為 key）*：
+  Laravel 也支援 JSON 格式的語言檔，**key 為原文**（通常是英文），**value 為翻譯內容**。
   這種格式適合大量、動態字串，或不想手動定義 key 的情境。
   - `lang/en.json`, `lang/zh-TW.json`
     每個語系一個 JSON 檔，放在 resources/lang 目錄下。
@@ -150,18 +150,18 @@ if (App::isLocale('zh-TW')) { /* ... */ }
 
 ## 5. **取得翻譯字串**
 
-- **短鍵語系檔**：
+- *短鍵語系檔*：
   ```php
   __('messages.welcome')
   // 若不存在，回傳 'messages.welcome'
   ```
-- **JSON 語系檔**：
+- *JSON 語系檔*：
   ```php
   __('I love programming.')
   // 若不存在，回傳 'I love programming.'
   ```
-- **Blade**：
-  ```blade
+- *Blade*：
+  ```html
   {{ __('messages.welcome') }}
   ```
 
@@ -186,7 +186,7 @@ echo __('messages.welcome', ['name' => 'Vincent']);
 
 ## 7. **物件參數格式化（stringable）**
 
-- Laravel 語系字串支援傳入物件參數，會自動呼叫物件的 __toString() 方法。
+- Laravel 語系字串支援傳入物件參數，會自動呼叫物件的 *__toString()* 方法。
 - 你也可以用 *Lang::stringable()* 全域自訂某類物件的顯示格式（如金額、日期等）。
 
 若佔位符傳入物件，Laravel 會呼叫其 `__toString`。如需自訂格式，可在 `AppServiceProvider` 註冊：
@@ -202,7 +202,7 @@ public function boot(): void
     });
 }
 ```
--【應用情境】這樣你在語系字串中用 :amount 佔位符時，傳入 Money 物件會自動顯示正確格式。
+-【應用情境】這樣你在語系字串中用 *:amount 佔位符*時，傳入 Money 物件會自動顯示正確格式。
 -【注意】可註冊多個 stringable，支援多型、不同物件類型。
 
 ---
@@ -288,31 +288,31 @@ echo __('messages.product_info', ['product' => $product]);
 
 ## 8. **複數化（Pluralization）**
 
-- **短鍵語系檔**：
+- *短鍵語系檔*：
   ```php
   'apples' => '有一顆蘋果|有很多顆蘋果',
   ```
-- **JSON 語系檔**：
+- *JSON 語系檔*：
   ```json
   {
     "There is one apple|There are many apples": "有一顆蘋果|有很多顆蘋果"
   }
   ```
-- **多區間**：
+- *多區間*：
   ```php
   'apples' => '{0} 沒有蘋果|[1,19] 有一些蘋果|[20,*] 有很多蘋果',
   ```
-- **取得複數翻譯**：
+- *取得複數翻譯*：
   ```php
   echo trans_choice('messages.apples', 10);
   // 根據數量自動選擇
   ```
-- **帶參數**：
+- *帶參數*：
   ```php
   'minutes_ago' => '{1} :value 分鐘前|[2,*] :value 分鐘前',
   echo trans_choice('time.minutes_ago', 5, ['value' => 5]);
   ```
-- **:count 內建佔位符**：
+- *:count 內建佔位符*：
   ```php
   'apples' => '{0} 沒有蘋果|{1} 只有一顆|[2,*] 有 :count 顆',
   ```
@@ -321,7 +321,7 @@ echo __('messages.product_info', ['product' => $product]);
 
 ## 9. **Pluralizer 多語系**
 
-Eloquent 等會用 pluralizer 進行複數化，預設英文。可在 `AppServiceProvider` 設定：
+Eloquent 等會用 pluralizer 進行 *複數化*，預設英文。可在 `AppServiceProvider` 設定：
 ```php
 use Illuminate\Support\Pluralizer;
 public function boot(): void

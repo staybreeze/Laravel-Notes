@@ -1,16 +1,16 @@
-# Laravel Queue 基本觀念整理
+# *Laravel Queue 基本觀念整理*
 
 ---
 
-## Queue、Job、Worker 是什麼？
+## **Queue、Job、Worker 是什麼？**
 
 ### *什麼是 Queue Job？*
-**Queue Job（佇列任務）** 就是你要丟到背景執行的「工作」。  
+**Queue Job（佇列任務）** 就是你要丟到背景執行的「**工作**」。  
 例如：寄信、處理上傳檔案、產生報表、推播通知等，這些通常比較耗時，不適合在 HTTP 請求流程中直接執行。
 
 在 Laravel 裡，你會建立一個 Job 類別（通常在 `app/Jobs`），裡面寫好要執行的邏輯，然後用 `dispatch()` 把它丟到 queue（佇列）裡。
 
-**簡單來說：**  
+**簡單來說**：  
 Job = 你要做的「一件事」的程式碼（任務）。
 
 ---
@@ -25,41 +25,41 @@ php artisan queue:work
 ```
 你可以開很多個 worker（多工），讓他們同時處理多個任務。
 
-**簡單來說：**  
+**簡單來說**：  
 Worker = 幫你執行 queue 裡 job 的背景程式。
 
 ---
 
 ### *什麼是 Queue？*
-**Queue（佇列）** 就是「任務的排隊區」，像是「待辦清單」。
+**Queue（佇列）** 就是「**任務的排隊區**」，像是「待辦清單」。
 你把 Job 丟進 Queue，這些任務就會在這裡排隊，等著被執行。
 Queue 可以有很多種（例如：high、default、low），也可以有不同的後端（如 Redis、資料庫）。
 
 ---
 
-## 三者的關係
+## **三者的關係**
 
-### 關係圖解
+### *關係圖解*
 ```
     A[你寫的 Job 任務] -- dispatch() --> B[Queue 佇列]
     B -- 等待 --> C[Worker 工人]
     C -- 執行 --> D[Job 任務完成]
 ```
 - 你用 `dispatch()` 把 Job 丟進 Queue。
-- Queue 負責「排隊」。
-- Worker 會「撿」Queue 裡的 Job 來執行。
-- Job 執行完畢，Queue 就少一個任務。
+- **Queue** 負責「排隊」。
+- **Worker** 會「撿」Queue 裡的 Job 來執行。
+- **Job** 執行完畢，Queue 就少一個任務。
 
 ---
 
-### 生活化比喻
+### *生活化比喻*
 - **Job**：一張待辦卡片（上面寫著要做什麼）
 - **Queue**：待辦箱（所有卡片都丟進這裡排隊）
 - **Worker**：工人（負責從箱子裡拿卡片出來，照著上面指示去做）
 
 ---
 
-### 總結
+### *總結*
 - **Job** 是「要做什麼」。
 - **Queue** 是「排隊等著做」。
 - **Worker** 是「真的去做的人」。
@@ -68,11 +68,11 @@ Queue 可以有很多種（例如：high、default、low），也可以有不同
 
 ---
 
-# Laravel Queue（佇列）筆記
+# *Laravel Queue（佇列）筆記*
 
 ---
 
-## *什麼是 Laravel Queue？*
+## **什麼是 Laravel Queue？**
 
 - **Laravel Queue（佇列）** 讓你可以將耗時的任務（如：解析與儲存上傳的 CSV 檔案）丟到背景執行，讓網頁請求能夠快速回應，提升使用者體驗。
 - Laravel 提供統一的 Queue API，可支援多種後端（Amazon SQS、Redis、資料庫等）。
@@ -81,10 +81,10 @@ Queue 可以有很多種（例如：high、default、low），也可以有不同
 
 ---
 
-## *Connections vs. Queues*
+## **Connections vs. Queues**
 
-- **Connection（連線）**：指向一個後端服務（如 SQS、Redis、資料庫等），在 `config/queue.php` 的 `connections` 陣列中設定。
-- **Queue（佇列）**：每個 connection 可有多個 queue（可想像成不同的工作堆疊）。
+- *Connection（連線）*：指向一個後端服務（如 SQS、Redis、資料庫等），在 `config/queue.php` 的 `connections` 陣列中設定。
+- *Queue（佇列）*：每個 connection 可有多個 queue（可想像成不同的工作堆疊）。
 - 每個 connection 設定檔內有 `queue` 屬性，代表預設的 queue 名稱。
 - 派送（dispatch）Job 時可指定 queue 名稱：
 ```php
@@ -101,9 +101,9 @@ php artisan queue:work --queue=high,default
 
 ---
 
-## *各 Driver 注意事項與前置作業*
+## **各 Driver 注意事項與前置作業**
 
-### **Database**
+### *Database*
 - 需有 jobs 資料表，預設 migration：`0001_01_01_000002_create_jobs_table.php`
 - 若無此 migration，可用：
 ```bash
@@ -111,7 +111,7 @@ php artisan make:queue-table
 php artisan migrate
 ```
 
-### **Redis**
+### *Redis*
 - 需在 `config/database.php` 設定 Redis 連線。
    ```php
    // 範例：config/database.php 內 redis 設定
@@ -130,7 +130,7 @@ php artisan migrate
    // 在 *queue.php* 設定 'queue' => '{default}'，或 dispatch(new Job)->onQueue('{default}')
    // 加上大括號 hash tag，讓 cluster 下同一 queue 的 key 分配到同一 slot，避免分散導致 queue 無法正確消費。
 
-- `block_for` 設定：指定 worker 等待新任務的秒數（可提升效能）。
+- `block_for` 設定：指定 worker **等待新任務的秒數**（可提升效能）。
    ```php
    // 範例：config/queue.php 內 redis 連線設定
    'connections' => [
@@ -140,13 +140,13 @@ php artisan migrate
        ],
    ]
    ```
-- 設為 0 會無限阻塞，直到有新任務。
+- 設為 *0 會無限阻塞**，直到有新任務。
    ```php
    // 範例：
     'block_for' => 0 // worker 會一直阻塞直到有新任務
    // 適合高併發場景，worker 不會閒置浪費資源。
    ```
-### **其他 Driver 依賴**
+### *其他 Driver 依賴*
 - Amazon SQS：`aws/aws-sdk-php ~3.0`
 - Beanstalkd：`pda/pheanstalk ~5.0`
 - Redis：`predis/predis ~2.0` 或 phpredis PHP extension
@@ -154,16 +154,16 @@ php artisan migrate
 
 ---
 
-## *建立 Job*
+## **建立 Job**
 
-### **產生 Job 類別**
+### *產生 Job 類別*
 ```bash
 php artisan make:job ProcessPodcast
 ```
 - 產生於 `app/Jobs` 目錄。
 - 預設會實作 `Illuminate\Contracts\Queue\ShouldQueue`，代表此 Job 會進入佇列。
 
-### **Job 類別結構**
+### *Job 類別結構*
 ```php
 namespace App\Jobs; // Job 類別的命名空間，通常放在 app/Jobs 目錄
 
@@ -199,9 +199,9 @@ class ProcessPodcast implements ShouldQueue // 實作 ShouldQueue 介面，這�
 - 可直接將 Eloquent Model 傳入建構子，Laravel 會自動序列化/還原。
 - 只會序列化 model 的主鍵，執行時自動查回完整 model。
 
-### **handle 方法依賴注入**
+### *handle 方法依賴注入*
 - handle 方法可型別提示依賴，Laravel 會自動注入。
-- 進階：可用 `bindMethod` 自訂注入邏輯。
+- 進階：可用 `bindMethod` **自訂注入邏輯**。
 ```php
 use App\Jobs\ProcessPodcast; // 載入你自訂的 Job 類別
 use App\Services\AudioProcessor; // 載入你要注入的服務類別
@@ -219,7 +219,7 @@ $this->app->bindMethod([
 ```
 - 二進位資料（如圖片內容）建議先 `base64_encode` 再傳入 Job，避免序列化失敗。
 
-### **關聯序列化注意**
+### *關聯序列化注意*
 - Model 的已載入關聯也會被序列化，可能導致 payload 很大。
 - 若只需主 model，可用 `withoutRelations()`：
 ```php
@@ -409,7 +409,7 @@ public function middleware(): array { // 定義 middleware 方法，回傳要套
 
 ---
 
-### 補充
+### *補充*
 - middleware 方法需回傳「*物件陣列*」而非字串。
 - middleware 也可用於 *queueable* *event* *listeners*、*mailables*、*notifications*。
 - **release/dontRelease** 會影響 job attempts 次數，請調整 tries/maxExceptions/retryUntil。
@@ -480,7 +480,7 @@ php artisan queue:flush          # 清空所有失敗任務
 
 這些屬性與方法要寫在你自訂的 Job 類別（通常在 app/Jobs/ 目錄下），用來控制這個 job 的重試、逾時、失敗行為。
 
-#### 範例：
+#### **範例**：
 ```php
 namespace App\Jobs;
 
@@ -527,9 +527,9 @@ class SendEmailJob implements ShouldQueue // 這個 job 會進 queue
 
 ---
 
-#### *進階補充與常見細節*
+#### **進階補充與常見細節**
 
-##### (1) `$this->release()` 與 `$this->fail()` 用法
+##### (1) *`$this->release()` 與 `$this->fail()` 用法*
 你可以在 Job 的 handle() 內 **主動釋放（重派** 或 **標記失敗**：
 
 ```php
@@ -547,11 +547,11 @@ public function handle()
 - `$this->release(10)`：將 job 釋放回 queue，10 秒後再重試。
 - `$this->fail($e)`：直接標記 job 失敗，並觸發 `failed()` 方法。
 
-##### (2) `failed_jobs` 資料表
+##### (2) *`failed_jobs` 資料表*
 - 所有失敗的 job 都會被記錄在 `failed_jobs` 資料表（除非你用 sync driver）。
 - 你可以用 artisan 指令查詢、重試、刪除這些失敗任務。
 
-##### (3) `FailOnException` Middleware 用法
+##### (3) *`FailOnException` Middleware 用法*
 遇到特定例外時 job 直接失敗，不再重試：
 
 ```php
@@ -567,12 +567,12 @@ public function middleware(): array // 定義 middleware 方法，回傳要套�
 }
 ```
 
-##### (4) 釋放與重試注意事項
-- 若 Job *逾時*，會被 worker 標記為失敗（根據 `$failOnTimeout` 設定）。
-- 若 Job *釋放*（release），會重新進 queue，重試次數會累加。
-- 若 Job *失敗*（fail），會進入 `failed_jobs` 表。
+##### (4) *釋放與重試注意事項*
+- 若 Job **逾時**，會被 worker 標記為失敗（根據 `$failOnTimeout` 設定）。
+- 若 Job **釋放**（release），會重新進 queue，重試次數會累加。
+- 若 Job **失敗**（fail），會進入 `failed_jobs` 表。
 
-##### (5) *tries()*、*backoff()* 動態設定補充
+##### (5) *tries()*、*backoff() 動態設定補充*
 - 你可以用方法動態決定最大嘗試次數或重試間隔：
 
 ```php
@@ -589,7 +589,7 @@ public function backoff(): int|array // 動態設定每次重試的延遲秒數
 
 ---
 
-### 3. 總結
+### 3. *總結*
 - **artisan 指令**：只在終端機執行，不寫在 PHP 程式裡。
 - **Job 屬性/方法**：要寫在你自訂的 Job 類別裡，控制重試、逾時、失敗等行為。
 - 兩者搭配，讓你能彈性管理 queue 任務的執行與失敗處理。
@@ -674,7 +674,7 @@ Bus::chain([
 
 ## **Job Batching（任務批次）**
 
-### 前置作業
+### *前置作業*
 - 需建立 *job_batches* 資料表：
 ```bash
 php artisan make:queue-batches-table
@@ -904,16 +904,17 @@ php artisan queue:work -v
 php artisan queue:work redis --queue=emails # 啟動 worker，指定使用 redis 連線，並只處理 emails 這個 queue
 ```
 - 多 worker 可同時處理多個 queue，或同一 queue 多工：
-  - 多開終端機或用 Supervisor 設定 *numprocs*。 # numprocs 代表同時啟動幾個 worker 處理任務，可提升併發處理能力
+  - 多開終端機或用 **Supervisor** 設定 **numprocs**。 
+    - numprocs 代表*同時啟動幾個 worker 處理任務*，可提升併發處理能力
   - 指令範例：
     ```php
     # 多個終端機分別執行，處理不同 queue
-    php artisan queue:work redis --queue=emails
-    php artisan queue:work redis --queue=notifications
-    php artisan queue:work redis --queue=default
+    `php artisan queue:work redis --queue=emails`
+    `php artisan queue:work redis --queue=notifications`
+    `php artisan queue:work redis --queue=default`
     # 或同一 queue 開多個 worker
-    php artisan queue:work redis --queue=emails
-    php artisan queue:work redis --queue=emails
+    `php artisan queue:work redis --queue=emails`
+    `php artisan queue:work redis --queue=emails`
     ```
   - Supervisor 設定範例（推薦生產環境自動多工）：
     ```php
@@ -928,7 +929,7 @@ php artisan queue:work redis --queue=emails # 啟動 worker，指定使用 redis
     stdout_logfile=/path/to/worker.log
     ```
 
-- 只處理一個 job：
+- *只處理一個 job*：
 ```bash
 php artisan queue:work --once
 ```
@@ -986,9 +987,9 @@ php artisan queue:work --queue=high,low
 
 ### *任務過期與 timeout*
 - `config/queue.php` 每個 connection 有 retry_after（秒），超過未完成會重派。
-- *SQS* 由 AWS 控制 visibility timeout。
-- *worker --timeout（預設 60 秒）*，超過會強制終止 worker。
-- *retry_after* 應大於 **timeout**，否則可能重複執行同一 job。
+- **SQS**由 AWS 控制 visibility timeout。
+- **worker --timeout（預設 60 秒）**，超過會強制終止 worker。
+- **retry_after** 應大於 **timeout**，否則可能重複執行同一 job。
 
 ---
 
@@ -1032,9 +1033,9 @@ sudo supervisorctl start "laravel-worker:*"
 
 ---
 
-## *Dealing With Failed Jobs（處理失敗任務）*
+## **Dealing With Failed Jobs（處理失敗任務）**
 
-### **failed_jobs 資料表**
+### *failed_jobs 資料表*
 - 預設 migration 已包含，若無可用：
 ```bash
 php artisan make:queue-failed-table
@@ -1139,7 +1140,7 @@ php artisan queue:clear redis --queue=emails
 php artisan queue:monitor redis:default,redis:deployments --max=100
 ```
 
-- *監控事件可用於自動通知*：
+- **監控事件可用於自動通知**：
 ```php
 use Illuminate\Queue\Events\QueueBusy; // 匯入 QueueBusy 事件類別，代表 queue 長度超過門檻時會觸發的事件
 Event::listen(function (QueueBusy $event) { // 註冊一個監聽器，當 queue 長度過高時會自動呼叫這個匿名函式，並注入 QueueBusy 事件物件

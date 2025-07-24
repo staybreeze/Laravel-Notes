@@ -1,35 +1,35 @@
-# Laravel Artisan 與 Tinker 實作範例
+# *Laravel Artisan 與 Tinker 實作範例*
 
 ---
 
-## 1. Artisan 常用指令實作
+## 1. **Artisan 常用指令實作**
 
-### 1.1 路由列表
+### 1.1 *路由列表*
 ```bash
 php artisan route:list
 ```
 
-### 1.2 快取清除
+### 1.2 *快取清除*
 ```bash
 php artisan cache:clear
 php artisan config:clear
 php artisan view:clear
 ```
 
-### 1.3 執行資料庫遷移與填充
+### 1.3 *執行資料庫遷移與填充*
 ```bash
 php artisan migrate
 php artisan db:seed
 php artisan migrate:refresh --seed
 ```
 
-### 1.4 建立 Model、Controller、Migration
+### 1.4 *建立 Model、Controller、Migration*
 ```bash
 php artisan make:model Post -mcr
 # 會同時建立 Model、Migration、Controller、Resource
 ```
 
-### 1.5 建立自訂 Artisan 指令
+### 1.5 *建立自訂 Artisan 指令*
 ```bash
 php artisan make:command HelloWorld
 ```
@@ -59,19 +59,19 @@ php artisan hello:world
 
 ---
 
-## 2. Tinker 常用互動操作
+## 2. **Tinker 常用互動操作**
 
-### 2.1 進入 Tinker
+### 2.1 *進入 Tinker*
 ```bash
 php artisan tinker
 ```
 
-### 2.2 查詢所有使用者
+### 2.2 *查詢所有使用者*
 ```php
 App\Models\User::all();
 ```
 
-### 2.3 新增一筆資料
+### 2.3 *新增一筆資料*
 ```php
 $user = new App\Models\User();
 $user->name = 'Vincent';
@@ -80,26 +80,26 @@ $user->password = bcrypt('secret');
 $user->save();
 ```
 
-### 2.4 查詢單一資料
+### 2.4 *查詢單一資料*
 ```php
 $user = App\Models\User::find(1);
 $user->email;
 ```
 
-### 2.5 更新資料
+### 2.5 *更新資料*
 ```php
 $user = App\Models\User::find(1);
 $user->name = '新名字';
 $user->save();
 ```
 
-### 2.6 刪除資料
+### 2.6 *刪除資料*
 ```php
 $user = App\Models\User::find(1);
 $user->delete();
 ```
 
-### 2.7 使用 Collection 與 Helper
+### 2.7 *使用 Collection 與 Helper*
 ```php
 collect([1,2,3])->map(fn($v) => $v * 2);
 str('laravel')->upper();
@@ -107,34 +107,34 @@ str('laravel')->upper();
 
 ---
 
-## 3. Tinker 進階應用
+## 3. **Tinker 進階應用**
 
-### 3.1 派送 Job
+### 3.1 *派送 Job*
 ```php
 use App\Jobs\SendEmailJob;
 Bus::dispatch(new SendEmailJob($user));
 ```
 
-### 3.2 觸發 Event
+### 3.2 *觸發 Event*
 ```php
 use App\Events\UserRegistered;
 event(new UserRegistered($user));
 ```
 
-### 3.3 操作關聯資料
+### 3.3 *操作關聯資料*
 ```php
 $user = App\Models\User::find(1);
 $user->posts; // 取得該使用者的所有文章
 ```
 
-### 3.4 使用 Query Builder
+### 3.4 *使用 Query Builder*
 ```php
 DB::table('users')->where('email', 'like', '%@gmail.com')->get();
 ```
 
 ---
 
-## 4. Artisan 與 Tinker 實作小技巧
+## 4. **Artisan 與 Tinker 實作小技巧**
 
 - Artisan 指令可用 `--help` 查看所有參數
 - Tinker 支援多行輸入，可用 `Shift+Enter` 換行
@@ -143,14 +143,14 @@ DB::table('users')->where('email', 'like', '%@gmail.com')->get();
 
 ---
 
-## 5. 自訂 Artisan 指令實作
+## 5. **自訂 Artisan 指令實作**
 
-### 5.1 建立自訂指令
+### 5.1 *建立自訂指令*
 ```bash
 php artisan make:command SendEmails
 ```
 
-### 5.2 指令結構與範例
+### 5.2 *指令結構與範例*
 ```php
 namespace App\Console\Commands;
 
@@ -170,7 +170,7 @@ class SendEmails extends Command
 }
 ```
 
-### 5.3 狀態碼與錯誤處理
+### 5.3 *狀態碼與錯誤處理*
 ```php
 $this->error('Something went wrong.');
 return 1;
@@ -178,7 +178,7 @@ return 1;
 $this->fail('Something went wrong.');
 ```
 
-### 5.4 閉包式（Closure-based）指令
+### 5.4 *閉包式（Closure-based）指令*
 ```php
 // routes/console.php
 use Illuminate\Support\Facades\Artisan;
@@ -190,14 +190,14 @@ Artisan::command('greet {name}', function (string $name) {
     $this->info("Hello, {$name}!");
 })->purpose('Say hello to someone'); // 用 purpose() 設定指令描述，顯示於 php artisan list
 ```
-// 特點：
-// - 不需建立 class，適合臨時、簡單、教學用指令
-// - 支援 type-hint 依賴注入（如 function (DripEmailer $drip, string $user)）
-// - closure 內 $this 可用所有 Command 輔助方法
-// - signature 語法與 class 指令一致，支援 arguments/options/描述
-// - 可同時存在多個 closure-based 與 class 指令
+- **特點**：
+ - 不需建立 class，適合 *臨時、簡單、教學用指令*
+ - 支援 *type-hint* 依賴注入（如 function (DripEmailer $drip, string $user)）
+ - closure 內 *$this 可用所有 Command 輔助方法*
+ - signature 語法與 class 指令一致，支援 arguments/options/描述
+ - 可同時存在多個 closure-based 與 class 指令
 
-### 5.5 進階：Isolatable 指令
+### 5.5 *進階：Isolatable 指令*
 ```php
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
@@ -221,13 +221,13 @@ php artisan mail:send 1 --isolated
 php artisan mail:send 1 --isolated=12
 ```
 
-### 5.6 實作練習
+### 5.6 *實作練習*
 - 建立 HelloWorld 指令，顯示 Hello World
 - 在 routes/console.php 實作 greet {name} 指令，顯示問候語
 - 實作一個 Isolatable 指令，模擬長時間任務，測試 --isolated
 
-### 5.7 範例
-#### HelloWorld 指令
+### 5.7 *範例*
+#### **HelloWorld 指令**
 ```php
 namespace App\Console\Commands;
 
@@ -245,7 +245,7 @@ class HelloWorld extends Command
 }
 ```
 
-#### Closure-based 指令
+#### **Closure-based 指令**
 ```php
 // routes/console.php
 Artisan::command('greet {name}', function (string $name) {
@@ -255,9 +255,9 @@ Artisan::command('greet {name}', function (string $name) {
 
 ---
 
-## 6. 指令輸入定義與互動提示實作
+## 6. **指令輸入定義與互動提示實作**
 
-### 6.1 signature 定義範例
+### 6.1 *signature 定義範例*
 ```php
 protected $signature = 'mail:send
                         {user : The ID of the user}
@@ -266,7 +266,7 @@ protected $signature = 'mail:send
                         {--id=* : 多個 id}';
 ```
 
-### 6.2 使用方式
+### 6.2 *使用方式*
 ```bash
 php artisan mail:send 1 --queue
 php artisan mail:send 1 --queue=default
@@ -275,9 +275,9 @@ php artisan mail:send 1 2 3
 php artisan mail:send --id=1 --id=2
 ```
 
-### 6.3 PromptsForMissingInput 互動提示實作
+### 6.3 *PromptsForMissingInput 互動提示實作*
 
-#### 基本自動互動
+#### **基本自動互動**
 ```php
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
@@ -289,7 +289,7 @@ class SendEmails extends Command implements PromptsForMissingInput
 }
 ```
 
-#### 自訂互動問題
+#### **自訂互動問題**
 ```php
 protected function promptForMissingArgumentsUsing(): array
 {
@@ -299,7 +299,7 @@ protected function promptForMissingArgumentsUsing(): array
 }
 ```
 
-#### 加入 placeholder
+#### **加入 placeholder**
 ```php
 protected function promptForMissingArgumentsUsing(): array
 {
@@ -309,7 +309,7 @@ protected function promptForMissingArgumentsUsing(): array
 }
 ```
 
-#### 完全自訂互動（closure）
+#### **完全自訂互動（closure）**
 ```php
 use App\Models\User;
 use function Laravel\Prompts\search;
@@ -328,7 +328,7 @@ protected function promptForMissingArgumentsUsing(): array
 }
 ```
 
-#### afterPromptingForMissingArguments 進一步互動
+#### **afterPromptingForMissingArguments 進一步互動**
 ```php
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -345,9 +345,9 @@ protected function afterPromptingForMissingArguments(InputInterface $input, Outp
 
 ---
 
-## 7. 指令 I/O 輸入與輸出實作
+## 7. **指令 I/O 輸入與輸出實作**
 
-### 7.1 取得 Arguments 與 Options
+### 7.1 *取得 Arguments 與 Options*
 ```php
 // 取得單一 argument
 $userId = $this->argument('user');
@@ -359,7 +359,7 @@ $queueName = $this->option('queue');
 $options = $this->options();
 ```
 
-### 7.2 互動式輸入
+### 7.2 *互動式輸入*
 ```php
 // 一般提問
 $name = $this->ask('What is your name?');
@@ -380,7 +380,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], 0);
 $names = $this->choice('Select names', ['Taylor', 'Dayle'], null, null, true);
 ```
 
-### 7.3 輸出訊息
+### 7.3 *輸出訊息*
 ```php
 $this->info('The command was successful!');
 $this->error('Something went wrong!');
@@ -392,7 +392,7 @@ $this->newLine();
 $this->newLine(3);
 ```
 
-### 7.4 表格輸出
+### 7.4 *表格輸出*
 ```php
 use App\Models\User;
 $this->table(
@@ -401,7 +401,7 @@ $this->table(
 );
 ```
 
-### 7.5 進度條
+### 7.5 *進度條*
 ```php
 // 自動進度條
 $users = $this->withProgressBar(User::all(), function (User $user) {
@@ -420,15 +420,15 @@ $bar->finish();
 
 ---
 
-## 8. 進階主題實作：Stub 自訂與 Signal Handling
+## 8. **進階主題實作：Stub 自訂與 Signal Handling**
 
-### 8.1 Stub Customization
+### 8.1 *Stub Customization*
 ```bash
 php artisan stub:publish
 # 修改 stubs/ 目錄下的檔案，之後 make:controller 等都會用自訂內容
 ```
 
-### 8.2 Signal Handling
+### 8.2 *Signal Handling*
 ```php
 // 指令內攔截 SIGTERM、SIGQUIT
 $this->trap([SIGTERM, SIGQUIT], function (int $signal) {
@@ -440,9 +440,9 @@ $this->trap([SIGTERM, SIGQUIT], function (int $signal) {
 
 ---
 
-## 9. 指令註冊與 Artisan 事件實作
+## 9. **指令註冊與 Artisan 事件實作**
 
-### 9.1 withCommands 註冊範例
+### 9.1 *withCommands 註冊範例*
 ```php
 // bootstrap/app.php
 ->withCommands([
@@ -451,7 +451,7 @@ $this->trap([SIGTERM, SIGQUIT], function (int $signal) {
 ])
 ```
 
-### 9.2 Artisan Events 監聽範例
+### 9.2 *Artisan Events 監聽範例*
 ```php
 // app/Providers/EventServiceProvider.php
 protected $listen = [
@@ -465,9 +465,7 @@ protected $listen = [
         \App\Listeners\LogCommandFinished::class,
     ],
 ];
-```
 // 監聽器內可記錄 log、統計、hook 等
+```
 
 ---
-
-> 本筆記適合實務練習、教學與日常查閱，歡迎依需求擴充更多範例！ 

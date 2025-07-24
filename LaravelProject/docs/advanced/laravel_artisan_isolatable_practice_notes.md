@@ -1,8 +1,8 @@
-# Laravel Isolatable 指令實作範例
+# *Laravel Isolatable 指令實作範例*
 
 ---
 
-## 1. 基本 Isolatable 指令
+## 1. **基本 Isolatable 指令**
 
 ```php
 use Illuminate\Console\Command;
@@ -20,7 +20,7 @@ class SendEmails extends Command implements Isolatable
 }
 ```
 
-- 執行時加 `--isolated`，同一時間只允許一個執行：
+- 執行時加 `--isolated`，*同一時間只允許一個執行*：
   ```bash
   php artisan mail:send 1 --isolated
   ```
@@ -31,7 +31,7 @@ class SendEmails extends Command implements Isolatable
 
 ---
 
-## 2. 進階自訂 Lock ID
+## 2. **進階自訂 Lock ID**
 
 ```php
 public function isolatableId(): string
@@ -43,7 +43,7 @@ public function isolatableId(): string
 
 ---
 
-## 3. 進階自訂 Lock 過期時間
+## 3. **進階自訂 Lock 過期時間**
 
 ```php
 use DateTimeInterface;
@@ -58,9 +58,9 @@ public function isolationLockExpiresAt(): DateTimeInterface|DateInterval
 
 ---
 
-## 4. 實作重點
+## 4. **實作重點**
 
-- 只要 implements Isolatable，Laravel 會自動幫你加上 --isolated 參數
-- 執行時加 --isolated，會用 cache 做 lock，確保同一時間只有一個指令執行
+- 只要 *implements Isolatable*，Laravel 會自動幫你加上 --isolated 參數
+- 執行時加 --isolated，*會用 cache 做 lock*，確保同一時間只有一個指令執行
 - 不會排隊，搶不到 lock 直接結束
 - 適合高併發、排程、批次等場景 
