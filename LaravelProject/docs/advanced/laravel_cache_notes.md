@@ -1,4 +1,4 @@
-# *Laravel Cache 快取系統完整筆記*
+# *Laravel Cache 快取系統*
 
 ## 1. **什麼是 Cache？為什麼要用？**
 - Cache（快取）是將耗時或重複查詢的資料暫存起來，加速下次存取。
@@ -456,7 +456,7 @@ $value = cache()->remember('users', 600, function () { // 取得 users 這個快
 - **實務舉例**：
   1. *排程任務防重複*：多台伺服器都跑 schedule:run，只希望同一任務同時只執行一次。
   2. *秒殺/搶購*：多台伺服器同時下單，庫存只能被扣一次。
-  3. *分散式資源搶佔：*多個 queue worker 處理同一任務池，某些任務只能被一個 worker 處理。
+  3. *分散式資源搶佔*：多個 queue worker 處理同一任務池，某些任務只能被一個 worker 處理。
 - **常見實作方式**：
   - Redis（setnx/expire）、Database（唯一索引/for update）、ZooKeeper、Memcached（add 指令）等。
 - **小結**：

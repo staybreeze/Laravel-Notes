@@ -1,5 +1,5 @@
 
-# *Laravel Logging 日誌教學*
+# *Laravel Logging 日誌*
 
 ---
 

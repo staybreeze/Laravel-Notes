@@ -1,4 +1,4 @@
-# *Laravel Validation 驗證教學*
+# *Laravel Validation 驗證*
 
 ---
 

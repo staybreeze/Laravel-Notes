@@ -1,4 +1,4 @@
-# *Laravel Error Handling 錯誤處理完整教學*
+# *Laravel Error Handling 錯誤處理*
 
 ---
 

@@ -342,7 +342,7 @@ public function update(?User $user, Post $post): bool
 ```
 
 #### **before 過濾器（全域授權/拒絕）**
-- 可在 Policy 類別內定義 before 方法，於*所有授權前先執行：*
+- 可在 Policy 類別內定義 before 方法，於*所有授權前先執行*：
 ```php
 public function before(User $user, string $ability): bool|null
 {
