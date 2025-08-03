@@ -4,7 +4,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\DB;
-use App\Jobs\Heartbeat;
+// use App\Jobs\Heartbeat;
 use App\Tasks\DeleteRecentUsers;
 
 // --- Closure 任務：每天凌晨清空 recent_users ---
@@ -27,7 +27,7 @@ Artisan::command('delete:recent-users', function () {
 })->purpose('Delete recent users')->daily();
 
 // --- Queue Job ---
-Schedule::job(new Heartbeat)->everyFiveMinutes();
+// Schedule::job(new Heartbeat)->everyFiveMinutes();
 // 指定 queue/connection
 // Schedule::job(new Heartbeat, 'heartbeats', 'sqs')->everyFiveMinutes();
 
