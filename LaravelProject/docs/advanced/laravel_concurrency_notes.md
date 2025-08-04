@@ -1,8 +1,8 @@
-# *Laravel Concurrency 並行*
+# *Laravel Concurrency 併發*
 
 ## 1. **簡介**（Introduction）
 
-有時需`同時執行多個互不相依的耗時任務`，Laravel 提供 Concurrency facade，讓你能簡單地並行執行 closure，顯著提升效能。
+有時需`同時執行多個互不相依的耗時任務`，Laravel 提供 Concurrency facade，讓你能簡單地併發執行 closure，顯著提升效能。
 
 ---
 
@@ -22,7 +22,7 @@ composer require spatie/fork
 
 ---
 
-## 3. **執行並行任務**（Running Concurrent Tasks）
+## 3. **執行併發任務**（Running Concurrent Tasks）
 
 用 `Concurrency::run` *同時執行多個 closure*，回傳結果陣列：
 
@@ -50,7 +50,7 @@ php artisan config:publish concurrency
 
 ---
 
-## 4. **延遲並行任務**（Deferring Concurrent Tasks）
+## 4. **延遲併發任務**（Deferring Concurrent Tasks）
 
 若*只需執行 closure 而不需回傳結果*，可用 `defer`，Laravel 會`於 HTTP response 傳送後`才執行 closure：
 
