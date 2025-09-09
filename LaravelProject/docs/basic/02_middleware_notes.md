@@ -1,21 +1,29 @@
-# *Laravel Middleware 中介層*
+# *Laravel Middleware 中介層 筆記*
 
 ---
 
 ## 1. **簡介與核心概念**
-- *Middleware（中介層）* 可攔截、檢查、過濾進入應用的 HTTP 請求。
+
+- *Middleware（中介層）* 可`攔截、檢查、過濾`進入應用的 HTTP 請求。
 - 例如：驗證用戶是否登入、CSRF 防護、日誌記錄等。
+
 - *生活化比喻*： Middleware 就像「門禁管制」，每層都能檢查、放行或拒絕訪客。
 - 所有自訂 middleware 通常放在 `app/Http/Middleware` 目錄。
 
 ---
 
 ## 2. **定義 Middleware**
+
 - 使用 artisan 指令建立：
+
   ```bash
   `php artisan make:middleware EnsureTokenIsValid`
   ```
-- 範例：只允許 token 正確才放行，否則重導回 /home：
+
+---
+
+- 範例：只允許 `token 正確` 才放行，否則重導回 `/home`：
+
   ```php
   namespace App\Http\Middleware;
   use Closure;
@@ -30,14 +38,16 @@
       }
   }
   ```
-- *$next($request)* 代表「放行」到下一層 middleware 或 controller。
-- Middleware 可視為「多層洋蔥」，每層都能檢查、處理請求。
+- *$next($request)* 代表`「放行」到下一層` middleware 或 controller。
+- Middleware 可視為「__多層洋蔥__」，每層都能檢查、處理請求。
 - 所有 middleware 由 *service container* 注入，可在建構子 *type-hint* 依賴。
 
 ---
 
 ## 3. **Middleware 與 Response 前後處理**
+
 - *前置處理*（請求進入前）：
+
   ```php
   class BeforeMiddleware {
       public function handle(Request $request, Closure $next): Response {
@@ -46,7 +56,11 @@
       }
   }
   ```
+
+  ---
+
 - *後置處理*（回應送出後）：
+
   ```php
   class AfterMiddleware {
       public function handle(Request $request, Closure $next): Response {
@@ -62,21 +76,35 @@
 ## 4. **註冊 Middleware**
 
 ### *全域 Middleware*
+
 - 讓 middleware 作用於`所有請求`：
+
   ```php
   use App\Http\Middleware\EnsureTokenIsValid;
+
   ->withMiddleware(function (Middleware $middleware) {
       $middleware->append(EnsureTokenIsValid::class);
   })
   ```
-- `append` 加在全域 middleware 最後，
-  `prepend` 加在最前。
+
+- `append` 代表把 middleware 加在全域 middleware 列表的*最後面*，
+  請求會先經過其他 middleware，最後才經過你 append 的 middleware。
+
+
+- `prepend` 則是加在*最前面*，
+  請求一進來就先經過你 prepend 的 middleware，
+  再依序進入其他 middleware。
+
+---
+
 - **自訂全域 middleware stack**：
+
   ```php
   ->withMiddleware(function (Middleware $middleware) {
+      // use([]) 方法可以一次設定多個全域 middleware
       $middleware->use([
           \Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks::class,
-          // \Illuminate\Http\Middleware\TrustHosts::class,
+          \Illuminate\Http\Middleware\TrustHosts::class,
           \Illuminate\Http\Middleware\TrustProxies::class,
           \Illuminate\Http\Middleware\HandleCors::class,
           \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -87,16 +115,24 @@
   })
   ```
 
+---
+
 ### *路由 Middleware*
+
 - 指定 middleware 只作用於`特定路由`：
+
   ```php
   use App\Http\Middleware\EnsureTokenIsValid;
   Route::get('/profile', function () { /* ... */ })->middleware(EnsureTokenIsValid::class);
   Route::get('/', function () { /* ... */ })->middleware([First::class, Second::class]);
   ```
 
+---
+
 ### *排除 Middleware*
-- 可用 `withoutMiddleware` 排除 group 內特定 middleware：
+
+- 可用 `withoutMiddleware` 排除 `group` 內特定 middleware：
+
   ```php
   Route::middleware([EnsureTokenIsValid::class])->group(function () {
       Route::get('/', function () { /* ... */ });
@@ -110,62 +146,106 @@
 
 ---
 
-## 5. **Middleware 群組（Group）**
+## 5. **Middleware 群組**（Group）
+
 - 可將多個 middleware *組成群組*，方便一次套用：
+
   ```php
   use App\Http\Middleware\First;
   use App\Http\Middleware\Second;
+
   ->withMiddleware(function (Middleware $middleware) {
-      $middleware->appendToGroup('group-name', [First::class, Second::class]);
-      $middleware->prependToGroup('group-name', [First::class, Second::class]);
+    // 在 group-name 群組最後加入 First 和 Second middleware
+    $middleware->appendToGroup('group-name', [First::class, Second::class]);
+    // 在 group-name 群組最前面加入 First 和 Second middleware
+    $middleware->prependToGroup('group-name', [First::class, Second::class]);
+
+    // 也可以定義多個群組
+    $middleware->group('web', [
+        First::class,
+        Second::class,
+    ]);
+    $middleware->group('api', [
+        Second::class,
+    ]);
   })
   ```
-- *路由套用群組*：
+---
+
+- *路由套用群組*
+
   ```php
   Route::get('/', function () { /* ... */ })->middleware('group-name');
   Route::middleware(['group-name'])->group(function () { /* ... */ });
   ```
-- *Laravel 內建 web/api 群組*：
-  - `web`： EncryptCookies, 
-            AddQueuedCookiesToResponse, 
-            StartSession, 
-            ShareErrorsFromSession, 
-            ValidateCsrfToken, 
-            SubstituteBindings
-  - `api`：SubstituteBindings
 
-- *自訂/調整群組*：
-  ```php
-  use App\Http\Middleware\EnsureTokenIsValid;
-  use App\Http\Middleware\EnsureUserIsSubscribed;
-  ->withMiddleware(function (Middleware $middleware) {
-      $middleware->web(append: [EnsureUserIsSubscribed::class]);
-      $middleware->api(prepend: [EnsureTokenIsValid::class]);
-      $middleware->web(replace: [StartSession::class => StartCustomSession::class]);
-      $middleware->web(remove: [StartSession::class]);
-  })
-  ```
+---
+
+- *Laravel 內建 web/api 群組*
+
+  - `web`：
+    - __EncryptCookies__：`加密`回應中的 cookie，提升安全性
+    - __AddQueuedCookiesToResponse__：將排隊的 cookie `加入回應`
+
+    - __StartSession__：`啟動` Session，管理使用者狀態
+    - __ShareErrorsFromSession__：將 Session 中的錯誤訊息`分享給視圖`
+
+    - __ValidateCsrfToken__：`驗證` CSRF Token，防止跨站請求偽造
+
+    - __SubstituteBindings__：`自動解析`路由參數綁定
+
+  - `api`：
+    - __SubstituteBindings__：`自動解析`路由參數綁定
+
+---
+
+- *自訂/調整群組*
+
+```php
+// bootstrap/app.php 
+use App\Http\Middleware\EnsureTokenIsValid;
+use App\Http\Middleware\EnsureUserIsSubscribed;
+
+->withMiddleware(function (Middleware $middleware) {
+    // 在 web 群組最後加上 EnsureUserIsSubscribed
+    $middleware->web(append: [EnsureUserIsSubscribed::class]);
+    // 在 api 群組最前面加上 EnsureTokenIsValid
+    $middleware->api(prepend: [EnsureTokenIsValid::class]);
+    // 用 StartCustomSession 取代 web 群組裡的 StartSession
+    $middleware->web(replace: [StartSession::class => StartCustomSession::class]);
+    // 從 web 群組移除 StartSession
+    $middleware->web(remove: [StartSession::class]);
+})
+```
+
+---
+
 - *完全自訂群組內容*：
+
   ```php
   ->withMiddleware(function (Middleware $middleware) {
+      // 定義 web 群組的 middleware
       $middleware->group('web', [
-          \Illuminate\Cookie\Middleware\EncryptCookies::class,
-          \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-          \Illuminate\Session\Middleware\StartSession::class,
-          \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-          \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
-          \Illuminate\Routing\Middleware\SubstituteBindings::class,
+          \Illuminate\Cookie\Middleware\EncryptCookies::class,              // 加密 cookie
+          \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,  // 回應時加入排隊 cookie
+          \Illuminate\Session\Middleware\StartSession::class,               // 啟動 Session
+          \Illuminate\View\Middleware\ShareErrorsFromSession::class,        // 分享 Session 錯誤到視圖
+          \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,  // 驗證 CSRF Token
+          \Illuminate\Routing\Middleware\SubstituteBindings::class,         // 路由參數綁定
       ]);
+      // 定義 api 群組的 middleware
       $middleware->group('api', [
-          \Illuminate\Routing\Middleware\SubstituteBindings::class,
+          \Illuminate\Routing\Middleware\SubstituteBindings::class,         // 路由參數綁定
       ]);
   })
   ```
 
 ---
 
-## 6. **Middleware 別名（Alias）**
+## 6. **Middleware 別名**（Alias）
+
 - 可為 middleware 設定 *短別名* ，方便路由引用：
+
   ```php
   use App\Http\Middleware\EnsureUserIsSubscribed;
   ->withMiddleware(function (Middleware $middleware) {
@@ -190,8 +270,10 @@
 
 ---
 
-## 7. **Middleware 執行順序（Priority）**
+## 7. **Middleware 執行順序**（Priority）
+
 - 可用 `priority()` 指定 middleware *執行順序*：
+
   ```php
   ->withMiddleware(function (Middleware $middleware) {
       $middleware->priority([
@@ -214,27 +296,46 @@
 ---
 
 ## 8. **Middleware 參數**
+
 - Middleware *可接收額外參數*：
+
   ```php
-  class EnsureUserHasRole {
-      public function handle(Request $request, Closure $next, string $role): Response {
+  class EnsureUserHasRole
+  {
+      // Middleware 處理方法，$role 由路由 middleware 參數傳入
+      public function handle(Request $request, Closure $next, string $role): Response
+      {
+          // 檢查使用者是否有指定角色
           if (! $request->user()->hasRole($role)) {
-              // Redirect...
+              // 如果沒有角色，可以重定向或回傳錯誤
+              // return redirect('/no-permission');
           }
+          // 有角色則繼續後續請求流程
           return $next($request);
       }
   }
   ```
+
+---
+
 - *路由指定參數*：
+
   ```php
-  Route::put('/post/{id}', function (string $id) { /* ... */ })->middleware(EnsureUserHasRole::class.':editor');
-  Route::put('/post/{id}', function (string $id) { /* ... */ })->middleware(EnsureUserHasRole::class.':editor,publisher');
+  Route::put('/post/{id}', function (string $id) {
+      // 編輯指定 id 的文章
+  })->middleware(EnsureUserHasRole::class . ':editor'); // 只允許 editor 角色
+
+  Route::put('/post/{id}', function (string $id) {
+      // 編輯指定 id 的文章
+  })->middleware(EnsureUserHasRole::class . ':editor,publisher'); // 允許 editor 或 publisher 角色
   ```
 
 ---
 
-## 9. **Terminable Middleware（回應送出後處理）**
+## 9. **Terminable Middleware**（回應送出後處理）
+
 - 若 middleware 有 `terminate` 方法，*回應送出後會自動呼叫*（需 FastCGI）：
+
   ```php
   class TerminatingMiddleware {
       public function handle(Request $request, Closure $next): Response {
@@ -245,9 +346,14 @@
       }
   }
   ```
-- 若要 `handle/terminate `用同一實例，需在 `AppServiceProvider` 註冊 `singleton`：
+
+---
+
+- 若要 `handle/terminate `用**同一實例**，需在 `AppServiceProvider` 註冊 `singleton`：
+
   ```php
   use App\Http\Middleware\TerminatingMiddleware;
+  
   public function register(): void {
       $this->app->singleton(TerminatingMiddleware::class);
   }
