@@ -1,4 +1,4 @@
-# *Laravel Blade Anonymous Components 匿名元件*
+# *Laravel Blade Anonymous Components 匿名元件 筆記*
 
 ---
 
@@ -17,28 +17,33 @@
   touch resources/views/components/alert.blade.php
   ```
 
+---
+
 - **渲染**：
-  ```html
+  ```php
   <x-alert />
   <!-- 若在子目錄：<x-inputs.button /> -->
   ```
 
+---
+
 - **Index 元件**：
+
   - 若有 `多個相關檔案`，可在目錄下建立同名檔作為 `root` 元件。
   - 範例檔案結構：
 
-    - /resources/views/components/accordion/accordion.blade.php
+    - `/resources/views/components/accordion/accordion.blade.php`
       <div class="accordion">
       {{ $slot }}
       </div>
 
-    - /resources/views/components/accordion/item.blade.php
+    - `/resources/views/components/accordion/item.blade.php`
       <div class="accordion-item">
       {{ $slot }}
       </div>
 
-  - 使用方式：
-    ```html
+  - **使用方式**：
+    ```php
     <x-accordion>
         <x-accordion.item>
             Item Content
@@ -57,7 +62,8 @@
 ## 3. **@props 與資料屬性**
 
 - *`@props`*：定義哪些`屬性`會變成`變數`，其餘進 `$attributes`
-  ```html
+
+  ```php
   @props(['type' => 'info', 'message'])
   <!-- 
       1. `@props` 用於定義元件的屬性。
@@ -73,6 +79,8 @@
             - 用於合併屬性到 HTML 標籤中。
             - 這裡將 `class` 屬性合併為 `'alert alert-'.$type`。
             - 如果使用者傳入其他屬性（例如 `class="custom-class"`），會與預設值合併。
+              <x-alert class="custom-class" type="danger" message="Oops!"></x-alert>
+              => <div class="alert alert-danger custom-class">...</div>
           2. `'alert alert-'.$type`：
             - 根據 `type` 的值動態生成類別名稱，例如 `'alert alert-info'`。
       -->
@@ -85,10 +93,15 @@
   </div>
   ```
 
+---
+
 - *使用*：
-  ```html
+
+  ```php
   <x-alert type="error" :message="$message" class="mb-4" />
   ```
+
+---
 
 - *預設值*：@props(['type' => 'info'])
 
@@ -97,7 +110,7 @@
 ## 4. **@aware 父元件資料注入**
 
 - *`@aware`*：讓**子元件可取得父元件屬性**（必須由父元件 HTML 屬性傳入）
-  ```html
+  ```php
   <!-- /components/menu/index.blade.php -->
   @props(['color' => 'gray'])
   <!-- 
@@ -124,7 +137,7 @@
   </li>
   ```
 
-  ```html
+  ```php
   <!-- 使用範例 -->
   <x-menu color="blue">
       <x-menu.item>Item 1</x-menu.item>
@@ -132,7 +145,7 @@
   </x-menu>
   ```
 
-  ```html
+  ```php
   <!-- 輸出結果 -->
   <ul class="bg-blue-200">
       <li class="text-blue-800">Item 1</li>
@@ -140,16 +153,19 @@
   </ul>
   ```
 
+---
+
 - *註解*
+
   - **父元件的屬性傳遞**：
-    - `父元件`的屬性（如 color="blue"）會傳遞給子元件，子元件可以使用 `@aware` 來取得該屬性。
+    - `父元件`的屬性（如 `color="blue"`）會傳遞給子元件，子元件可以使用 `@aware` 來取得該屬性。
 
   - **限制**：
-    - `子元件`只能取得`父元件`的 HTML 屬性。
-    - 父元件的 `@props` *預設值*（如 color => 'gray'）無法被 `@aware` 取得。
+    - `子元件`只能取得`父元件`的 __HTML 屬性__。
+    - 父元件的 `@props` *預設值*（如 `color => 'gray'`）無法被 `@aware` 取得。
 
   - **動態生成樣式**：
-    - 父元件的屬性值（如 color="blue"）會影響子元件的樣式，實現`樣式的動態生成`。
+    - 父元件的屬性值（如 `color="blue"`）會影響子元件的樣式，實現`樣式的動態生成`。
 
 ---
 
@@ -184,7 +200,8 @@
 ## 6. **Layout 與繼承**
 
 - *用元件作 layout*
-  ```html
+
+  ```php
   <!-- /components/layout.blade.php -->
   <html>
       <head>
@@ -222,8 +239,12 @@
   </x-layout>
   ```
 
+---
+
 - *傳統繼承*
-  ```html
+
+  ```php
+
   @extends('layouts.app')
   <!-- 
       1. `@extends` 用於指定要繼承的 Blade 模板。
@@ -254,8 +275,11 @@
   -->
   ```
 
+---
+
 - *`@yield` 可設預設值*
-  ```html
+
+  ```php
   @yield('content', 'Default content')
   <!-- 
       1. `@yield` 用於顯示指定區塊的內容。
@@ -269,7 +293,8 @@
 
 - *@csrf*：產生 CSRF token 欄位
 - *@method*：產生 _method 欄位（PUT/PATCH/DELETE）
-  ```html
+
+  ```php
   <form method="POST" action="/update">
     @method('PUT')
     @csrf
@@ -281,7 +306,7 @@
   </form>
   ```
 
-  ```html
+  ```php
   <!-- 輸出結果 -->
   <form method="POST" action="/update">
     <input type="hidden" name="_method" value="PUT">
@@ -290,9 +315,14 @@
   </form>
   ```
 
+---
+
 - *@error*：顯示欄位錯誤訊息
-  ```html
+
+  ```php
+  // 如果 email 欄位有驗證錯誤，class 會加上 is-invalid
   <input class="@error('email') is-invalid @enderror" />
+  // 如果 email 欄位有錯誤，顯示錯誤訊息
   @error('email') 
   <div>{{ $message }}</div> 
   @enderror
@@ -301,22 +331,26 @@
       2. 如果有錯誤，`$message` 會包含該欄位的錯誤訊息。
       3. `is-invalid` 是 Bootstrap 的樣式類別，用於標記錯誤的輸入框。
   -->
+
   @error('email', 'login') 
       <div>{{ $message }}</div>
   @enderror
   <!-- 
       1. 第二個參數 `'login'` 指定錯誤包（error bag）。
+      error bag 是在 controller 裡用 withErrors($validator, 'bag名稱')
+      或 validate($request, [...], [], 'bag名稱') 時自己指定的，
+      Laravel 會根據你給的名稱建立錯誤包，
       2. 用於處理多個表單的錯誤訊息。
   -->
   ```
 
-  ```html
+  ```php
   <!-- 輸出結果（有錯誤時） -->
   <input class="is-invalid" name="email" />
   <div>The email field is required.</div>
   ```
 
-  ```html
+  ```php
   <!-- 輸出結果（無錯誤時） -->
   <input name="email" />
   ```
@@ -325,7 +359,8 @@
 ## 8. **Stack 與 @push/@prepend**
 
 - *@push('scripts') ... @endpush*：將內容推送到指定的 `stack（堆疊）` ，通常用於在 layout 中的特定位置插入內容。
-  ```html
+
+  ```php
   @push('scripts')
       <script src="/js/app.js"></script>
   @endpush
@@ -336,19 +371,35 @@
   -->
   ```
 
+---
+
 - *@stack('scripts')*：在 layout 中的指定位置渲染 `stack` 的內容。
-  ```html
+
+  ```php
   <head>
       @stack('scripts')
   </head>
   <!-- 
       1. `@stack('scripts')`：渲染名為 `scripts` 的 stack 的所有內容。
       2. 所有使用 `@push('scripts')` 推送的內容會在這裡渲染。
+
+      堆疊是（stack）是 Blade 的一種內容插入機制，  
+      可以讓你在不同的 view 或元件裡用 `@push('stack名稱')` 推送內容，  
+      然後在 layout 的 `@stack('stack名稱')` 位置一次渲染所有推送的內容。  
+      常用於插入 script、style 或 meta 標籤等。
+
+      堆疊的東西指的是： 
+      你用 `@push('stack名稱')` 推送到 stack 的內容，  
+      例如 script、style、meta 標籤等，  
+      這些內容會在 layout 的 `@stack('stack名稱')` 位置一次渲染出來。
   -->
   ```
+
+---
   
 - *@prepend('scripts') ... @endprepend*：將內容插入到 `stack` 的最前面，**優先**於其他推送的內容。
-  ```html
+
+  ```php
   @prepend('scripts')
       <script src="/js/priority.js"></script>
   @endprepend
@@ -359,8 +410,11 @@
   -->
   ```
 
+---
+
 - *@pushIf($cond, 'scripts') ... @endPushIf*：根據條件推送內容到指定 `stack`。
-  ```html
+
+  ```php
   @pushIf($cond, 'scripts')
       <script src="/js/conditional.js"></script>
   @endPushIf
@@ -370,9 +424,12 @@
       3. `@endPushIf`：結束條件推送。
   -->
   ```
+
+---
   
-－ *總範例*
-  ```html
+- *總範例*
+
+  ```php
   <!-- Layout 文件 -->
   <!-- resources/views/layouts/app.blade.php -->
   <!DOCTYPE html>
@@ -392,7 +449,7 @@
   </html>
   ```
 
-  ```html
+  ```php
   <!-- 子模版 -->
   <!-- resources/views/pages/home.blade.php -->
   @extends('layouts.app')
@@ -410,7 +467,7 @@
   @endsection
   ```
 
-  ```html
+  ```php
   <!-- 輸出結果 -->
   <!DOCTYPE html>
   <html>
@@ -430,7 +487,8 @@
 ## 9. **Service Injection 與 Inline/Fragment**
 
 - *@inject*：`注入服務`
-  ```html
+
+  ```php
   @inject('metrics', 'App\Services\MetricsService')
   <div>Monthly Revenue: {{ $metrics->monthlyRevenue() }}</div>
     <!-- 
@@ -441,12 +499,16 @@
   -->
   ```
 
+---
+
 - *Blade::render*：渲染 `inline Blade` 字串
+
   - **適合使用的地方**
     - `控制器`：快速生成 HTML 回應。
     - `Artisan 命令`：生成動態內容。
     - `API 回應`：生成 HTML 片段作為 *JSON* 回應的一部分。
     - `動態渲染`：在需要快速渲染 Blade 模板片段的地方。
+
   - **注意事項**
     - `不適合複雜模板`：
       - *Blade::render()* 適合用於簡單的模板片段，複雜的模板應使用完整的 Blade 檔案。
@@ -454,6 +516,7 @@
       - 必須以*陣列形式*傳遞資料，並確保 Blade 字串中的變數名稱與陣列鍵名一致。
     - `性能`：
       - 適合*小型片段渲染*，頻繁使用可能影響性能。
+
   ```php
   Blade::render('Hello, {{ $name }}', ['name' => 'Julian Bashir']);
   <!-- 
@@ -468,8 +531,11 @@
   -->
   ```
 
+---
+
 - *@fragment ... @endfragment*：`只回傳片段`
-  ```html
+
+  ```php
   @fragment('user-list')
       <ul>
           <li>User 1</li>
@@ -507,6 +573,7 @@
 ## 10. **自訂指令與 Echo Handler**
 
 - *自訂指令*
+
   ```php
   use Illuminate\Support\Facades\Blade;
   Blade::directive('datetime', fn($exp) => "<?php echo ($exp)->format('m/d/Y H:i'); ?>");
@@ -524,7 +591,10 @@
   */
   ```
 
+---
+
 - *自訂 echo handler*
+
   ```php
   use Illuminate\Support\Facades\Blade;
   Blade::stringable(function (Money $money) { return $money->formatTo('en_GB'); });
@@ -542,7 +612,10 @@
   */
   ```
 
+---
+
 - *自訂 if 指令*
+
   ```php
   use Illuminate\Support\Facades\Blade;
   Blade::if('disk', fn($v) => config('filesystems.default') === $v);
