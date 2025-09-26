@@ -15,7 +15,7 @@
    ```bash
    php artisan install:broadcasting
    ```
-2. *選擇驅動並安裝套件（以 Reverb 為例）*
+2. *選擇驅動並安裝套件*（以 Reverb 為例）
    ```bash
    php artisan install:broadcasting --reverb
    # 或
@@ -72,14 +72,14 @@ class UserDataExported implements ShouldBroadcast
 UserDataExported::dispatch($userId);
 ```
 
-- *註冊頻道授權（routes/channels.php）*
+- *註冊頻道授權*（routes/channels.php）
 ```php
 Broadcast::channel('user.{userId}', function ($user, $userId) {
     return (int) $user->id === (int) $userId;
 });
 ```
 
-- *前端 Echo 監聽事件（以 Vue/JS 為例）*
+- *前端 Echo 監聽事件*（以 Vue/JS 為例）
 ```js
 import Echo from 'laravel-echo';
 window.Pusher = require('pusher-js');

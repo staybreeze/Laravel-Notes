@@ -6,7 +6,7 @@
 
 ### 1.1 *安裝 Echo 及對應套件*
 
-#### **Reverb / Pusher / Ably（皆需 pusher-js）**
+#### **Reverb / Pusher / Ably**（皆需 pusher-js）
 
 ```bash
 # 路徑：終端機指令
@@ -15,7 +15,7 @@ npm install --save-dev laravel-echo pusher-js
 
 ---
 
-### 1.2 *建立 Echo 實例（resources/js/bootstrap.js）*
+### 1.2 *建立 Echo 實例*（resources/js/bootstrap.js）
 #### **Reverb**
 ```js
 // 路徑：LaravelProject/resources/js/bootstrap.js
@@ -133,7 +133,7 @@ class OrderShipmentStatusUpdated implements ShouldBroadcast
 
 ---
 
-### 2.2 *頻道授權（routes/channels.php）*
+### 2.2 *頻道授權*（routes/channels.php）
 ```php
 // 路徑：LaravelProject/routes/channels.php
 use App\Models\Order;
@@ -159,7 +159,7 @@ window.Echo.private('orders.' + orderId)
     });
 ```
 
-#### **React Hook 寫法（@laravel/echo-react）**
+#### **React Hook 寫法**（@laravel/echo-react）
 ```js
 // 路徑：LaravelProject/resources/js/components/OrderStatus.js
 
@@ -234,7 +234,7 @@ class OrderController extends Controller
 
 ---
 
-### 6.2 *Job 觸發事件（如需非同步處理）*
+### 6.2 *Job 觸發事件*（如需非同步處理）
 ```php
 // app/Jobs/NotifyOrderShipmentStatus.php
 namespace App\Jobs;
@@ -389,7 +389,7 @@ public function broadcastWith(): array
 
 ---
 
-### 7.4 *頻道授權（routes/channels.php）*
+### 7.4 *頻道授權*（routes/channels.php）
 ```php
 Broadcast::channel('orders.{orderId}', function ($user, $orderId) {
     return $user->id === \App\Models\Order::findOrNew($orderId)->user_id;
@@ -504,7 +504,7 @@ export default function OrderStatus({ orderId }) {
 
 ---
 
-## 9. **Broadcasting 頻道授權（Authorizing Channels）**
+## 9. **Broadcasting 頻道授權**（Authorizing Channels）
 
 ### 9.1 *為什麼要授權？*
 - Private/Presence Channel 需要驗證「目前登入的 user 是否有權限訂閱這個頻道」。
@@ -512,7 +512,7 @@ export default function OrderStatus({ orderId }) {
 
 ---
 
-### 9.2 *定義授權邏輯（routes/channels.php）*
+### 9.2 *定義授權邏輯*（routes/channels.php）
 ```php
 // 路徑：LaravelProject/routes/channels.php
 use App\Models\User;
@@ -537,7 +537,7 @@ Broadcast::channel('orders.{order}', function (User $user, Order $order) {
 
 ---
 
-### 9.4 *多重認證守衛（guards）*
+### 9.4 *多重認證守衛*（guards）
 ```php
 Broadcast::channel('channel', function () {
     // ...
@@ -601,7 +601,7 @@ A: 前端 Echo 會自動收到授權失敗，無法訂閱頻道。
 
 ## 10. **Broadcasting 進階用法與補充**
 
-### 10.1 *只推播給其他人（toOthers）***
+### 10.1 *只推播給其他人*（toOthers）
 - 避免自己收到重複推播（如表單送出後，自己已經有資料）。
 ```php
 broadcast(new OrderShipmentStatusUpdated($order))->toOthers();
@@ -610,7 +610,7 @@ broadcast(new OrderShipmentStatusUpdated($order))->toOthers();
 
 ---
 
-### 10.2 *多連線支援（via/broadcastVia）*
+### 10.2 *多連線支援*（via/broadcastVia）
 - 即時指定 driver：
 ```php
 broadcast(new OrderShipmentStatusUpdated($order))->via('pusher');
@@ -631,7 +631,7 @@ class OrderShipmentStatusUpdated implements ShouldBroadcast
 
 ---
 
-### 10.3 *匿名事件（Anonymous Events）*
+### 10.3 *匿名事件*（Anonymous Events）
 - 不用自訂事件 class，也能推播事件到前端。
 ```php
 Broadcast::on('orders.'.$order->id)->send();
@@ -647,7 +647,7 @@ Broadcast::on('orders.'.$order->id)->toOthers()->send(); // 只推播給其他�
 
 ---
 
-### 10.4 *Rescue 機制（ShouldRescue）*
+### 10.4 *Rescue 機制*（ShouldRescue）
 - 推播失敗時自動捕捉例外，不會影響主流程，適合非關鍵推播。
 ```php
 use Illuminate\Contracts\Broadcasting\ShouldRescue;
@@ -753,9 +753,9 @@ window.Echo.channel('orders.' + orderId)
 
 --- 
 
-## 12. **前端接收 Broadcasting 事件（Receiving Broadcasts）**
+## 12. **前端接收 Broadcasting 事件**（Receiving Broadcasts）
 
-### 12.1 *監聽事件（Listen for Events）*
+### 12.1 *監聽事件*（Listen for Events）
 ```js
 // Public channel
 Echo.channel(`orders.${orderId}`)
@@ -802,7 +802,7 @@ Echo.leave(`orders.${orderId}`); // 完全離開頻道，Presence Channel 會同
 
 ---
 
-### 12.3 *命名空間（Namespace）*
+### 12.3 *命名空間*（Namespace）
 ```js
 window.Echo = new Echo({
     broadcaster: 'pusher',
@@ -884,7 +884,7 @@ Broadcast::channel('chatroom.{roomId}', function ($user, $roomId) {
 });
 ```
 
-#### **前端（React）**
+#### **前端**（React）
 ```js
 import { useEchoPresence } from "@laravel/echo-react";
 import { useState } from "react";
@@ -1024,9 +1024,10 @@ A: 可以，Echo.join 支援 here/joining/leaving 也支援 listen 監聽自訂�
 
 ---
 
-### 13.6 前後端完整實作範例
+### 13.6 *前後端完整實作範例*
 
-#### 後端（routes/channels.php）
+#### **後端**（`routes/channels.php`）
+
 ```php
 Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
     if ($user->canJoinRoom($roomId)) {
@@ -1036,7 +1037,7 @@ Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
 });
 ```
 
-#### **前端（JS）**
+#### **前端**（JS）
 ```js
 Echo.join(`chat.${roomId}`)
     .here((users) => {
