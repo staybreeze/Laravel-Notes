@@ -1,18 +1,23 @@
-# Laravel HTTP Client 筆記
+# *Laravel HTTP Client 筆記*
 
-## 介紹
-Laravel HTTP Client 是基於 Guzzle 封裝的簡潔 API，讓你能快速、優雅地發送 HTTP 請求，與其他 Web 應用程式溝通。Laravel 封裝後的 API 著重於最常見的用法與良好的開發體驗。
+---
+
+## **介紹**
+
+Laravel HTTP Client 是基於 `Guzzle` 封裝的簡潔 API，讓你能 __快速、優雅地發送 HTTP 請求，與其他 Web 應用程式溝通__。Laravel 封裝後的 API 著重於最常見的用法與良好的開發體驗。
+
+---
+
+### *什麼是 Guzzle？*
+
+Guzzle（Guzzle HTTP Client）是 PHP 最主流的 __HTTP 請求函式庫__，
+讓你可以在 PHP 程式中很方便地發送 HTTP 請求（`GET、POST、PUT、DELETE` 等），
+並 __處理回應、設定 headers、認證、timeout、上傳下載檔案__ 等。
+
+Laravel 的 HTTP Client（`Http::get()、Http::post()` 等）
+就是基於 Guzzle 再包裝，讓你用更簡單、直覺的語法操作。
 
 ```php
-【補充說明：什麼是 Guzzle？】
-// Guzzle（Guzzle HTTP Client）是 PHP 最主流的 HTTP 請求函式庫，
-// 讓你可以在 PHP 程式中很方便地發送 HTTP 請求（GET、POST、PUT、DELETE 等），
-// 並處理回應、設定 headers、認證、timeout、上傳下載檔案等。
-//
-// Laravel 的 HTTP Client（Http::get()、Http::post() 等）
-// 就是基於 Guzzle 再包裝，讓你用更簡單、直覺的語法操作。
-//
-// 【Guzzle 原生用法範例】
 use GuzzleHttp\Client;
 $client = new Client();
 $response = $client->get('https://api.example.com/data');
@@ -22,45 +27,61 @@ data = $response->getBody()->getContents();
 use Illuminate\Support\Facades\Http;
 $response = Http::get('https://api.example.com/data');
 $data = $response->body();
-//
-// 小結：Guzzle 就像 PHP 的「超強 HTTP 工具箱」，Laravel 幫你包裝成更好用的 API。
-
-
-【補充說明：什麼是 Guzzle？Laravel HTTP Client 與 Guzzle 的關係】
-- Guzzle 是 PHP 最主流的 HTTP 請求函式庫，讓你可以很方便地在 PHP 程式中發送 HTTP 請求、處理回應、設定 headers、認證、timeout、上傳下載檔案等。
-- Laravel 的 HTTP Client （Http::get()、Http::post() 等）其實是「包裝」了 Guzzle，讓你用更簡潔、直覺的語法操作。
-- Laravel 預設會安裝 Guzzle（composer 會自動帶入 guzzlehttp/guzzle 套件），只要你用 Laravel 7 以上版本，基本都會有。
-- 如果沒有 Guzzle，Laravel 的 HTTP Client 會完全失效，因為底層就是靠 Guzzle 實作，會出現找不到 Guzzle 或 Class not found 的錯誤。
-- 總結：Guzzle 是底層引擎，Laravel HTTP Client 是包裝後的好用介面，兩者缺一不可。
-
 ```
-【Guzzle、HTTP Client、Route 差異與關係】
-- **Guzzle**：PHP 的 HTTP 請求函式庫，讓你「**主動**」去呼叫別人的 API（例如你寫 PHP 程式去抓天氣、查匯率等）。
-- **Laravel HTTP Client**：Laravel 幫你包裝 Guzzle，讓你用更簡單的語法（如 Http::get()）去「**主動**」發送 HTTP 請求。
-- **Route（路由）**：Laravel 的路由是「**讓別人來呼叫你**」的入口，也就是你寫 API、網站，讓外部（瀏覽器、App、其他伺服器）來存取你的程式。
 
-【三者的關係與影響】
-- **Guzzle/HTTP Client** 是「你去找別人」；
-  **Route** 是「別人來找你」。
-- 兩者完全獨立，互不影響。
+---
 
-【如果沒有 Guzzle 會怎樣？】
-- 你不能用 Laravel 的 HTTP Client（Http::get()、Http::post() 等）去**主動發送** HTTP 請求，因為底層就是靠 Guzzle。
-- 但是！你的 Laravel 路由（Route::get、Route::post 等）完全不受影響，因為這是 Laravel 處理「**接收請求**」的功能，跟 Guzzle 無關。
-- 你可以只用 Route 完成一個網站或 API，完全不用 Guzzle。
-- 只有當你要「主動去抓資料」時，才需要 Guzzle 或 HTTP Client。
+### *Laravel HTTP Client 與 Guzzle 的關係*
 
-【圖解】
+- Laravel **預設** 會安裝 `Guzzle`（`composer` 會自動帶入 `guzzlehttp/guzzle` 套件），只要你用 Laravel 7 以上版本，基本都會有。
+- __如果沒有 Guzzle，Laravel 的 HTTP Client 會完全失效，因為底層就是靠 Guzzle 實作__，會出現找不到 Guzzle 或 `Class not found` 的錯誤。
+- `Guzzle` 是 _底層引擎_，`Laravel HTTP Client` 是 _包裝後的好用介面_，兩者缺一不可。
+
+---
+
+### *Guzzle、HTTP Client、Route 差異與關係*
+
+- `Guzzle`：PHP 的 **HTTP 請求函式庫**，讓你「__主動__」去呼叫別人的 API（例如`你寫 PHP 程式去抓天氣、查匯率`等）。
+
+- `Laravel HTTP Client`：Laravel __幫你包裝 Guzzle__，讓你用更簡單的語法（如 `Http::get()`）去「__主動__」發送 HTTP 請求。
+
+- `Route（路由）`：Laravel 的路由是「__讓別人來呼叫你__」的入口，也就是你寫 API、網站，讓外部（瀏覽器、App、其他伺服器）來存取你的程式。
+
+---
+
+#### **三者的關係與影響**
+
+- _Guzzle/HTTP Client_ 是「__你去找別人__」
+  _Route_ 是「__別人來找你__」
+- 兩者完全獨立，互不影響
+
+---
+
+### *如果沒有 Guzzle 會怎樣？*
+
+- 你不能用 Laravel 的 HTTP Client（`Http::get()、Http::post()` 等）去 __主動發送__ HTTP 請求，因為 _底層就是靠 Guzzle_。
+
+- 但是！你的 Laravel **路由**（`Route::get、Route::post` 等）完全不受影響，因為這是 Laravel 處理「__接收請求__」的功能，跟 Guzzle 無關。
+
+- 你可以只用 **Route** 完成一個網站或 API，完全不用 Guzzle。
+
+- 只有當你要「__主動去抓資料__」時，才需要 `Guzzle` 或 `HTTP Client`。
+
+---
+
+#### **圖解**
+
 - 你 →（Guzzle/HTTP Client）→ 別人（API、網站）
 - 別人（瀏覽器、App）→（Route）→ 你
 
-- 這一區塊是理解 Laravel HTTP Client 與 Guzzle、Route 差異的重點，務必熟記！
 ---
 
-## 基本用法
+## **基本用法**
 
-### 1. 發送請求
-可用 Http facade 的 head、get、post、put、patch、delete 方法發送請求。
+
+### 1. *發送請求*
+
+可用 `Http facade` 的 `head、get、post、put、patch、delete` 方法發送請求。
 
 ```php
 use Illuminate\Support\Facades\Http;
@@ -71,39 +92,53 @@ $response = Http::get('http://example.com');
 
 ---
 
-## 2. 回應物件（Response）常用方法
+## 2. **回應物件（`Response`）常用方法**
 
 ```php
 $response->body();
 // 取得 HTTP 回應的原始內容（字串），不做任何解析。適合回應不是 JSON 或你只想拿到原始資料時使用。
+
 $response->json($key = null, $default = null);
 // 將回應內容解析為陣列（假設回應是 JSON 格式）。
 // $key 可指定要取得的 JSON 欄位（支援點號語法，如 'data.user.name'）。
 // $default 若找不到指定 key，回傳預設值。
+
 $response->object(); // 轉為物件
 // 將 JSON 回應內容轉成 PHP 標準物件（stdClass），方便用物件屬性存取資料。
+
 $response->collect($key = null); // 轉為 Collection
 // 將 JSON 回應內容轉成 Laravel Collection 物件，方便用 Collection 的各種方法（如 map、filter、pluck 等）處理資料。
 // $key 可指定要轉換的子欄位。
+
 $response->resource(); // 取得資源 resource
 // 取得底層的 stream resource，通常用於需要以 stream 方式處理大量資料（如檔案下載）時。
+
 $response->status(); // 取得 HTTP 狀態碼
 // 取得 HTTP 回應的狀態碼（如 200、404、500 等），可用來判斷請求是否成功。
+
 $response->successful(); // 狀態碼 2xx
 // 判斷回應狀態碼是否為 2xx（代表請求成功），回傳布林值。
+
 $response->redirect(); // 是否為重導
 // 判斷回應是否為 HTTP 重導（3xx 狀態碼），回傳布林值。
+
 $response->failed(); // 狀態碼 >= 400
 // 判斷回應是否為失敗（狀態碼大於等於 400），回傳布林值。
+
 $response->clientError(); // 狀態碼 4xx
 // 判斷回應是否為 client error（4xx 狀態碼），回傳布林值。
+
 $response->header($header); // 取得單一 header
 // 取得指定名稱的 HTTP 回應 header 值。
+
 $response->headers(); // 取得所有 header 陣列
 // 取得所有 HTTP 回應 header，回傳關聯陣列（header 名稱為 key）。
 ```
 
-- Response 物件支援 ArrayAccess，可直接用陣列方式存取 JSON 欄位：
+---
+
+- `Response 物件` 支援 `ArrayAccess`，可直接 __用陣列方式存取 JSON 欄位__：
+
 ```php
 return Http::get('http://example.com/users/1')['name'];
 // 直接取得 name 欄位
@@ -111,15 +146,19 @@ return Http::get('http://example.com/users/1')['name'];
 
 ---
 
-## 3. 狀態碼判斷方法
+## 3. **狀態碼判斷方法**
+
 基本上都是回傳 **boolean（布林值）**，用來判斷 HTTP 回應的狀態
+
 ```php
 $response->ok(); // 200 OK
 $response->created(); // 201 Created
 $response->accepted(); // 202 Accepted
 $response->noContent(); // 204 No Content
+
 $response->movedPermanently(); // 301 Moved Permanently
 $response->found(); // 302 Found
+
 $response->badRequest(); // 400 Bad Request
 $response->unauthorized(); // 401 Unauthorized
 $response->paymentRequired(); // 402 Payment Required
@@ -129,6 +168,7 @@ $response->requestTimeout(); // 408 Request Timeout
 $response->conflict(); // 409 Conflict
 $response->unprocessableEntity(); // 422 Unprocessable Entity
 $response->tooManyRequests(); // 429 Too Many Requests
+
 $response->serverError(); // 500 Internal Server Error
 ```
 
@@ -136,14 +176,15 @@ $response->serverError(); // 500 Internal Server Error
 
 ## 4. **URI Templates**
 
-可用 **withUrlParameters** 定義 URI 參數，並用模板展開：
+可用 `withUrlParameters` 定義 URI 參數，並用模板展開：
+
 ```php
 Http::withUrlParameters([
-    'endpoint' => 'https://laravel.com',
-    'page' => 'docs',
-    'version' => '12.x',
-    'topic' => 'validation',
-])->get('{+endpoint}/{page}/{version}/{topic}');
+    'endpoint' => 'https://laravel.com', // 網站主機
+    'page' => 'docs',                    // 文件頁面
+    'version' => '12.x',                 // 版本
+    'topic' => 'validation',             // 主題
+])->get('{+endpoint}/{page}/{version}/{topic}'); // 自動組合網址並發送 GET 請求
 // 產生 https://laravel.com/docs/12.x/validation
 ```
 
@@ -154,13 +195,17 @@ Http::withUrlParameters([
 ```php
 return Http::dd()->get('http://example.com');
 // 送出前 dump 請求內容並終止執行
+// get 方法本來是用來發送請求並取得資料，
+// 但加上 dd() 之後，會在「送出前」把請求內容 dump 出來並終止程式，
+// 所以這時不會真的去取得遠端資料，只是顯示你準備要送出的請求內容。
 ```
 
 ---
 
-## 6. 請求資料
+## 6. **請求資料**
 
-### (1) **傳送 JSON 資料（預設）**
+### (1) *傳送 JSON 資料*（預設）
+
 ```php
 $response = Http::post('http://example.com/users', [
     'name' => 'Steve',
@@ -169,7 +214,10 @@ $response = Http::post('http://example.com/users', [
 // 以 application/json 傳送資料
 ```
 
-### (2) **GET 請求帶查詢參數**
+---
+
+### (2) *GET 請求帶查詢參數*
+
 ```php
 $response = Http::get('http://example.com/users', [
     'name' => 'Taylor',
@@ -177,43 +225,68 @@ $response = Http::get('http://example.com/users', [
 ]);
 // 產生 http://example.com/users?name=Taylor&page=1
 ```
-// 或用 **withQueryParameters**：
+
+---
+
+- 或用 `withQueryParameters`：
+
 ```php
-Http::retry(3, 100)->withQueryParameters([
-    'name' => 'Taylor',
-    'page' => 1,
-])->get('http://example.com/users');
+Http::retry(3, 100) // 失敗時最多重試 3 次，每次間隔 100 毫秒
+    ->withQueryParameters([
+        'name' => 'Taylor', // 查詢參數 name
+        'page' => 1,        // 查詢參數 page
+    ])
+    ->get('http://example.com/users'); // 發送 GET 請求到指定網址
+    // 產生的網址會是：
+    // http://example.com/users?name=Taylor&page=1
 ```
 
-### (3) **傳送 Form URL Encoded**
+---
+
+### (3) *傳送 Form URL Encoded*
+
 ```php
 $response = Http::asForm()->post('http://example.com/users', [
-    'name' => 'Sara',
-    'role' => 'Privacy Consultant',
+    'name' => 'Sara',                // 表單欄位 name
+    'role' => 'Privacy Consultant',  // 表單欄位 role
 ]);
-// 以 application/x-www-form-urlencoded 傳送
+// 以 application/x-www-form-urlencoded 格式送出 POST 請求
+// application/x-www-form-urlencoded 是一種常見的表單資料格式，
+// 會把資料編碼成 key=value&key2=value2 的字串，
+// 通常用於 HTML 表單 POST 請求。
 ```
 
-### (4) **傳送 Raw Body**
+---
+
+### (4) *傳送 Raw Body*
+
 ```php
 $response = Http::withBody(
-    base64_encode($photo), 'image/jpeg'
-)->post('http://example.com/photo');
+    base64_encode($photo), // 將圖片內容編碼成 base64 字串
+    'image/jpeg'           // 設定 Content-Type 為 image/jpeg
+)->post('http://example.com/photo'); // 發送 POST 請求
 // 傳送原始資料內容，指定 content-type
 ```
 
-### (5) **Multi-Part 檔案上傳**
+---
+
+### (5) *Multi-Part 檔案上傳*
+
 ```php
+// <input type="file" name="attachment">
 $response = Http::attach(
-    'attachment', file_get_contents('photo.jpg'), 'photo.jpg', ['Content-Type' => 'image/jpeg']
-)->post('http://example.com/attachments');
+    'attachment',                                 // 欄位名稱
+    file_get_contents('photo.jpg'),               // 檔案內容
+    'photo.jpg',                                  // 檔案名稱
+    ['Content-Type' => 'image/jpeg']              // 檔案類型
+)->post('http://example.com/attachments');        // 發送 POST 請求（multipart/form-data）
 // 上傳檔案，指定檔名與 header
 
 // 也可用 stream resource：
-$photo = fopen('photo.jpg', 'r');
+$photo = fopen('photo.jpg', 'r'); // 開啟檔案資源
 $response = Http::attach(
-    'attachment', $photo, 'photo.jpg'
-)->post('http://example.com/attachments');
+    'attachment', $photo, 'photo.jpg' // 上傳檔案資源，檔名為 photo.jpg
+)->post('http://example.com/attachments'); // 發送 multipart/form-data POST 請求
 ```
 
 ---
@@ -221,40 +294,65 @@ $response = Http::attach(
 ## 7. **Header 設定**
 
 ```php
-$response = Http::withHeaders([
-    'X-First' => 'foo',
-    'X-Second' => 'bar'
-])->post('http://example.com/users', [
-    'name' => 'Taylor',
-]);
 // 設定自訂 header
+$response = Http::withHeaders([
+    'X-First' => 'foo',   // 自訂 HTTP 標頭
+    'X-Second' => 'bar',  // 自訂 HTTP 標頭
+])->post('http://example.com/users', [
+    'name' => 'Taylor',   // POST 請求資料
+]);
 
-$response = Http::accept('application/json')->get('http://example.com/users');
 // 指定期望回應 content-type
+$response = Http::accept('application/json')->get('http://example.com/users');
 
-$response = Http::acceptJson()->get('http://example.com/users');
 // 快速指定期望 application/json
+$response = Http::acceptJson()->get('http://example.com/users');
 
 // 取代所有 header
 $response = Http::withHeaders([
-    'X-Original' => 'foo',
+    'X-Original' => 'foo',      // 設定初始 header
 ])->replaceHeaders([
-    'X-Replacement' => 'bar',
+    'X-Replacement' => 'bar',   // 取代所有 header，只剩下這個
 ])->post('http://example.com/users', [
-    'name' => 'Taylor',
+    'name' => 'Taylor',         // POST 請求資料
 ]);
+// 最後送出的 header 只會有 X-Replacement: bar
+// 這麼做是為了完全取代原本的 HTTP 標頭，
+// 有時候你不想保留之前設定的 header，
+// 只希望送出新的 header，
+// 就可以用 replaceHeaders() 來達到這個目的。
 ```
 
 ---
 
 ## 8. **認證**
 
+- `基本認證（Basic Auth）`：  
+  用 _帳號和密碼_ 直接 __編碼成一段字串（base64）__，放在 HTTP header 裡送出。  
+  缺點是安全性較低，建議搭配 HTTPS。
+
+- `摘要認證（Digest Auth）`：  
+  用 _帳號、密碼_ __和一些隨機資料（nonce）計算加密摘要__，  
+  只送出加密後的結果，比基本認證安全，  
+  但現在用得比較少。
+
+- `Bearer Token（Token 認證）`：  
+  用一組 token（通常是 *API key* 或 *JWT*）__代表身分__，  
+  __不需要帳號密碼__，安全性高、彈性好，  
+  現代 API 最常用這種方式。
+
+<!-- JWT（JSON Web Token）是一種用來安全傳遞使用者身分和資料的「加密字串」，
+     常用於 API 認證，內容包含使用者資訊、簽章等，
+     伺服器可以驗證 JWT 來確認請求者身分。 -->
+
 ```php
-// Basic Auth
+// Basic Auth：用帳號密碼做 HTTP 基本認證（header: Authorization: Basic ...）
 $response = Http::withBasicAuth('taylor@laravel.com', 'secret')->post(/* ... */);
-// Digest Auth
+
+// Digest Auth：用帳號密碼做 HTTP 摘要認證（header: Authorization: Digest ...）
 $response = Http::withDigestAuth('taylor@laravel.com', 'secret')->post(/* ... */);
-// Bearer Token
+
+// Bearer Token：用 token 做 HTTP Bearer 認證（header: Authorization: Bearer ...）
 $response = Http::withToken('token')->post(/* ... */);
 ```
 
@@ -272,8 +370,11 @@ $response = Http::connectTimeout(3)->get(/* ... */);
 $response = Http::retry(3, 100)->post(/* ... */);
 // 最多重試 3 次，每次間隔 100 毫秒
 
+---
+
 // 自訂 sleep 間隔
 use Exception; // 引入 PHP 內建 Exception 類別，callback 會用到
+
 $response = Http::retry(3, function (int $attempt, Exception $exception) {
     // 設定最多重試 3 次，第二個參數是 callback，決定每次重試的間隔（毫秒）
     // $attempt：第幾次重試（從 1 開始）
@@ -285,18 +386,24 @@ $response = Http::retry(3, function (int $attempt, Exception $exception) {
 $response = Http::retry([100, 200])->post(/* ... */);
 // 用陣列直接指定每次重試的間隔（毫秒），第一次 100ms，第二次 200ms
 
+---
+
 // 只在特定例外時重試
 use Exception; // 引入 Exception
 use Illuminate\Http\Client\PendingRequest; // 引入 PendingRequest
+
 $response = Http::retry(3, 100, function (Exception $exception, PendingRequest $request) {
     // 設定最多重試 3 次，每次間隔 100ms，第三個參數 callback 決定是否要重試
     return $exception instanceof ConnectionException; // 只有遇到 ConnectionException 才重試
 })->post(/* ... */); // 發送 POST 請求
 
+---
+
 // 失敗時可修改 request 再重試
 use Exception; // 引入 Exception
 use Illuminate\Http\Client\PendingRequest; // 引入 PendingRequest
 use Illuminate\Http\Client\RequestException; // 引入 RequestException
+
 $response = Http::withToken($this->getToken()) // 先設定 Bearer Token
     ->retry(2, 0, function (Exception $exception, PendingRequest $request) {
         // 最多重試 2 次，每次間隔 0ms，第三個參數 callback 可修改 request 並決定是否重試
@@ -304,9 +411,14 @@ $response = Http::withToken($this->getToken()) // 先設定 Bearer Token
             // 只有遇到 RequestException 且狀態碼為 401（未授權）才重試
             return false;
         }
+
         $request->withToken($this->getNewToken()); // 重試前自動刷新 token
+
         return true; // 回傳 true 代表要重試
+
     })->post(/* ... */); // 發送 POST 請求
+
+---
 
 // 關閉自動丟出例外
 $response = Http::retry(3, 100, throw: false)->post(/* ... */);
@@ -314,7 +426,7 @@ $response = Http::retry(3, 100, throw: false)->post(/* ... */);
 
 ---
 
-## 10. 錯誤處理與例外
+## 10. **錯誤處理與例外**
 
 ```php
 // 狀態碼 2xx
@@ -332,8 +444,10 @@ $response->onError(callable $callback);
 $response->throw();
 $response->throwIf($condition);
 $response->throwIf(fn (Response $response) => true);
+
 $response->throwUnless($condition);
 $response->throwUnless(fn (Response $response) => false);
+
 $response->throwIfStatus(403); // 如果回應狀態碼是 403（禁止存取），就丟出例外（Exception）
 $response->throwUnlessStatus(200); // 如果回應狀態碼不是 200（成功），就丟出例外（Exception）
 
@@ -362,10 +476,13 @@ return Http::truncateExceptionsAt(240)->post(/* ... */); // 只針對這次請�
 
 ## 11. **Guzzle Middleware**
 
-### (1) **請求** Middleware
+### (1) *請求 Middleware*
+
 ```php
+// 放在控制器、服務類別或命令（Command）裡
 use Illuminate\Support\Facades\Http; // 匯入 Laravel HTTP Facade
 use Psr\Http\Message\RequestInterface; // 匯入 PSR-7 Request 介面
+
 $response = Http::withRequestMiddleware(
     function (RequestInterface $request) {
         // 這個 middleware 會在每次發送 HTTP 請求前執行
@@ -376,10 +493,19 @@ $response = Http::withRequestMiddleware(
 // 發送前自訂 header
 ```
 
-### (2) **回應** Middleware
+---
+
+### (2) *回應 Middleware*
+
+<!-- 
+這裡的 response 指的是你用 Laravel 的 HTTP Client 發送「外部」HTTP 請求後，收到「外部伺服器」的回應，
+不是你自己的專案 route 回傳的 response。 
+-->
+
 ```php
 use Illuminate\Support\Facades\Http; // 匯入 Laravel HTTP Facade
 use Psr\Http\Message\ResponseInterface; // 匯入 PSR-7 Response 介面
+
 $response = Http::withResponseMiddleware(
     function (ResponseInterface $response) {
         // 這個 middleware 會在每次收到 HTTP 回應後執行
@@ -397,13 +523,17 @@ $response = Http::withResponseMiddleware(
 ## 12. **全域 Middleware**
 
 ```php
+// AppServiceProvider 的 boot() 方法
 use Illuminate\Support\Facades\Http;
+
 Http::globalRequestMiddleware(fn ($request) => $request->withHeader(
     'User-Agent', 'Example Application/1.0'
 ));
 // 所有請求都會帶上 User-Agent header
 // User-Agent 是 HTTP 標準請求標頭，通常用來標示發送端的應用程式名稱與版本（這裡是固定字串 'Example Application/1.0'，讓伺服器知道請求來源）
 // globalRequestMiddleware 的 callback 只會收到 $request 物件，因為這是「發送前」的請求，可以修改 request 內容
+
+---
 
 Http::globalResponseMiddleware(fn ($response) => $response->withHeader(
     'X-Finished-At', now()->toDateTimeString()
@@ -431,6 +561,7 @@ $response = Http::withOptions([
 
 ```php
 use Illuminate\Support\Facades\Http; // 匯入 Laravel HTTP Facade
+
 public function boot(): void
 {
     Http::globalOptions([
@@ -443,9 +574,9 @@ public function boot(): void
 
 ---
 
-## 15. **並列請求（Concurrent Requests）**
+## 15. **並列請求**（`Concurrent Requests`）
 
-有時你需要同時發送多個 HTTP 請求（非依序），可用 **pool** 方法大幅提升效能。
+有時你需要 __同時發送多個 HTTP 請求__（非依序），可用 `pool` 方法大幅提升效能。
 
 ```php
 use Illuminate\Http\Client\Pool;
@@ -458,13 +589,18 @@ $responses = Http::pool(fn (Pool $pool) => [
 ]);
 // $responses 會是一個 Response 物件的陣列，依照上面順序存放每個請求的回應
 // 例如 $responses[0] 是第一個網址的回應，$responses[1] 是第二個，以此類推
+
 // 注意：$responses 不是「request 請求物件」的陣列，而是「response 回應物件」的陣列
+
 // 因為 pool 方法會自動幫你發送所有請求，並把每個請求的回應（Response 物件）依序收集回來
+
 // 這樣設計是因為開發者最常需要處理的是伺服器的回應內容，而不是送出的 request
 // 所以 $responses[0]、$responses[1]... 都是 Illuminate\Http\Client\Response 物件，可以直接用來取得資料或狀態碼
 ```
 
-### **命名請求**
+---
+
+### *命名請求*
 
 ```php
 $responses = Http::pool(fn (Pool $pool) => [
@@ -476,9 +612,12 @@ $responses = Http::pool(fn (Pool $pool) => [
 return $responses['first']->ok();
 ```
 
-### **客製化 headers/middleware**
+---
 
-**pool** 不能鏈式 withHeaders/middleware，需在每個請求個別設定：
+### *客製化 headers/middleware*
+
+`pool` __不能鏈式__ `withHeaders/middleware`，需在 __每個請求個別設定__：
+
 ```php
 $headers = [
     'X-Example' => 'example',
@@ -493,7 +632,7 @@ $responses = Http::pool(fn (Pool $pool) => [
 
 ## 16. **HTTP Client Macro**
 
-可自訂常用的 request 設定，方便全專案重複使用。
+可 __自訂__ 常用的 `request` 設定，方便`全專案重複使用`。
 
 ```php
 use Illuminate\Support\Facades\Http;
@@ -515,43 +654,59 @@ $response = Http::github()->get('/');
 
 ---
 
-## 17. **測試與假資料（Faking & Testing）**
+## 17. **測試與假資料**（Faking & Testing）
 
-### **假資料回應**
+### *假資料回應*
 
 ```php
 use Illuminate\Support\Facades\Http;
 
-Http::fake();
-// 所有請求都回傳空 200 回應
-$response = Http::post(/* ... */);
+Http::fake(); // 所有 HTTP 請求都會回傳一個空的 200 回應（測試用）
+$response = Http::post(/* ... */); // 這裡不會真的發送請求，只會拿到假的回應
 ```
 
-### **指定 URL 假資料**
+---
+
+### *指定 URL 假資料*
 
 ```php
 Http::fake([
-    'github.com/*' => Http::response(['foo' => 'bar'], 200, $headers), // 當網址符合 github.com/* 時，回傳內容為陣列 ['foo' => 'bar']，狀態碼 200，並帶上 $headers
-    'google.com/*' => Http::response('Hello World', 200, $headers),    // 當網址符合 google.com/* 時，回傳內容為字串 'Hello World'，狀態碼 200，並帶上 $headers
+    'github.com/*' => Http::response(['foo' => 'bar'], 200, $headers), 
+    // 當網址符合 github.com/* 時，回傳內容為陣列 ['foo' => 'bar']，狀態碼 200，並帶上 $headers
+
+    'google.com/*' => Http::response('Hello World', 200, $headers),    
+    // 當網址符合 google.com/* 時，回傳內容為字串 'Hello World'，狀態碼 200，並帶上 $headers
 ]);
 // 指定不同網址回傳不同假資料，測試時不會真的發送 HTTP 請求
 // 'github.com/*'、'google.com/*' 都是萬用字元路徑，可以對應多個網址
 // Http::response(內容, 狀態碼, headers) 可自訂回傳內容、狀態碼與 header
 
 ```
-### **萬用字元與 fallback**
+
+---
+
+### *萬用字元與 fallback*
 
 ```php
 Http::fake([
-    'github.com/*' => Http::response(['foo' => 'bar'], 200, ['Headers']), // 當網址符合 github.com/* 時，回傳內容為陣列 ['foo' => 'bar']，狀態碼 200，帶上 headers
-    '*' => Http::response('Hello World', 200, ['Headers']),               // 其他所有網址（未被上面條件覆蓋到的）都回傳 'Hello World'，狀態碼 200，帶上 headers
+    'github.com/*' => Http::response(['foo' => 'bar'], 200, ['Headers']), 
+    // 當網址符合 github.com/* 時，回傳內容為陣列 ['foo' => 'bar']，狀態碼 200，帶上 headers
+
+    '*' => Http::response('Hello World', 200, ['Headers']),               
+    // 其他所有網址（未被上面條件覆蓋到的）都回傳 'Hello World'，狀態碼 200，帶上 headers
 ]);
 // '*' 是萬用字元，代表所有未指定網址都回傳這個假資料，確保所有請求都能被 fake
 // 這樣設計可以避免測試時有漏網之魚，所有請求都能被攔截與控制回應
 
 ```
+<!-- fallback（備援、後備）是指當主要方法失敗或不可用時，
+     自動改用另一個替代方案，
+     常用於錯誤處理、路由、快取等場景，
+     確保系統能持續運作。 -->
 
-### **直接用字串/陣列/數字**
+---
+
+### *直接用字串/陣列/數字*
 
 ```php
 Http::fake([
@@ -562,7 +717,9 @@ Http::fake([
 // 直接用字串/陣列/數字快速產生假回應，適合簡單測試
 ```
 
-### **假例外**
+---
+
+### *假例外*
 
 ```php
 Http::fake([
@@ -576,7 +733,9 @@ Http::fake([
 // 模擬 404 例外
 ```
 
-### **假回應序列**
+---
+
+### *假回應序列*
 
 ```php
 Http::fake([
@@ -601,7 +760,9 @@ Http::fakeSequence()
     ->whenEmpty(Http::response());             // 用完後預設回傳空 200 回應
 ```
 
-### **假 callback**
+---
+
+### *假 callback*
 
 ```php
 use Illuminate\Http\Client\Request;
@@ -611,7 +772,9 @@ Http::fake(function (Request $request) {
 });
 ```
 
-### **驗證請求**
+---
+
+### *驗證請求*
 
 ```php
 use Illuminate\Http\Client\Request;
@@ -635,7 +798,9 @@ Http::assertSent(function (Request $request) {
 // 驗證是否有發送指定內容的請求
 ```
 
-### **驗證未發送**
+---
+
+### *驗證未發送*
 
 ```php
 Http::fake();
@@ -650,21 +815,27 @@ Http::assertNotSent(function (Request $request) {
 // 驗證未發送特定請求
 ```
 
-### **驗證發送次數**
+---
+
+### *驗證發送次數*
 
 ```php
 Http::fake();
 Http::assertSentCount(5); // 驗證共發送 5 次請求
 ```
 
-### **驗證完全未發送**
+---
+
+### *驗證完全未發送*
 
 ```php
 Http::fake();
 Http::assertNothingSent(); // 驗證完全沒有發送任何請求
 ```
 
-### **記錄所有請求/回應**
+---
+
+### *記錄所有請求/回應*
 
 ```php
 Http::fake([
@@ -687,7 +858,9 @@ $recorded = Http::recorded(function (Request $request, Response $response) {
 });
 ```
 
-### **防止未 fake 請求**
+---
+
+### *防止未 fake 請求*
 
 ```php
 use Illuminate\Support\Facades\Http;
@@ -703,15 +876,19 @@ Http::get('https://laravel.com'); // 會丟例外，因未 fake
 
 ## 18. **HTTP Client 事件**
 
-Laravel 會在發送 HTTP 請求過程中觸發三個事件：
-- **RequestSending**：發送前
-  // 這個事件會在 HTTP 請求即將送出時觸發，可以取得即將發送的 request 物件
-- **ResponseReceived**：收到回應後
-  // 這個事件會在收到 HTTP 回應時觸發，可以同時取得 request 物件和 response 物件，方便比對請求與回應內容
-- **ConnectionFailed**：連線失敗
-  // 這個事件會在連線失敗（如網路斷線、DNS 錯誤）時觸發，可以取得 request 物件
+Laravel 會在 __發送 HTTP 請求過程中__ 觸發三個事件：
 
-每個事件都可取得 $request，ResponseReceived 可同時取得 $response。
+- `RequestSending`：_發送前_
+  - 這個事件會在 HTTP 請求即將送出時觸發，可以 __取得即將發送的 request 物件__
+
+- `ResponseReceived`：_收到回應後_
+  - 這個事件會在收到 HTTP 回應時觸發，可以 __同時取得 request 物件和 response 物件__，方便比對請求與回應內容
+
+- `ConnectionFailed`：_連線失敗_
+  - 這個事件會在連線失敗（如網路斷線、DNS 錯誤）時觸發，可以 __取得 request 物件__
+
+*每個事件* 都可取得 `$request`
+*ResponseReceived* 可 __同時__ 取得 `$response`。
 
 ```php
 use Illuminate\Http\Client\Events\RequestSending; // 匯入 RequestSending 事件類別
