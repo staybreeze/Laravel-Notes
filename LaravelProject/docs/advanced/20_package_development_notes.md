@@ -1,5 +1,7 @@
 # *Laravel Package Development（套件開發） 筆記*
 
+---
+
 ## 1. **簡介**（Introduction）
 
 Laravel 套件是`擴充功能`的主要方式。
