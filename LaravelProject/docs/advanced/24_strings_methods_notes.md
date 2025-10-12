@@ -3,19 +3,36 @@
 ---
 
 ## **全域函式 / 輔助方法**
+
 - *__*：`翻譯語系`字串。
-- *class_basename*：取得`類別名稱`（去除 namespace）。
-- *e*：HTML 字元轉義。
-- *preg_replace_array*：依序用陣列值`取代字串 pattern`。
+- *class_basename*：取得`類別名稱`（去除 __Namespace__）。
+- *e*：HTML `字元轉義`。
+- *preg_replace_array*：依序用 __陣列值__`取代字串 pattern`。
 - *str*：建立 `Fluent String 實例`。
 - *trans*：翻譯語系字串（`同 __）`。
 - *trans_choice*：`根據數量`選擇語系字串。
 
+---
+
 ## **Str:: 靜態方法**
+
 - *Str::after*：取指定`字串之後`。
 - *Str::afterLast*：取`最後一次`指定字串之後。
-- *Str::apa*：`APA` 標題格式。
 - *Str::ascii*：轉為 `ASCII`。
+- *Str::apa*：`APA` 標題格式。
+
+<!-- 
+主要單字首字母大寫（如名詞、動詞、形容詞等）
+連接詞、冠詞、介系詞等小字通常小寫（除非在開頭）
+Str::apa('the quick brown fox jumps over the lazy dog');
+// "The Quick Brown Fox Jumps Over the Lazy Dog" 
+-->
+
+- *Str::headline*：轉為`標題格式`（每個單字首字母大寫，並自動處理分隔符號）。
+- *Str::title*：轉為`標題格式`（每個單字首字母大寫，但不會自動處理分隔符號）。
+
+<!-- Str::headline('user_profile_data'); // "User Profile Data" -->
+<!-- Str::title('user_profile_data');    // "User_Profile_Data" -->
 
 - *Str::before*：取指定`字串之前`。
 - *Str::beforeLast*：取`最後一次指`定字串之前。
@@ -28,40 +45,32 @@
 - *Str::chopStart*：`移除開頭`指定字串。
 - *Str::chopEnd*：`移除結尾`指定字串。
 
-- *Str::contains*：是否`包含`指定字串。
-- *Str::containsAll*：是否同時`包含多個`字串。
+- *Str::contains*： __是否__`包含`指定字串。
+- *Str::containsAll*： __是否__ 同時`包含多個`字串。
+- *Str::doesntContain*： __是否__`不包含`指定字串。
 
-- *Str::doesntContain*：是否`不包含`指定字串。
-- *Str::doesntEndWith*：是否`不以`指定字串`結尾`。
-- *Str::doesntStartWith*：是否`不以`指定字串`開頭`。
 
 - *Str::deduplicate*：`合併重複`字元。
 
-- *Str::endsWith*：是否`以`指定字串`結尾`。
 - *Str::excerpt*：`擷取關鍵字片段`。
 
 - *Str::finish*：`結尾補上`指定字串。
 - *Str::fromBase64*：`Base64 解碼`。
 
-- *Str::headline*：轉為`標題格式`。
-
 - *Str::inlineMarkdown*：將單行或內嵌的 Markdown 文本轉換為 HTML。
 - *Str::markdown*：將完整的 Markdown 文本轉換為 HTML。
 
-- *Str::is*：是否`符合模式`。
-- *Str::isAscii*：是否為 `ASCII`。
-- *Str::isJson*：是否為 `JSON 字串`。
-- *Str::isUlid*：是否為 `ULID`。
-- *Str::isUrl*：是否為 `URL。`
-- *Str::isUuid*：是否為 `UUID`。
+- *Str::is*： __是否__`符合模式`。
+- *Str::isAscii*： __是否__ 為 `ASCII`。
+- *Str::isJson*： __是否__ 為 `JSON 字串`。
+- *Str::isUlid*： __是否__ 為 `ULID`。
+- *Str::isUrl*： __是否__ 為 `URL`。
+- *Str::isUuid*： __是否__ 為 `UUID`。
 
 - *Str::kebab*：轉 kebab-case。
 
-- *Str::lcfirst*：`首字小寫`。
 - *Str::length*：字串`長度`。
 - *Str::limit*：`限制長度`。
-- *Str::lower*：`轉小寫`。
-
 
 - *Str::mask*：`遮罩`字串。
 - *Str::match*：`正則比對`。
@@ -73,10 +82,25 @@
 - *Str::padLeft*：`左`補齊。
 - *Str::padRight*：`右`補齊。
 
-- *Str::password*：產生`隨機密碼`。
+- *Str::singular*：轉`單數`。
 - *Str::plural*：轉`複數`。
+
+- *Str::password*：產生`隨機密碼`。
 - *Str::pluralStudly*：Studly 複數。
 - *Str::position*：尋找`字串位置`。
+- *Str::studly*：轉 `StudlyCase`。
+
+<!-- 
+StudlyCase：每個單字首字母大寫、沒有分隔符號，例如：UserProfile、OrderItem
+Studly 複數：就是把 StudlyCase 字串轉成複數，例如：UserProfile → UserProfiles
+Laravel 的 Str::studly() 會把字串轉成 StudlyCase，
+而複數通常用 Str::pluralStudly()（Laravel 11 新增）來處理。 
+-->
+
+<!-- 
+StudlyCase（帕斯卡命名法）：每個單字首字母都大寫，例如：UserProfile、OrderItem
+camelCase（駱駝命名法）：第一個單字首字母小寫，後面每個單字首字母大寫，例如：userProfile、orderItem 
+-->
 
 - *Str::random*：`隨機字串`。
 - *Str::remove*：`移除`指定字串。
@@ -92,15 +116,16 @@
 
 - *Str::reverse*：`反轉`字串。
 
-- *Str::singular*：轉`單數`。
 - *Str::slug*：產生 `slug`。
 - *Str::snake*：轉 `snake_case`。
 - *Str::squish*：`壓縮空白`。
 
 - *Str::start*：`開頭補上`指定字串。
-- *Str::startsWith*：是否以指定字串`開頭`。
+- *Str::startsWith*： __是否__ 以指定字串`開頭`。
+- *Str::doesntStartWith*： __是否__`不以`指定字串`開頭`。
 
-- *Str::studly*：轉 `StudlyCase`。
+- *Str::endsWith*： __是否__`以`指定字串`結尾`。
+- *Str::doesntEndWith*： __是否__`不以`指定字串`結尾`。
 
 - *Str::substr*：子字串。
 - *Str::substrCount*：子字串`出現次數`。
@@ -108,18 +133,40 @@
 
 - *Str::swap*：多組字串`交換`。
 
-- *Str::take*：取`前/後 n 字元`。
-- *Str::title*：轉為`標題格式`。
 - *Str::toBase64*：Base64 編碼。
 - *Str::transliterate*：音譯。
+
+- *Str::words*：取`前 n 個單字`。
+- *Str::take*：取`前/後 n 字元`。
+
+<!-- 
+Str::words('Laravel is a powerful framework', 3, '...'); 
+// "Laravel is a..." 
+-->
+
+<!-- 
+Str::take('Laravel', 4);   
+// "Lara"
+
+Str::take('Laravel', -3);  
+// "vel" 
+-->
 
 - *Str::trim*：去除`首尾`空白。
 - *Str::ltrim*：去除`左側`空白。
 - *Str::rtrim*：去除`右側`空白。
 
-- *Str::ucfirst*：首字`大寫`。
-- *Str::ucsplit*：依大寫`分割為陣列`。
 - *Str::upper*：轉`大寫`。
+- *Str::lower*：轉`小寫`。
+- *Str::ucfirst*：首字`大寫`。
+- *Str::lcfirst*：首字`小寫`。
+- *Str::ucsplit*：依大寫`分割為陣列`。
+
+<!-- 
+Laravel 11 新增了 Str::ucsplit() 方法，
+可以根據大寫字母分割字串，
+但沒有 lcsplit 方法。
+-->
 
 - *Str::ulid*：產生 ULID。
 - *Str::uuid*：產生 UUID。
@@ -127,7 +174,6 @@
 
 - *Str::wordCount*：單字數。
 - *Str::wordWrap*：`自動換行`。
-- *Str::words*：取`前 n 個單字`。
 
 - *Str::unwrap*：`去除`包裹字元。
 - *Str::wrap*：`包裹`字串。 
@@ -142,9 +188,9 @@
 
 - *orderedUuid*：產生`有序 UUID`。
 
-- *password*：產生隨機密碼。
+- *password*：產生`隨機密碼`。
 
-- *random*：產生隨機字串。
+- *random*：產生`隨機字串`。
 
 - *replaceFirstArray*：多組 `replaceFirst` 批次處理。
 - *replaceLastArray*：多組 `replaceLast` 批次處理。
@@ -153,16 +199,21 @@
 - *uuid*：產生 UUID。
 - *uuid7*：產生 UUID v7。
 
-- **補充**：大多數 Str:: 靜態方法都能用 `Fluent String 物件`鏈式呼叫，但上述這些「*產生型*」或「*批次處理型*」方法僅存在於 `Str:: 靜態方法`，Fluent String 物件沒有。
+- __補充__：大多數 Str:: 靜態方法都能用 `Fluent String 物件`鏈式呼叫，但上述這些「_產生型_」或「_批次處理型_」方法僅存在於 `Str:: 靜態方法`，Fluent String 物件沒有。
 
 ---
+
 ## **Fluent String 方法索引**
 
 - *after*：取得指定字串`之後`的內容。
 - *afterLast*：取得`最後一次`指定字串之後的內容。
-- *apa*：轉為 `APA` 標題格式。
-- *append*：在`字串後面`加上內容。
+- *append*：在`字串後面`加上內容。（**僅 Fluent String**）
+- *prepend*：在`前面`加上內容。（**僅 Fluent String**）
 - *ascii*：轉為 `ASCII` 字元。
+
+- *apa*：轉為 `APA` 標題格式（主要單字首字母大寫，連接詞等小字小寫）。
+- *headline*：轉為`標題格式`（每個單字首字母大寫，並自動處理分隔符號）。
+- *title*：轉為`標題格式`（每個單字首字母大寫，不處理分隔符號）。
 
 - *basename*：取得`路徑的檔名`。
 - *before*：取得指定`字串之前`的內容。
@@ -172,23 +223,28 @@
 
 - *camel*：轉為 `camelCase`。
 - *charAt*：取得指定`索引`的字元。
-- *classBasename*：取得`類別名稱`（去除 Namespace）。
+- *classBasename*：取得`類別名稱`（去除 __Namespace__）。
 
 - *chopStart*：`移除開頭`指定內容。
 - *chopEnd*：`移除結尾`指定內容。
 
-- *contains*：判斷是否`包含`指定內容。
-- *containsAll*：判斷是否同時`包含`多個內容。
-
-- *decrypt*：`解密字串`。（**僅 Fluent String**）
-- *deduplicate*：`合併連續重複字元`。
-- *dirname*：取得`路徑的上層目錄`。（**僅 Fluent String**）
-- *doesntEndWith*：判斷結尾`不是`指定內容。
-- *doesntStartWith*：判斷開頭`不是`指定內容。（
+- *contains*：判斷 __是否__`包含`指定內容。
+- *containsAll*：判斷 __是否__ 同時`包含`多個內容。
 
 - *encrypt*：`加密字串`。（**僅 Fluent String**）
-- *endsWith*：`判斷結尾`是否為指定內容。
-- *exactly*：判斷是否`完全相同`。（**僅 Fluent String**）
+- *decrypt*：`解密字串`。（**僅 Fluent String**）
+
+- *deduplicate*：`合併連續重複字元`。
+- *dirname*：取得`路徑的上層目錄`。（**僅 Fluent String**）
+
+- *endsWith*：`判斷結尾` __是否__ 為指定內容。
+- *doesntEndWith*：判斷結尾 __不是__ 指定內容。
+
+- *start*：確保`開頭`有指定內容。
+- *startsWith*：判斷`開頭` __是否__ 為指定內容。
+- *doesntStartWith*：判斷開頭 __不是__ 指定內容。
+
+- *exactly*：判斷 __是否__ `完全相同`。（**僅 Fluent String**）
 - *excerpt*：擷取`關鍵字附近片段`。
 - *explode*：用分隔符`切割`字串為 Collection。（**僅 Fluent String**）
 
@@ -196,7 +252,6 @@
 - *fromBase64*：Base64 解碼。
 
 - *hash*：`雜湊字串`。（**僅 Fluent String**）
-- *headline*：轉為`標題格式`。
 
 - *inlineMarkdown*：Markdown 轉 inline HTML。
 - *markdown*：Markdown 轉 HTML。
@@ -211,12 +266,18 @@
 - *isUuid*：判斷`是否`為 UUID。
 - *isMatch*：判斷`是否`符合正則。（**僅 Fluent String**）
 
-- *kebab*：轉為 kebab-case。
+- *kebab*：轉為 `kebab-case`。
 
-- *lcfirst*：首字轉`小寫`。
+- *upper*：轉為`大寫`。
+- *lower*：轉為`小寫`。
+- *ucfirst*：`首字大寫`。
+- *lcfirst*：`首字小寫`。
+- *ucsplit*：依大寫`分割為陣列`。
+
+- *split*：`正則分割`字串為 Collection。（**僅 Fluent String**）
+
 - *length*：取得字串`長度`。
 - *limit*：`限制`字串長度。
-- *lower*：轉為`小寫`。
 
 - *mask*：`遮蔽`部分字元。
 - *match*：`正則`擷取第一個符合內容。
@@ -229,9 +290,9 @@
 - *padRight*：`右側`補滿至指定長度。
 
 - *pipe*：`傳入函式或閉包處理`。（**僅 Fluent String**）
+- *singular*：轉為`單數`。
 - *plural*：轉為`複數`。
 - *position*：取得`子字串首次出現位置`。
-- *prepend*：在`前面`加上內容。
 
 - *remove*：`移除`指定內容。
 - *repeat*：`重複`字串。
@@ -245,14 +306,15 @@
 - *replaceEnd*：`結尾為指定內容`才取代。
 
 - *scan*：依 `sscanf 格式`解析字串。（**僅 Fluent String**）
-- *singular*：轉為`單數`。
 - *slug*：轉為` URL 友善格式`。
-- *snake*：轉為 s`nake_case`。
-- *split*：`正則分割`字串為 Collection。
+- *snake*：轉為 `snake_case`。
 - *squish*：`移除多餘空白`。
 
-- *start*：確保`開頭`有指定內容。
-- *startsWith*：判斷`開頭`是否為指定內容。
+<!-- 
+squish 會移除字串中所有多餘空白（包含中間、前後），
+只保留單一空白分隔，
+而 trim 只會移除字串前後的空白，不會處理中間。 
+-->
 
 - *stripTags*：`移除 HTML 標籤`。（**僅 Fluent String**）
 - *studly*：轉為 `StudlyCase`。
@@ -264,8 +326,7 @@
 
 - *take*：`取`前/後幾個字元。
 - *tap*：執行閉包後`回傳自身`。（**僅 Fluent String**）
-- *test*：`正則測試`是否符合。（**僅 Fluent String**）
-- *title*：轉為`每字首大寫`。
+- *test*：`正則測試` __是否__ 符合。（**僅 Fluent String**）
 - *toBase64*：Base64 編碼。
 - *toHtmlString*：轉為 `HtmlString 物件`。（**僅 Fluent String**）
 - *toUri*：轉為 `URI 格式`。（**僅 Fluent String**）
@@ -275,20 +336,15 @@
 - *ltrim*：去除`左側`空白。
 - *rtrim*：去除`右側`空白。
 
-- *ucfirst*：`首字大寫`。
-- *ucsplit*：依大寫`分割為陣列`。
-
-
-- *upper*：`轉為大寫`。
-
 - *when*：`條件成立時`執行閉包。（**僅 Fluent String**）
 - *whenContains*：包含指定`內容時`執行閉包。（**僅 Fluent String**）
 - *whenContainsAll*：同時`包含多個內容`時執行閉包。（**僅 Fluent String**）
 
 - *whenStartsWith*：`開頭為指定內容時`執行閉包。（**僅 Fluent String**）
+- *whenDoesntStartWith*：`開頭不是指定內容時`執行閉包。（**僅 Fluent String**）
+
 - *whenEndsWith*：`結尾為指定內容時`執行閉包。（**僅 Fluent String**）
 - *whenDoesntEndWith*：`結尾不是指定內容時`執行閉包。（**僅 Fluent String**）
-- *whenDoesntStartWith*：`開頭不是指定內容時`執行閉包。（**僅 Fluent String**）
 
 
 - *whenEmpty*：`為空時`執行閉包。（**僅 Fluent String**）
@@ -322,39 +378,56 @@
 
 ```php
 echo __('Welcome to our application');
-echo __('messages.welcome');
+echo __('messages.welcome'); // 
 ```
+
+<!-- 
+messages 是語言檔名（如 resources/lang/zh-TW/messages.php）
+welcome 是語言檔裡的 key
+這樣會取得 messages.php 裡 welcome 對應的翻譯內容。 
+-->
+
+<!-- 
+__('messages.welcome')：單維（只有一層 key）
+__('messages.user.login')：多維（user 是第一層 key，login 是第二層 key）
+__('messages.order.success')：多維（order 是第一層 key，success 是第二層 key） 
+-->
+
 - *若 key 不存在，會直接回傳原字串*
   - 如果查不到翻譯，Laravel 會`直接回傳你查詢的 key`，不會報錯或回傳空白，方便偵錯與開發。
-  **範例**：
+
+  __範例__：
     - 假設語系檔沒有 `messages.hello` 這個 key
     
     ```php
     echo __('messages.hello'); // 輸出：messages.hello
     ```
-  **註解**：查不到翻譯時，畫面會直接顯示 key，方便你發現遺漏的翻譯。
+
+  - __註解__：查不到翻譯時，畫面會直接顯示 key，方便你發現遺漏的翻譯。
 
 ---
 
 ### *class_basename()*
 
-取得`類別名稱`（去除 namespace）。
+取得`類別名稱`（去除 __namespace__）。
 
 ```php
 $class = class_basename('Foo\Bar\Baz'); // Baz
 ```
-**註解**：`class_basename` 可用來取得類別的「*短名稱*」，常用於顯示、日誌、動態產生檔名等場合，讓你不用處理冗長的 namespace 路徑。
+
+- __註解__：`class_basename` 可用來取得類別的「_短名稱_」，常用於`顯示、日誌、動態產生檔名`等場合，讓你不用處理冗長的 namespace 路徑。
 
 ---
 
 ### *e()*
 
-執行 PHP 的 `htmlspecialchars`，**預設** double_encode 為 true。
+執行 PHP 的 `htmlspecialchars`，**預設** `double_encode` 為 `true`。
 
 ```php
 echo e('<html>foo</html>'); // &lt;html&gt;foo&lt;/html&gt;
 ```
-**註解**：`e()` 主要用於將 HTML 特殊字元轉為*安全的實體*，*防止 XSS 攻擊*。常用於 Blade 模板或任何需要安全輸出的場合，確保用戶輸入不會被當成 HTML 執行。
+
+- __註解__：`e()` 主要用於將 HTML 特殊字元轉為*安全的實體*，*防止 XSS 攻擊*。常用於 Blade 模板或任何需要安全輸出的場合，確保用戶輸入不會被當成 HTML 執行。
 
 ---
 
@@ -362,25 +435,30 @@ echo e('<html>foo</html>'); // &lt;html&gt;foo&lt;/html&gt;
 
 依序用`陣列值取代`字串中的 pattern。
 
-
 ```php
 $string = 'The event will take place between :start and :end';
+// 字串裡有兩個佔位符 :start 和 :end
 $replaced = preg_replace_array('/:[a-z_]+/', ['8:30', '9:00'], $string);
 // The event will take place between 8:30 and 9:00
 ```
-**註解**：`preg_replace_array()` 會根據你提供的正則 pattern，從左到右依序尋找字串中每個符合的部分，然後用陣列中的值一一取代。
 
-- 適合用於模板字串的**多參數動態填值**、**SQL 查詢組裝**、**訊息自動帶入**多個參數等情境。
-- 範例：
+- __註解__：`preg_replace_array()` 會根據你 __提供的正則 pattern__，從左到右依序尋找字串中每個符合的部分，然後用陣列中的值一一取代。
+
+- 適合用於模板字串的 __多參數動態填值、SQL 查詢組裝、訊息自動帶入__ 多個參數等情境。
+
+- __範例__：
+
     ```php
     $template = 'Hi :name, your order #:order will be delivered at :time.';
     $result = preg_replace_array('/:[a-z_]+/', ['Vincent', 'A123', '18:00'], $template);
     ```
-- 結果：
+
+- __結果__：
     
     ```php
     'Hi Vincent, your order #A123 will be delivered at 18:00.'
     ```
+
 ---
 
 ### *str()*
@@ -392,7 +470,8 @@ $string = str('Taylor')->append(' Otwell'); // 'Taylor Otwell'
 // 不傳參數時回傳 Str 實例
 $snake = str()->snake('FooBar'); // 'foo_bar'
 ```
-**註解**：`str()` 讓你可以用物件導向、鏈式語法處理字串，讓多步驟字串處理更直覺、可讀性更高。常用於需要多次轉換、組合、格式化字串的場合。
+
+- __註解__：`str()` 讓你可以用 __物件導向、鏈式語法__ 處理字串，讓多步驟字串處理更直覺、可讀性更高。常用於需要多次轉換、組合、格式化字串的場合。
 
 ---
 
@@ -403,14 +482,26 @@ $snake = str()->snake('FooBar'); // 'foo_bar'
 ```php
 echo trans('messages.welcome');
 ```
-**註解**：`trans()` 用於多語系網站，根據 key 取得對應語系檔的翻譯內容。若 key 不存在，會直接回傳 key 本身，方便偵錯。
 
-- 範例：
+- __註解__：`trans()` 用於 __多語系網站__，_根據 key 取得對應語系檔的翻譯內容_。若 key 不存在，會直接回傳 key 本身，方便偵錯。
+<!-- 
+trans() 和 __() 在 Laravel 裡功能幾乎一樣，
+都是用來取得語言檔的翻譯內容，
+__('messages.welcome') 和 trans('messages.welcome') 都會輸出 歡迎光臨。
+
+差異：
+__() 是 Laravel 推薦的新寫法，語法更簡潔。
+trans() 是舊寫法，功能相同，仍可用。
+-->
+
+- __範例__：
+
     ```php
-    <!-- - resources/lang/zh-TW/messages.php 內容： -->
-    - return ['welcome' => '歡迎光臨'];
+    <!-- resources/lang/zh-TW/messages.php 內容： -->
+    return ['welcome' => '歡迎光臨'];
     echo trans('messages.welcome'); // 輸出：歡迎光臨
     ```
+
 ---
 
 ### *trans_choice()*
@@ -420,9 +511,11 @@ echo trans('messages.welcome');
 ```php
 echo trans_choice('messages.notifications', $unreadCount);
 ```
-**註解**：`trans_choice()` 用於*根據數量自動選擇單數/複數*等不同翻譯內容，常見於通知、商品數量等場合。
 
-- 範例：
+- __註解__：`trans_choice()` 用於*根據數量自動選擇單數/複數*等不同翻譯內容，常見於 __通知、商品數量__ 等場合。
+
+- __範例__：
+
 ```php
     // resources/lang/zh-TW/messages.php 內容：
     return ['notifications' => '{0} 沒有新通知|{1} 你有一則新通知|[2,*] 你有 :count 則新通知'];
@@ -434,6 +527,7 @@ echo trans_choice('messages.notifications', $unreadCount);
     echo trans_choice('messages.notifications', 1); // 輸出：你有一則新通知
     echo trans_choice('messages.notifications', 5); // 輸出：你有 5 則新通知
 ```
+
 ---
 
 ## **Str:: 靜態方法**
@@ -456,62 +550,52 @@ $slice = Str::after('This is my name', 'This is'); // ' my name'
 ```php
 $slice = Str::afterLast('App\Http\Controllers\Controller', '\\'); // 'Controller'
 ```
+<!-- 
+在 PHP 字串裡，
+反斜線 \ 是跳脫字元，
+如果你只寫 '\Controller'，PHP 會把 \C 當成特殊字元，
+所以要用兩個反斜線 \\，代表字串裡的單一反斜線。
+ -->
+
 ---
 
 ### *afterArray()*
 
-#### **用途**
+- __用途__
 
 多組 after 批次處理，依序對`字串陣列`每個元素執行 after。
 
-#### **語法**
-
-```php
-Str::afterArray(['foo:bar', 'baz:qux'], ':');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::afterArray(['foo:bar', 'baz:qux'], ':'); // ['bar', 'qux']
 ```
 
-#### **註解**
-- 可用於`批次處理多個字串`，取得 *`每個字串`指定分隔符後* 的內容。
+- __註解__：可用於`批次處理多個字串`，取得 *`每個字串`指定分隔符後* 的內容。
 
-#### **白話解釋**
-- 就是「一次處理一堆字串，全部都 after」。
+- __白話解釋__：就是「一次處理一堆字串，全部都 after」。
 
-#### **應用場景**
-- 批次解析多個 `key:value` 字串。
+- __應用場景__：批次解析多個 `key:value` 字串。
 
 ---
 
 ### *beforeArray()*
 
-#### **用途**
+- __用途__
+
 多組 before 批次處理，依序對`字串陣列`每個元素執行 before。
 
-#### **語法**
-
-```php
-Str::beforeArray(['foo:bar', 'baz:qux'], ':');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::beforeArray(['foo:bar', 'baz:qux'], ':'); // ['foo', 'baz']
 ```
 
-#### **註解**
-- 可用於批次處理多個字串，取得 *`每個字串`指定分隔符前* 的內容。
+- __註解__：可用於批次處理多個字串，取得 *`每個字串`指定分隔符前* 的內容。
 
-#### **白話解釋**
-- 就是「一次處理一堆字串，全部都 before」。
+- __白話解釋__：就是「一次處理一堆字串，全部都 before」。
 
-#### **應用場景**
-- 批次解析多個 `key:valu`e` 字串。
+- __應用場景__：批次解析多個 `key:valu`e` 字串。
 
 ---
 
@@ -522,7 +606,8 @@ $result = Str::beforeArray(['foo:bar', 'baz:qux'], ':'); // ['foo', 'baz']
 ```php
 $title = Str::apa('Creating A Project'); // 'Creating a Project'
 ```
-**註解**：apa 是「`APA 標題格式`」（美國心理學會出版規範），會`將每個單字的第一個字母大寫`（連接詞、介系詞、冠詞等除外），常用於學術論文、書籍標題等標準化英文標題。
+
+- __註解__：apa 是「_APA 標題格式_」（美國心理學會出版規範），會`將每個單字的第一個字母大寫`（__連接詞、介系詞、冠詞__ 等除外），常用於學術論文、書籍標題等標準化英文標題。
 
 ---
 
@@ -533,6 +618,14 @@ $title = Str::apa('Creating A Project'); // 'Creating a Project'
 ```php
 $slice = Str::ascii('û'); // 'u'
 ```
+
+<!-- 
+ASCII（American Standard Code for Information Interchange，美國資訊交換標準碼）
+是一種字元編碼標準，
+用來表示英文字母、數字、符號等，
+每個字元都對應一個數值（0~127），
+常用於電腦、程式設計和網路通訊。 
+-->
 
 ---
 
@@ -551,7 +644,7 @@ $slice = Str::before('This is my name', 'my name'); // 'This is '
 回傳`最後一次出現指定字串之前`的內容。
 
 ```php
-$slice = Str::beforeLast('This is my name', 'is'); // 'This '
+$slice = Str::beforeLast('This is my name, is it?', 'is'); // 'This is my name, '
 ```
 
 ---
@@ -572,6 +665,9 @@ $slice = Str::between('This is my name', 'This', 'name'); // ' is my '
 
 ```php
 $slice = Str::betweenFirst('[a] bc [d]', '[', ']'); // 'a'
+// 只會取得第一個 [ 和第一個 ] 之間的內容，
+// 也就是 'a'，
+// bc 不會被包含在結果裡。
 ```
 
 ---
@@ -588,7 +684,7 @@ $converted = Str::camel('foo_bar'); // 'fooBar'
 
 ### *Str::charAt()*
 
-取得指定`索引的字元`，超出範圍回傳 false。
+取得指定`索引的字元`，超出範圍回傳 `false`。
 
 ```php
 $character = Str::charAt('This is my name.', 6); // 's'
@@ -598,7 +694,7 @@ $character = Str::charAt('This is my name.', 6); // 's'
 
 ### *Str::chopStart()*
 
-若字串開頭為指定值，`移除第一個`出現的該值。
+若 __字串開頭為指定值__，`移除第一個`出現的該值。
 
 ```php
 $url = Str::chopStart('https://laravel.com', 'https://'); // 'laravel.com'
@@ -610,7 +706,7 @@ $url = Str::chopStart('http://laravel.com', ['https://', 'http://']); // 'larave
 
 ### *Str::chopEnd()*
 
-若字串結尾為指定值，`移除最後一個`出現的該值。
+若 __字串結尾為指定值__，`移除最後一個`出現的該值。
 
 ```php
 $url = Str::chopEnd('app/Models/Photograph.php', '.php'); // 'app/Models/Photograph'
@@ -622,7 +718,7 @@ $url = Str::chopEnd('laravel.com/index.php', ['/index.html', '/index.php']); // 
 
 ### *Str::contains()*
 
-判斷字串是否`包含`指定值，**預設**區分大小寫。
+判斷字串 __是否__ `包含`指定值，**預設**_區分大小寫_。
 
 ```php
 $contains = Str::contains('This is my name', 'my'); // true
@@ -634,22 +730,23 @@ $contains = Str::contains('This is my name', 'MY', ignoreCase: true); // true
 
 ### *Str::containsAll()*
 
-判斷字串是否同時`包含陣列中所有值`。
+判斷字串 __是否__ 同時`包含陣列中所有值`。
 
 ```php
 $containsAll = Str::containsAll('This is my name', ['my', 'name']); // true
 $containsAll = Str::containsAll('This is my name', ['MY', 'NAME'], ignoreCase: true); // true
 ```
-**註解**：`containsAll()` 會檢查字串是否同時包含陣列中的所有子字串。
+
+- __註解__：`containsAll()` 會檢查字串 __是否__ 同時包含陣列中的所有子字串。
 
 - `ignoreCase`: true 代表*比對時忽略大小寫*。
-- 例如：'This is my name' 同時包含 'MY' 和 'NAME'（不分大小寫），所以回傳 true。
+- 例如：'This is my name' 同時包含 'MY' 和 'NAME'（不分大小寫），所以回傳 `true`。
 
 ---
 
 ### *Str::doesntContain()*
 
-判斷字串是否`不包含指定值`，**預設**區分大小寫。
+判斷字串 __是否__ `不包含指定值`，**預設**_區分大小寫_。
 
 ```php
 $doesntContain = Str::doesntContain('This is name', 'my'); // true
@@ -661,13 +758,12 @@ $doesntContain = Str::doesntContain('This is name', 'MY', ignoreCase: true); // 
 
 ### *Str::deduplicate()*
 
-將`連續重複的字元合併為一個`，**預設**為空白。
+將 __`連續重複的字元`合併為一個__，**預設**_為空白_。
 
 ```php
 $result = Str::deduplicate('The   Laravel   Framework'); // 'The Laravel Framework'
 $result = Str::deduplicate('The---Laravel---Framework', '-'); // 'The-Laravel-Framework'
 ```
-**註解**：`deduplicate` 會將連續重複的字元（預設空白）合併成一個，常用於清理多餘空白或符號，讓字串更乾淨、格式更一致。
 
 ---
 
@@ -680,15 +776,16 @@ $result = Str::doesntEndWith('This is my name', 'dog'); // true
 $result = Str::doesntEndWith('This is my name', ['this', 'foo']); // true
 $result = Str::doesntEndWith('This is my name', ['name', 'foo']); // false
 ```
-**註解**：
+
+- __註解__：
+
 - *第一行*：原字串不是以 'dog' 結尾，回傳 `true`。
 - *第二行*：原字串結尾不是 'this' 也不是 'foo'，回傳 `true`。
 - *第三行*：原字串結尾是 'name'，所以「不是」這個條件不成立，回傳 `false`。
+
 - *補充說明*：
-    - 當第`二個參數`是**陣列**時，只要原字串有「以陣列裡任一個字串」開頭/結尾，就會回傳 false。
-    - 只有當全部都不符合時，才會回傳 true。
-- 口語化理解：
-    - 「是不是完全沒以這些字串開頭/結尾？」是，才回傳 true；否（有一個有），就回傳 false。
+    - 當第`二個參數`是**陣列**時，只要原字串有「__以陣列裡任一個字串__」開頭/結尾，就會回傳 `false`。
+    - 只有當全部都不符合時，才會回傳 `true`。
 
 ---
 
@@ -700,9 +797,6 @@ $result = Str::doesntEndWith('This is my name', ['name', 'foo']); // false
 $result = Str::doesntStartWith('This is my name', 'That'); // true
 $result = Str::doesntStartWith('This is my name', ['This', 'That', 'There']); // false
 ```
-**註解**：
-- *第一行*：原字串不是以 'That' 開頭，回傳 `true。`
-- *第二行*：原字串開頭是 'This'，所以「不是」這個條件不成立，回傳 `false`。
 
 ---
 
@@ -720,19 +814,45 @@ $result = Str::endsWith('This is my name', ['this', 'foo']); // false
 
 ### *Str::excerpt()*
 
-`擷取包含`指定關鍵字的片段，可自訂`半徑`與`省略字串`。
+__`擷取`包含指定關鍵字的片段，並在`前後`自動加上省略符號__（可自訂`半徑`與`省略字串`，預設為 ...）。
+
+<!-- 
+excerpt 英文意思是「摘錄」、「節選」，
+通常指從文章或內容中擷取一小段重點文字。 
+-->
 
 ```php
 $excerpt = Str::excerpt('This is my name', 'my', ['radius' => 3]); // '...is my na...'
+// 取得包含關鍵字 'my' 並前後各取 3 個字元的摘錄，超出部分用 ... 取代
 $excerpt = Str::excerpt('This is my name', 'name', ['radius' => 3, 'omission' => '(...) ']); // '(...) my name'
 ```
-**註解**：excerpt 會從字串中擷取出包含關鍵字的片段，radius 代表關鍵字左右各取幾個字元，omission 可自訂省略字串。
+
+- __註解__：`excerpt` 會 _從字串中擷取出包含關鍵字的片段_，
+           `radius` 代表 _關鍵字左右_ 各取幾個字元，
+           `omission` 可自訂 _省略字串_。
 
 - 例如第一行，會抓出 'my' 左右各 3 個字元，前後加上 '...'，結果為 '...is my na...'。
 - 適合用於搜尋**結果摘要**、**重點片段顯示**等場景。
-- 補充說明：
-    - `radius` 是「最多」*左右各取幾個字元*，但遇到空白、標點、字串邊界時，實際取到的字元可能會少於設定值。
+- __補充說明__：
+    - `radius` 是「__最多__」*左右各取幾個字元*，但遇 __到空白、標點、字串邊界時，實際取到的字元可能會少於設定值__。
     - 這是為了讓片段顯示更自然、不會斷詞。
+
+```php
+use Illuminate\Support\Str;
+
+// 原字串
+$text = 'Hello, this is my name!';
+
+// 擷取 'my'，radius 設 3
+$excerpt = Str::excerpt($text, 'my', ['radius' => 3]);
+// 結果: "...is my na..."
+// 左右各取最多 3 個字元，但遇到空白或標點就停止
+
+// 擷取 'Hello'，radius 設 5
+$excerpt = Str::excerpt($text, 'Hello', ['radius' => 5]);
+// 結果: "Hello, th..."
+// 因為 'Hello' 已在字串開頭，左邊沒字元可取
+```
 
 ---
 
@@ -749,7 +869,7 @@ $adjusted = Str::finish('this/string/', '/'); // 'this/string/'
 
 ### *tr::fromBase64()*
 
-`Base64` 字串解碼。
+`Base64` 字串 __解碼__。
 
 ```php
 $decoded = Str::fromBase64('TGFyYXZlbA=='); // 'Laravel'
@@ -798,9 +918,10 @@ Str::inlineMarkdown('Inject: <script>alert("Hello XSS!");</script>', [
 
 ### *Str::is()*
 
-判斷字串`是否符合`指定模式（* 可作萬用字元）。
+判斷字串`是否符合`指定模式（`*` 可作萬用字元）。
 
 ```php
+// ( '比對規則' , '對象')
 $matches = Str::is('foo*', 'foobar'); // true
 $matches = Str::is('baz*', 'foobar'); // false
 $matches = Str::is('*.jpg', 'photo.JPG', ignoreCase: true); // true
@@ -810,7 +931,7 @@ $matches = Str::is('*.jpg', 'photo.JPG', ignoreCase: true); // true
 
 ### *Str::isAscii()*
 
-判斷字串是否為 `7 bit ASCII`。
+判斷字串 __是否__ 為 `7 bit ASCII`。
 
 ```php
 $isAscii = Str::isAscii('Taylor'); // true
@@ -821,9 +942,11 @@ $isAscii = Str::isAscii('ü'); // false
 
 ### *Str::isJson()*
 
-判斷字串是否為`合法 JSON`。
+判斷字串 __是否__ 為`合法 JSON`。
 
 ```php
+// 陣列格式：[1,2,3]（這是合法 JSON，代表一個數字陣列）
+// 物件格式：{"a":"b"}（這也是合法 JSON，代表一個鍵值對物件）
 $result = Str::isJson('[1,2,3]'); // true
 $result = Str::isJson('{"first": "John", "last": "Doe"}'); // true
 $result = Str::isJson('{first: "John", last: "Doe"}'); // false
@@ -833,7 +956,7 @@ $result = Str::isJson('{first: "John", last: "Doe"}'); // false
 
 ### *Str::isUlid()*
 
-判斷字串是否為`合法 ULID`。
+判斷字串 __是否__ 為`合法 ULID`。
 
 ```php
 $isUlid = Str::isUlid('01gd6r360bp37zj17nxb55yv40'); // true
@@ -844,7 +967,7 @@ $isUlid = Str::isUlid('laravel'); // false
 
 ### *Str::isUuid()*
 
-判斷字串是否為`合法 UUID`。
+判斷字串 __是否__ 為`合法 UUID`。
 
 ```php
 $isUuid = Str::isUuid('a0a2a2d2-0b87-4a18-83f2-2529882be2de'); // true
@@ -885,7 +1008,7 @@ $length = Str::length('Laravel'); // 7
 
 ### *Str::limit()*
 
-`限制`字串長度，**預設**結尾加 ...。
+`限制`字串長度，**預設**_結尾加 ..._。
 
 ```php
 $truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20); // 'The quick brown fox...'
@@ -919,7 +1042,7 @@ $string = Str::mask('taylor@example.com', '*', -15, 3); // tay***@example.com
 
 ### *Str::match()*
 
-回傳`符合正則`的第一個片段。
+回傳`符合正則`的 __第一個片段__。
 
 ```php
 $result = Str::match('/bar/', 'foo bar'); // 'bar'
@@ -935,7 +1058,8 @@ $result = Str::match('/foo (.*)/', 'foo bar'); // 'bar'
 
 $result = Str::match('/baz/', 'foo bar'); // ''
 ```
-**註解**`：match` 會用正則表達式比對字串，回傳第一個符合的片段。
+
+**註解**：`match` 會用正則表達式比對字串，回傳第一個符合的片段。
 
 - 若正則有分組（如 `(.*)`），會回傳第一個分組的內容。
 - 如果找不到符合的內容，會*回傳空字串*。
@@ -959,32 +1083,32 @@ $result = Str::matchAll('/f(\w*)/', 'bar fun bar fly'); // collect(['un', 'ly'])
 
 ### *Str::orderedUuid()*
 
-產生「`時間戳優先`」的 UUID。
+產生「_時間戳優先_」的 UUID。
 
 ```php
 return (string) Str::orderedUuid();
 ```
-#### **語法**
-
-```php
-Str::orderedUuid();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $uuid = (string) Str::orderedUuid(); // 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
 ```
 
-#### **註解**
-- 適合`需要時間排序`的唯一識別碼。
+<!-- 
+orderedUuid() 和 ULID 都能產生有順序的唯一識別碼，
+效果類似，都可用於排序和索引，
+但格式不同（UUID vs ULID），
+實作細節也不一樣。 
+-->
 
-#### **白話解釋**
-- 跟 `uuid` 類似，但有時間順序。
+- __註解__：適合`需要時間排序`的唯一識別碼。
 
-#### **應用場景**
-- *資料庫主鍵*
-- *分散式系統唯一識別*
+- __白話解釋__：跟 `uuid` 類似，但有時間順序。
+
+- __應用場景__：
+
+  - *資料庫主鍵*
+  - *分散式系統唯一識別*
 
 ---
 
@@ -1023,7 +1147,7 @@ $padded = Str::padRight('James', 10); // 'James     '
 
 ### *Str::password()*
 
-產生`隨機密碼`（**預設** 32 字元，含字母、數字、符號、空白）。
+產生`隨機密碼`（**預設** _32 字元_，含字母、數字、符號、空白）。
 
 ```php
 $password = Str::password(); // 'EbJo2vE-AS:U,$%_gkrV4n,q~1xy/-_4'
@@ -1055,40 +1179,45 @@ $plural = Str::pluralStudly('UserFeedback'); // 'UserFeedback'
 $plural = Str::pluralStudly('VerifiedHuman', 2); // 'VerifiedHumans'
 $singular = Str::pluralStudly('VerifiedHuman', 1); // 'VerifiedHuman'
 ```
-**註解**：StudlyCase 是每個單字首字大寫、單字間無底線或連字號（如 VerifiedHuman、UserFeedback）。
 
-- `pluralStudly` 會將 `StudlyCase` 單字自動轉為複數，**第二參數**可指定數量（1=單數，2=複數）。
+- __註解__：`StudlyCase` 是 __每個單字首字大寫、單字間無底線或連字號__（如 VerifiedHuman、UserFeedback）。
+
+- `pluralStudly` 會將 `StudlyCase` 單字自動轉為複數，**第二參數**可指定數量（`1`=單數，`2`=複數）。
 
 - 第一行：'VerifiedHuman' 轉複數，變 'VerifiedHumans'。
 - 第二行：'UserFeedback' 本身不可數，結果不變。
-- 第三行：數量 2，複數，結果 'VerifiedHumans'。
-- 第四行：數量 1，單數，結果 'VerifiedHuman'。
+- 第三行：數量 `2`，複數，結果 'VerifiedHumans'。
+- 第四行：數量 `1`，單數，結果 'VerifiedHuman'。
 
 ---
 
 ### *str::position()*
 
-回傳子字串`首次出現位置`，找不到回傳 false。
+回傳子字串`首次出現位置`，找不到回傳 `false`。
 
 ```php
 $position = Str::position('Hello, World!', 'Hello'); // 0
 $position = Str::position('Hello, World!', 'W'); // 7
 $position = Str::position('Hello, World!', 'foo'); // false
 ```
-**註解**：position 會回傳子字串在原字串`中第一次出現的位置`（從 0 開始算）。找不到則回傳 false。
+
+- __註解__：`position` 會回 傳 _子字串_ 在原字串中`第一次出現的位置`（從 0 開始算）。找不到則回傳 `false`。
 
 - 第一行：'Hello' 在最開頭，索引是 0，回傳 0。
 - 第二行：'W' 在第 7 個字元，回傳 7。
-- 第三行：'foo' 沒有出現，回傳 false。
+- 第三行：'foo' 沒有出現，回傳 `false`。
 
 ---
 
 ### *Str::random()*
 
-產生指定長度的隨機字串。
+產生 _指定長度_ 的`隨機字串`。
 
 ```php
 $random = Str::random(40);
+// 產生一個長度為 40 的隨機英數字串，例如：
+// "k8Jf2aQw9XzT1bL6pR3sV0yUeWqZ4mN7oP5cD8hSgFjK2lB"
+
 // 測試可 fake
 Str::createRandomStringsUsing(fn () => 'fake-random-string');
 Str::createRandomStringsNormally();
@@ -1098,7 +1227,7 @@ Str::createRandomStringsNormally();
 
 ### *Str::remove()*
 
-`移除`字串中的指定值（可陣列）。
+`移除`字串中的 _指定值_（可陣列）。
 
 ```php
 $string = 'Peter Piper picked a peck of pickled peppers.';
@@ -1120,7 +1249,7 @@ $repeat = Str::repeat('a', 5); // 'aaaaa'
 
 ### *Str::replace()*
 
-`取代`字串，可選擇是否區分大小寫。
+`取代`字串，可選擇 __是否__ 區分大小寫。
 
 ```php
 $string = 'Laravel 11.x';
@@ -1143,19 +1272,15 @@ $replaced = Str::replaceArray('?', ['8:30', '9:00'], $string); // 'The event wil
 
 ### *replaceFirstArray()*
 
-#### **用途**
-多組 `replaceFirst` 批次處理，依序對字串陣列每個元素執行 `replaceFirst。`
+- __用途__
 
-#### **語法**
+多組 `replaceFirst` 批次處理，依序對字串陣列每個元素執行 `replaceFirst`。
 
-```php
-Str::replaceFirstArray('foo', 'bar', ['foo1', 'foo2', 'baz']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::replaceFirstArray('foo', 'bar', ['foo1', 'foo2', 'baz']); // ['bar1', 'bar2', 'baz']
+
 // 參數解釋
 // 'foo'：
 //        要被替換的字串。
@@ -1169,42 +1294,31 @@ $result = Str::replaceFirstArray('foo', 'bar', ['foo1', 'foo2', 'baz']); // ['ba
 //        每個元素都會被檢查是否包含 'foo'。
 ```
 
-#### **註解**
-- 只取代每個字串的`第一個符合內容`。
+- __註解__：只取代每個字串的`第一個符合內容`。
 
-#### **白話解釋**
-- 一次處理一堆字串，全部都 `replaceFirst。`
+- __白話解釋__：一次處理一堆字串，全部都 `replaceFirst`。
 
-#### **應用場景**
-- `批次修正`多個字串的前綴。
+- __應用場景__：`批次修正`多個字串的前綴。
 
 ---
 
 ### *replaceLastArray()*
 
-#### **用途**
-多組 `replaceLast` 批次處理，依序對字串陣列每個元素執行 `replaceLast。`
+- __用途__
 
-#### **語法**
+多組 `replaceLast` 批次處理，依序對字串陣列每個元素執行 `replaceLast`。
 
-```php
-Str::replaceLastArray('foo', 'bar', ['1foo', '2foo', 'baz']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::replaceLastArray('foo', 'bar', ['1foo', '2foo', 'baz']); // ['1bar', '2bar', 'baz']
 ```
 
-#### **註解**
-- 只取代每個字串的`最後一個符合內容`。
+- __註解__：只取代每個字串的`最後一個符合內容`。
 
-#### **白話解釋**
-- 一次處理一堆字串，全部都 `replaceLast。`
+- __白話解釋__：一次處理一堆字串，全部都 `replaceLast`。
 
-#### **應用場景**
-- `批次修正`多個字串的結尾。
+- __應用場景__：`批次修正`多個字串的結尾。
 
 ---
 
@@ -1247,6 +1361,7 @@ $replaced = Str::replaceMatches('/\d/', fn($matches) => '['.$matches[0].']', '12
 ```php
 $replaced = Str::replaceStart('Hello', 'Laravel', 'Hello World'); // 'Laravel World'
 $replaced = Str::replaceStart('World', 'Laravel', 'Hello World'); // 'Hello World'
+// 說明：只有當字串「開頭」是 'World' 才會被替換，這裡開頭是 'Hello'，所以不會替換
 ```
 
 ---
@@ -1295,7 +1410,7 @@ $slug = Str::slug('Laravel 5 Framework', '-'); // 'laravel-5-framework'
 
 ### *Str::snake()*
 
-轉為 `snake_case。`
+轉為 `snake_case`。
 
 ```php
 $converted = Str::snake('fooBar'); // 'foo_bar'
@@ -1338,7 +1453,7 @@ $result = Str::startsWith('This is my name', ['This', 'That', 'There']); // true
 
 ### *Str::studly()*
 
-轉為 `StudlyCase。`
+轉為 `StudlyCase`。
 
 ```php
 $converted = Str::studly('foo_bar'); // 'FooBar'
@@ -1370,14 +1485,15 @@ $count = Str::substrCount('If you like ice cream, you will like snow cones.', 'l
 
 取代`字串中指定位置的內容`。
 
-- **更白話說明**
- - `substrReplace` 可以「*在字串的某個位置，把一段內容換成你指定的新內容*」，也可以「*在某個位置插入新內容*」。
+- __更白話說明__
+
+ - `substrReplace` 可以「_在字串的某個位置，把一段內容換成你指定的新內容_」，也可以「_在某個位置插入新內容_」。
 
 - 語法：`Str::substrReplace(原字串, 新內容, 起始位置, [長度])`
-  - *原字串*：你要處理的字串
-  - *新內容*：你要插入或取代的內容
-  - *起始位置*：從第幾個字元開始（從 0 算起）
-  - *長度（可選）*：要取代幾個字元（`不寫就把後面全部換掉`；寫 **0** 就是`插入`）
+  - _原字串_：你要處理的字串
+  - _新內容_：你要插入或取代的內容
+  - _起始位置_：從第幾個字元開始（從 0 算起）
+  - _長度（可選）_：要取代幾個字元（`不寫就把後面全部換掉`；寫 __0__ 就是`插入`）
 
 ```php
 
@@ -1395,21 +1511,25 @@ $result = Str::substrReplace('1300', ':', 2, 0); // '13:00'
 //     2（在這裡插入 :，原本的 0 0 往後推）
 // 結果：'13:00'
 ```
-- *補充說明*：
+
+- __補充說明__
+
  - `沒寫長度（只給三個參數）時`，會把起始位置後面全部**換成新內容**。
  - 長度寫 **0** 時，代表`只插入新內容，不會刪除任何東西`。
  - 這和 PHP 原生 `substr_replace` 行為一致。
 
-- 例如：
+- __例如__
+
   ```php
   Str::substrReplace('abcdef', 'X', 2); - 'abX'
   Str::substrReplace('abcdef', 'X', 2, 0); // 'abXcdef'
   ```
+
 ---
 
 ### *Str::swap()*
 
-用多組`對應值`批次取代字串（strtr）。
+用多組`對應值`批次 __取代字串__（`strtr`）。
 
 ```php
 $string = Str::swap([
@@ -1432,7 +1552,7 @@ $taken = Str::take('Build something amazing!', 5); // 'Build'
 
 ### *Str::title()*
 
-轉為標題格式（`每字首大寫`）。
+轉為 __標題格式__（`每字首大寫`）。
 
 ```php
 $converted = Str::title('a nice title uses the correct case'); // 'A Nice Title Uses The Correct Case'
@@ -1452,7 +1572,7 @@ $base64 = Str::toBase64('Laravel'); // 'TGFyYXZlbA=='
 
 ### *Str::transliterate()*
 
-嘗試將`字串音譯`為最接近的 `ASCII。`
+嘗試將`字串音譯`為最接近的 `ASCII`。
 
 ```php
 $email = Str::transliterate('ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ'); // 'test@laravel.com'
@@ -1462,7 +1582,7 @@ $email = Str::transliterate('ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ'); // 
 
 ### *Str::trim()*
 
-去除`首尾空`白（含 unicode 空白）。
+去除`首尾空`白（含 `unicode` 空白）。
 
 ```php
 $string = Str::trim(' foo bar '); // 'foo bar'
@@ -1502,7 +1622,7 @@ $string = Str::ucfirst('foo bar'); // 'Foo bar'
 
 ### *Str::ucsplit()*
 
-依大寫字母`分割為陣列`。
+依大寫字母 __分割為`陣列`__。
 
 ```php
 $segments = Str::ucsplit('FooBar'); // ['Foo', 'Bar']
@@ -1522,7 +1642,7 @@ $string = Str::upper('laravel'); // 'LARAVEL'
 
 ### *Str::ulid()*
 
-產生 `ULID`（時間排序唯一識別碼）。
+產生 `ULID`（__時間排序__ 唯一識別碼）。
 
 ```php
 $ulid = (string) Str::ulid(); // '01gd6r360bp37zj17nxb55yv40'
@@ -1537,7 +1657,7 @@ Str::createUlidsNormally();
 
 ### *Str::unwrap()*
 
-去除字串`開頭與結尾`的指定字元。
+__去除__ 字串`開頭與結尾`的指定字元。
 
 ```php
 Str::unwrap('-Laravel-', '-'); // 'Laravel'
@@ -1561,7 +1681,7 @@ Str::createUuidsNormally();
 
 ### *Str::uuid7()*
 
-產生 `UUID v7`，可指定時間。
+產生 `UUID v7`，可 __指定時間__。
 
 ```php
 $uuid7 = (string) Str::uuid7();
@@ -1582,7 +1702,7 @@ Str::wordCount('Hello, world!'); // 2
 
 ### *Str::wordWrap()*
 
-`自動換行`至指定長度。
+`自動換行`至 __指定長度__。
 
 ```php
 $text = "The quick brown fox jumped over the lazy dog."
@@ -1594,7 +1714,7 @@ Str::wordWrap($text, characters: 20, break: "<br />\n");
 
 ### *Str::words()*
 
-`限制`字串單字數，超過加上`結尾字串`。
+`限制`字串 __單字數__，超過加上`結尾字串`。
 
 ```php
 Str::words('Perfectly balanced, as all things should be.', 3, ' >>>'); // 'Perfectly balanced, as >>>'
@@ -1605,27 +1725,35 @@ Str::words('Perfectly balanced, as all things should be.', 3, ' >>>'); // 'Perfe
 ### *Str::wrap()*
 
 
-將一段字串「`包裹`」在你指定的`前綴`（before）和`後綴`（after）之間。
+將一段字串「_包裹_」在你指定的`前綴`（before）和`後綴`（after）之間。
 
-#### **用途**
-將主體`字串前後`加上指定內容，常用於自動加引號、括號、HTML 標籤、格式化輸出等。
+- __用途__
 
-#### **語法**
+將主體`字串前後`加上指定內容，常用於自動加 __引號、括號、HTML 標籤、格式化輸出__ 等。
+
+- __語法__
+
 ```php
 Str::wrap($string, before: '', after: '')
 ```
-- **$string**：要被包裹的`主體字串`。
-- **before**：要加在主體字串`前面的內容`（可省略）。
-- **after**：要加在主體字串`後面的內容`（可省略）。
+- __$string__：要被包裹的`主體字串`。
+- __before__：要加在主體字串`前面的內容`（可省略）。
+- __after__：要加在主體字串`後面的內容`（可省略）。
 
-#### **參數詳細解釋**
+---
+
+__參數詳細解釋__
+
 | 參數      | 型態   | 預設值 | 說明                                   |
 |-----------|--------|--------|----------------------------------------|
-| $string   | string | 無     | 要被包裹的主體字串                     |
-| before    | string | ''     | 要加在主體字串前面的內容（可省略）      |
-| after     | string | ''     | 要加在主體字串後面的內容（可省略）      |
+| `$string`   | string | 無     | 要被包裹的主體字串                     |
+| `before`    | string | ''     | 要加在主體字串前面的內容（可省略）      |
+| `after`     | string | ''     | 要加在主體字串後面的內容（可省略）      |
 
-#### **範例**
+
+---
+
+- __範例__
 
 ```php
 Str::wrap('is', before: 'This ', after: ' Laravel!'); // 'This is Laravel!'
@@ -1636,14 +1764,18 @@ Str::wrap('A', before: '(', after: ')'); // '(A)'
 Str::wrap('Laravel'); // 'Laravel'
 ```
 
-#### **圖解**
+---
+
+__圖解__
 
 假設你呼叫：
 
 ```php
 Str::wrap('中心', before: '【', after: '】');
 ```
-圖解如下：
+
+_圖解如下_：
+
 ```
 before   $string   after
   ↓        ↓        ↓
@@ -1652,23 +1784,31 @@ before   $string   after
       '【中心】'
 ```
 
-#### **常見問題 Q&A**
+---
+
+__常見問題 Q&A__
 
 - Q1：*如果 before 或 after 是空字串？*
   - 那一邊就不會加東西，結果就是原字串或只加一邊。
+
 - Q2：*可以同時加多層嗎？*
 
   - 可以多次呼叫 `Str::wrap()`，例如：
+
     ```php
     Str::wrap(Str::wrap('A', before: '[', after: ']'), before: '(', after: ')'); // '([A])'
     ```
 
 - Q3：*before/after 可以是任何字串嗎？*
-  - 可以，甚至可以是表情符號、HTML 標籤、特殊符號等。
-- Q4：*和 concat、.（點號）有什麼差別？*
-  - `Str::wrap()` 是專門設計來「同時」加前後字串，比你手動拼接更直覺、可讀性高，且支援具名參數。
+  - 可以，甚至可以是 __表情符號、HTML 標籤、特殊符號__ 等。
 
-#### **實用小技巧**
+- Q4：*和 concat、.（點號）有什麼差別？*
+  - `Str::wrap()` 是專門設計來「__同時__」加前後字串，比你手動拼接更直覺、可讀性高，且支援具名參數。
+
+---
+
+__實用小技巧__
+
 - *HTML 標籤包裹*
   
 ```php
@@ -1685,12 +1825,18 @@ before   $string   after
   Str::wrap(Str::wrap('A', before: '[', after: ']'), before: '(', after: ')'); // '([A])'
   ```
 
-#### **常見誤區提醒**
+---
+
+__常見誤區提醒__
+
 - *具名參數*：`before:`、`after:` 是 `PHP 8+ 的語法`，舊版 PHP 不能用這種寫法，只能用順序傳參數。
-- *不會自動加空白*：如果你想要有空白，要自己在 before/after 裡加空白。
+- *不會自動加空白*：如果你想要有空白，要自己在 `before/after` 裡加空白。
   - 例：`before: 'Hello, '`（有空白）
 
-#### **圖解：多層包裹**
+---
+
+__圖解：多層包裹__
+
 假設你想要這樣的效果：`((A))`
 
 ```php
@@ -1699,18 +1845,18 @@ Str::wrap(Str::wrap('A', before: '(', after: ')'), before: '(', after: ')');
 // 第二次：'(A)' → '((A))'
 ```
 
-#### **應用場景**
-- 產生 `HTML 標籤`
-- 自動`加引號、括號`
-- 格式化輸出（如 `[INFO] 訊息`）
-- 產生`自訂格式的字串`
+- __應用場景__：
+
+  - 產生 `HTML 標籤`
+  - 自動`加引號、括號`
+  - 格式化輸出（如 `[INFO] 訊息`）
+  - 產生`自訂格式的字串`
 
 ---
 
 ## **Fluent String 物件簡介**
 
-`Fluent String` 提供更流暢、*物件導向*的字串操作，*可鏈式*呼叫多個方法。
-
+`Fluent String` 提供更流暢、*物件導向* 的字串操作，*可鏈式* 呼叫多個方法。
 
 ```php
 use Illuminate\Support\Str;
@@ -1761,83 +1907,61 @@ $containsAll = Str::of('This is my name')->containsAll(['MY', 'NAME'], ignoreCas
 
 ### *after()*
 
-#### **用途**
+- __用途__
+
 取得指定`字串之後`的所有內容。如果找不到指定字串，會回傳原字串。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->after('This is');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $slice = Str::of('This is my name')->after('This is'); // ' my name'
 ```
 
-#### **註解**
-- 只會找`第一個出現`的指定字串。
-- 找不到時，回傳原字串。
+- __註解__：
+  - 只會找`第一個出現`的指定字串。
+  - 找不到時，回傳原字串。
 
 ---
 
 ### *afterLast()*
 
-#### **用途**
+- __用途__
+
 取得`最後一次出現`指定字串`之後`的所有內容。如果找不到，回傳原字串。
 
-#### **語法**
-
-```php
-Str::of('App\\Http\\Controllers\\Controller')->afterLast('\\');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $slice = Str::of('App\\Http\\Controllers\\Controller')->afterLast('\\'); // 'Controller'
 ```
 
-#### **註解**
-- 常用於`取得檔名、類別名稱`等。
+- __註解__：常用於`取得檔名、類別名稱`等。
 
 ---
 
 ### *apa()*
 
-#### **用途**
+- __用途__
+
 將字串`轉為 APA 標題格式`（每個單字首字大寫，符合 APA 標準）。
 
-#### **語法**
-
-```php
-Str::of('a nice title uses the correct case')->apa();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('a nice title uses the correct case')->apa(); // 'A Nice Title Uses the Correct Case'
 ```
 
-#### **註解**
-- 適合`論文、標題`自動格式化。
+- __註解__：適合`論文、標題`自動格式化。
 
 ---
 
 ### *append()*
 
-#### **用途**
+- __用途__
+
 在字串`後面加上`指定內容。
 
-#### **語法**
-
-```php
-Str::of('Taylor')->append(' Otwell');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Taylor')->append(' Otwell'); // 'Taylor Otwell'
@@ -1847,16 +1971,11 @@ $string = Str::of('Taylor')->append(' Otwell'); // 'Taylor Otwell'
 
 ### *ascii()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `ASCII` 字元（*去除重音、特殊符號*）。
 
-#### **語法**
-
-```php
-Str::of('ü')->ascii();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('ü')->ascii(); // 'u'
@@ -1866,17 +1985,11 @@ $string = Str::of('ü')->ascii(); // 'u'
 
 ### *basename()*
 
-#### **用途**
-取得`路徑的最後一段`（檔名），可選擇去除副檔名。
+- __用途__
 
-#### **語法**
+_取得_`路徑的最後一段`（檔名），可選擇去除副檔名。
 
-```php
-Str::of('/foo/bar/baz')->basename();
-Str::of('/foo/bar/baz.jpg')->basename('.jpg');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 Str::of('/foo/bar/baz')->basename(); // 'baz'
@@ -1887,16 +2000,11 @@ Str::of('/foo/bar/baz.jpg')->basename('.jpg'); // 'baz'
 
 ### *before()*
 
-#### **用途**
+- __用途__
+
 取得指定`字串之前`的所有內容。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->before('my name');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $slice = Str::of('This is my name')->before('my name'); // 'This is '
@@ -1906,35 +2014,25 @@ $slice = Str::of('This is my name')->before('my name'); // 'This is '
 
 ### *beforeLast()*
 
-#### **用途**
+- __用途__
+
 取得`最後一次出現`指定字串`之前`的所有內容。
 
-#### **語法**
+- __語法__
 
 ```php
-Str::of('This is my name')->beforeLast('is');
-```
-
-#### **範例**
-
-```php
-$slice = Str::of('This is my name')->beforeLast('is'); // 'This '
+$slice = Str::of('This is my name, is it?')->beforeLast('is'); // 'This is my name, '
 ```
 
 ---
 
 ### *between()*
 
-#### **用途**
+- __用途__
+
 取得兩個指定`字串之間`的內容。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->between('This', 'name');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('This is my name')->between('This', 'name'); // ' is my '
@@ -1944,16 +2042,11 @@ $converted = Str::of('This is my name')->between('This', 'name'); // ' is my '
 
 ### *betweenFirst()*
 
-#### **用途**
+- __用途__
+
 取得`第一組出現`的兩個`字串之間`的內容（遇到多組時只取最小範圍）。
 
-#### **語法**
-
-```php
-Str::of('[a] bc [d]')->betweenFirst('[', ']');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('[a] bc [d]')->betweenFirst('[', ']'); // 'a'
@@ -1963,16 +2056,11 @@ $converted = Str::of('[a] bc [d]')->betweenFirst('[', ']'); // 'a'
 
 ### *camel()*
 
-#### **用途**
-將字串轉為 `camelCase（駝峰式命名）。`
+- __用途__
 
-#### **語法**
+將字串轉為 `camelCase（駝峰式命名）`。
 
-```php
-Str::of('foo_bar')->camel();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('foo_bar')->camel(); // 'fooBar'
@@ -1982,16 +2070,11 @@ $converted = Str::of('foo_bar')->camel(); // 'fooBar'
 
 ### *charAt()*
 
-#### **用途**
-取得指定`索引位置`的`字元`。超出範圍時回傳 `false。`
+- __用途__
 
-#### **語法**
+取得指定`索引位置`的`字元`。超出範圍時回傳 ``false``。
 
-```php
-Str::of('This is my name.')->charAt(6);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $character = Str::of('This is my name.')->charAt(6); // 's'
@@ -2001,16 +2084,11 @@ $character = Str::of('This is my name.')->charAt(6); // 's'
 
 ### *classBasename()*
 
-#### **用途**
+- __用途__
+
 取得`類別名稱`（去除命名空間）。
 
-#### **語法**
-
-```php
-Str::of('Foo\\Bar\\Baz')->classBasename();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $class = Str::of('Foo\\Bar\\Baz')->classBasename(); // 'Baz'
@@ -2020,17 +2098,11 @@ $class = Str::of('Foo\\Bar\\Baz')->classBasename(); // 'Baz'
 
 ### *chopStart()*
 
-#### **用途**
-如果字串`開頭`是指定內容，`移除第一個出現`的指定內容。可傳陣列。
+- __用途__
 
-#### **語法**
+_如果_ 字串`開頭`是指定內容，`移除第一個出現`的指定內容。可傳陣列。
 
-```php
-Str::of('https://laravel.com')->chopStart('https://');
-Str::of('http://laravel.com')->chopStart(['https://', 'http://']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $url = Str::of('https://laravel.com')->chopStart('https://'); // 'laravel.com'
@@ -2041,17 +2113,11 @@ $url = Str::of('http://laravel.com')->chopStart(['https://', 'http://']); // 'la
 
 ### *chopEnd()*
 
-#### **用途**
-如果字串`結尾`是指定內容，`移除最後一個出現`的指定內容。可傳陣列。
+- __用途__
 
-#### **語法**
+_如果_ 字串`結尾`是指定內容，`移除最後一個出現`的指定內容。可傳陣列。
 
-```php
-Str::of('https://laravel.com')->chopEnd('.com');
-Str::of('http://laravel.com')->chopEnd(['.com', '.io']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $url = Str::of('https://laravel.com')->chopEnd('.com'); // 'https://laravel'
@@ -2062,18 +2128,11 @@ $url = Str::of('http://laravel.com')->chopEnd(['.com', '.io']); // 'http://larav
 
 ### *contains()*
 
-#### **用途**
-判斷字串是否`包含`指定內容。*預設*區分大小寫。
+- __用途__
 
-#### **語法**
+判斷字串 __是否__ `包含`指定內容。*預設*區分大小寫。
 
-```php
-Str::of('This is my name')->contains('my');
-Str::of('This is my name')->contains(['my', 'foo']);
-Str::of('This is my name')->contains('MY', ignoreCase: true);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $contains = Str::of('This is my name')->contains('my'); // true
@@ -2085,17 +2144,11 @@ $contains = Str::of('This is my name')->contains('MY', ignoreCase: true); // tru
 
 ### *containsAll()*
 
-#### **用途**
-判斷字串是否同時`包含`陣列中所有內容。
+- __用途__
 
-#### **語法**
+判斷字串 __是否__ 同時`包含`陣列中所有內容。
 
-```php
-Str::of('This is my name')->containsAll(['my', 'name']);
-Str::of('This is my name')->containsAll(['MY', 'NAME'], ignoreCase: true);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $containsAll = Str::of('This is my name')->containsAll(['my', 'name']); // true
@@ -2106,16 +2159,11 @@ $containsAll = Str::of('This is my name')->containsAll(['MY', 'NAME'], ignoreCas
 
 ### *decrypt()*
 
-#### **用途**
+- __用途__
+
 `解密字串`（需搭配 Laravel 加密功能）。
 
-#### **語法**
-
-```php
-$decrypted = $encrypted->decrypt();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 // 假設 $encrypted 是加密過的 Fluent String 物件
@@ -2126,17 +2174,11 @@ $decrypted = $encrypted->decrypt(); // 'secret'
 
 ### *deduplicate()*
 
-#### **用途**
+- __用途__
+
 將連續`重複的字元合併成一個`。*預設*合併空白，可自訂字元。
 
-#### **語法**
-
-```php
-Str::of('The   Laravel   Framework')->deduplicate();
-Str::of('The---Laravel---Framework')->deduplicate('-');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('The   Laravel   Framework')->deduplicate(); // 'The Laravel Framework'
@@ -2147,17 +2189,17 @@ $result = Str::of('The---Laravel---Framework')->deduplicate('-'); // 'The-Larave
 
 ### *dirname()*
 
-#### **用途**
+<!-- 
+dirname 的全稱是 directory name，
+意思是「目錄名稱」，
+用來取得檔案路徑的上層目錄。 
+-->
+
+- __用途__
+
 取得路徑的`上層目錄`。可指定往上幾層。
 
-#### **語法**
-
-```php
-Str::of('/foo/bar/baz')->dirname();
-Str::of('/foo/bar/baz')->dirname(2);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('/foo/bar/baz')->dirname(); // '/foo/bar'
@@ -2168,18 +2210,11 @@ $string = Str::of('/foo/bar/baz')->dirname(2); // '/foo'
 
 ### *doesntEndWith()*
 
-#### **用途**
+- __用途__
+
 判斷字串`結尾不是`指定內容。可傳陣列。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->doesntEndWith('dog');
-Str::of('This is my name')->doesntEndWith(['this', 'foo']);
-Str::of('This is my name')->doesntEndWith(['name', 'foo']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('This is my name')->doesntEndWith('dog'); // true
@@ -2191,70 +2226,55 @@ $result = Str::of('This is my name')->doesntEndWith(['name', 'foo']); // false
 
 ### *doesntStartWith()*
 
-#### **用途**
+- __用途__
+
 判斷字串`開頭不是`指定內容。可傳陣列。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->doesntStartWith('That');
-Str::of('This is my name')->doesntStartWith(['This', 'That', 'There']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('This is my name')->doesntStartWith('That'); // true
 $result = Str::of('This is my name')->doesntStartWith(['This', 'That', 'There']); // true
 ```
 
-#### **註解**
+- __註解__
+
 - 只要`開頭不是`陣列中任何一個值，就會回傳 `true`。
 - 如果開頭是陣列中任一個值，則回傳 `false`。
 
-#### **白話說明**
-- 就是「不是這些開頭」才會回傳 `true`。
-- 常用於`排除特定前綴`的字串。
+- __白話說明__
+
+  - 就是「不是這些開頭」才會回傳 `true`。
+  - 常用於`排除特定前綴`的字串。
 
 ---
 
 ### *encrypt()*
 
-#### **用途**
+- __用途__
+
 `加密字串`（需搭配 Laravel 加密功能）。
 
-#### **語法**
+- __語法__
 
 ```php
 $encrypted = Str::of('secret')->encrypt();
 ```
 
-#### **範例**
+- __註解__
 
-```php
-$encrypted = Str::of('secret')->encrypt();
-```
-
-#### **註解**
-- 回傳加密後的字串，通常用於`敏感資料儲存`。
-- 解密請用 `decrypt()` 方法。
+  - 回傳加密後的字串，通常用於`敏感資料儲存`。
+  - 解密請用 `decrypt()` 方法。
 
 ---
 
 ### *endsWith()*
 
-#### **用途**
+- __用途__
+
 判斷字串`結尾是否`為指定內容。可傳陣列。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->endsWith('name');
-Str::of('This is my name')->endsWith(['name', 'foo']);
-Str::of('This is my name')->endsWith(['this', 'foo']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('This is my name')->endsWith('name'); // true
@@ -2262,129 +2282,104 @@ $result = Str::of('This is my name')->endsWith(['name', 'foo']); // true
 $result = Str::of('This is my name')->endsWith(['this', 'foo']); // false
 ```
 
-#### **註解**
-- 只要`結`尾是陣列中任一個值，就會回傳 `true`。
-- 結尾都不是陣列中任何一個值，才會回傳 `false`。
+- __註解__
 
-#### **白話說明**
-- 就是「有這些結尾」才會回傳 `true`。
-- 常用於檢查副檔名、網址結尾等。
+  - 只要`結`尾是陣列中任一個值，就會回傳 `true`。
+  - 結尾都不是陣列中任何一個值，才會回傳 `false`。
+
+- __白話說明__
+
+  - 就是「有這些結尾」才會回傳 `true`。
+  - 常用於檢查副檔名、網址結尾等。
 
 ---
 
 ### *exactly()*
 
-#### **用途**
-判斷字串是否與另一字串`完全相同`。
+- __用途__
 
-#### **語法**
+判斷字串 __是否__ 與另一字串`完全相同`。
 
-```php
-Str::of('Laravel')->exactly('Laravel');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('Laravel')->exactly('Laravel'); // true
 ```
 
-#### **註解**
-- `完全比對`，包含大小寫、空白等。
+- __註解__：`完全比對`，包含大小寫、空白等。
 
-#### **白話說明**
-- 就是「一模一樣」才會 `true`，任何一點不同都會 `false`。
+- __白話說明__：就是「一模一樣」才會 `true`，任何一點不同都會 `false`。
 
 ---
 
 ### *excerpt()*
 
-#### **用途**
+- __用途__
+
 從字串中`擷取`出包含指定關鍵字的片段，可設定*前後顯示幾個字元*與*省略符號*。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->excerpt('my', ['radius' => 3]);
-Str::of('This is my name')->excerpt('name', ['radius' => 3, 'omission' => '(...) ']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $excerpt = Str::of('This is my name')->excerpt('my', ['radius' => 3]); // '...is my na...'
 $excerpt = Str::of('This is my name')->excerpt('name', ['radius' => 3, 'omission' => '(...) ']); // '(...) my name'
 ```
 
-#### **註解**
-- `radius` 代表關鍵字*左右各顯示*幾個字元，預設 100。
-- `omission` 可自訂省略符號，*預設*為 "..."。
-- 找不到關鍵字時回傳 `null`。
+- __註解__
 
-#### **白話說明**
-- 就像「`自動摘要`」功能，會抓出關鍵字附近的內容，前後太長就用省略符號補上。
-- 適合做搜尋結果摘要、重點提示。
+  - `radius` 代表關鍵字*左右各顯示*幾個字元，預設 100。
+  - `omission` 可自訂省略符號，*預設*為 "..."。
+  - 找不到關鍵字時回傳 `null`。
+
+- __白話說明__
+
+  - 就像「_自動摘要_」功能，會抓出關鍵字附近的內容，前後太長就用省略符號補上。
+  - 適合做搜尋結果摘要、重點提示。
 
 ---
 
 ### *explode()*
 
-#### **用途**
+- __用途__
+
 用指定`分隔符`切割字串，回傳 Collection。
 
-#### **語法**
-
-```php
-Str::of('foo bar baz')->explode(' ');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $collection = Str::of('foo bar baz')->explode(' '); // collect(['foo', 'bar', 'baz'])
 ```
 
-#### **白話說明**
-- 類似 `PHP 的 explode`，但回傳 `Laravel Collection`，方便後續鏈式操作。
+- __白話說明__
+
+  - 類似 `PHP 的 explode`，但回傳 `Laravel Collection`，方便後續鏈式操作。
 
 ---
 
-### *finish()*
+### *finish()* vs `start()`
 
-#### **用途**
-確保字串`結尾`有指定內容，若已存在則`不重複加`。
+- __用途__
 
-#### **語法**
+確保字串`結尾`_有指定內容_，若已存在則`不重複加`。
 
-```php
-Str::of('this/string')->finish('/');
-Str::of('this/string/')->finish('/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $adjusted = Str::of('this/string')->finish('/'); // 'this/string/'
 $adjusted = Str::of('this/string/')->finish('/'); // 'this/string/'
 ```
 
-#### **白話說明**
-- 常用於`路徑、網址`等，確保結尾有斜線或特定符號。
+- __白話說明__：常用於`路徑、網址`等，確保結尾有斜線或特定符號。
 
 ---
 
 ### *fromBase64()*
 
-#### **用途**
+- __用途__
+
 將 `Base64` 編碼字串解碼。
 
-#### **語法**
-
-```php
-Str::of('TGFyYXZlbA==')->fromBase64();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $decoded = Str::of('TGFyYXZlbA==')->fromBase64(); // 'Laravel'
@@ -2394,67 +2389,45 @@ $decoded = Str::of('TGFyYXZlbA==')->fromBase64(); // 'Laravel'
 
 ### *hash()*
 
-#### **用途**
+- __用途__
+
 用指定演算法`雜湊字串`。
 
-#### **語法**
-
-```php
-Str::of('secret')->hash(algorithm: 'sha256');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $hashed = Str::of('secret')->hash(algorithm: 'sha256');
 // '2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b'
 ```
 
-#### **白話說明**
-- 常用於`密碼、簽章`等安全需求。
+- __白話說明__：常用於`密碼、簽章`等安全需求。
 
 ---
 
 ### *headline()*
 
-#### **用途**
+- __用途__
+
 將字串轉為`每個單字首字大寫`的標題格式。
 
-#### **語法**
-
-```php
-Str::of('taylor_otwell')->headline();
-Str::of('EmailNotificationSent')->headline();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $headline = Str::of('taylor_otwell')->headline(); // 'Taylor Otwell'
 $headline = Str::of('EmailNotificationSent')->headline(); // 'Email Notification Sent'
 ```
 
-#### **白話說明**
-- 會自動判斷`底線、駝峰、連字號`等，轉成標題格式。
+- __白話說明__：會自動判斷`底線、駝峰、連字號`等，轉成標題格式。
 
 ---
 
 ### *inlineMarkdown()*
 
-#### **用途**
+- __用途__
+
 將 GitHub 風格 Markdown 轉為 `inline HTML`，不包 block-level 標籤。
 
-#### **語法**
-
-```php
-Str::of('**Laravel**')->inlineMarkdown();
-Str::of('Inject: <script>alert("Hello XSS!");</script>')->inlineMarkdown([
-    'html_input' => 'strip',
-    'allow_unsafe_links' => false,
-]);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $html = Str::of('**Laravel**')->inlineMarkdown(); // <strong>Laravel</strong>
@@ -2465,48 +2438,34 @@ $html = Str::of('Inject: <script>alert("Hello XSS!");</script>')->inlineMarkdown
 // Inject: alert(&quot;Hello XSS!&quot;);
 ```
 
-#### **註解**
-- 預設會處理 `XSS 風險`，建議用 `html_input` 選項。
+- __註解__：預設會處理 `XSS 風險`，建議用 `html_input` 選項。
 
 ---
 
 ### *is()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`符合指定模式（* 可作萬用字元）。
 
-#### **語法**
-
-```php
-Str::of('foobar')->is('foo*');
-Str::of('foobar')->is('baz*');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $matches = Str::of('foobar')->is('foo*'); // true
 $matches = Str::of('foobar')->is('baz*'); // false
 ```
 
-#### **白話說明**
-- `*` 代表任意字元，像 `shell` 的萬用字元。
+- __白話說明__：`*` 代表任意字元，像 `shell` 的萬用字元。
 
 ---
 
 ### *isAscii()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`為 ASCII 字元。
 
-#### **語法**
-
-```php
-Str::of('Taylor')->isAscii();
-Str::of('ü')->isAscii();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('Taylor')->isAscii(); // true
@@ -2517,17 +2476,11 @@ $result = Str::of('ü')->isAscii(); // false
 
 ### *isEmpty()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`為空（trim 後）。
 
-#### **語法**
-
-```php
-Str::of('  ')->trim()->isEmpty();
-Str::of('Laravel')->trim()->isEmpty();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('  ')->trim()->isEmpty(); // true
@@ -2538,17 +2491,11 @@ $result = Str::of('Laravel')->trim()->isEmpty(); // false
 
 ### *isNotEmpty()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`不為空（trim 後）。
 
-#### **語法**
-
-```php
-Str::of('  ')->trim()->isNotEmpty();
-Str::of('Laravel')->trim()->isNotEmpty();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('  ')->trim()->isNotEmpty(); // false
@@ -2559,18 +2506,11 @@ $result = Str::of('Laravel')->trim()->isNotEmpty(); // true
 
 ### *isJson()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`為合法 JSON。
 
-#### **語法**
-
-```php
-Str::of('[1,2,3]')->isJson();
-Str::of('{"first": "John", "last": "Doe"}')->isJson();
-Str::of('{first: "John", last: "Doe"}')->isJson();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('[1,2,3]')->isJson(); // true
@@ -2578,49 +2518,34 @@ $result = Str::of('{"first": "John", "last": "Doe"}')->isJson(); // true
 $result = Str::of('{first: "John", last: "Doe"}')->isJson(); // false
 ```
 
-#### **白話說明**
-- 只要是標準 `JSON` 格式（*鍵值都要加雙引號*），才會回傳 `true`。
+- __白話說明__：只要是標準 `JSON` 格式（*鍵值都要加雙引號*），才會回傳 `true`。
 
 ---
 
 ### *isUlid()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`為合法 ULID。
 
-#### **語法**
-
-```php
-Str::of('01gd6r360bp37zj17nxb55yv40')->isUlid();
-Str::of('Taylor')->isUlid();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('01gd6r360bp37zj17nxb55yv40')->isUlid(); // true
 $result = Str::of('Taylor')->isUlid(); // false
 ```
 
-#### **白話說明**
-- ULID 是一種*唯一識別碼*，類似 UUID，但有時間排序特性。
+- __白話說明__：ULID 是一種*唯一識別碼*，類似 UUID，但有時間排序特性。
 
 ---
 
 ### *isUrl()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`為合法 URL，可自訂協定。
 
-#### **語法**
-
-```php
-Str::of('http://example.com')->isUrl();
-Str::of('Taylor')->isUrl();
-Str::of('http://example.com')->isUrl(['http', 'https']);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('http://example.com')->isUrl(); // true
@@ -2628,47 +2553,34 @@ $result = Str::of('Taylor')->isUrl(); // false
 $result = Str::of('http://example.com')->isUrl(['http', 'https']); // true
 ```
 
-#### **白話說明**
-- 預設支援多種協定，可用陣列限制只接受 `http/https`。
+- __白話說明__：預設支援多種協定，可用陣列限制只接受 `http/https`。
 
 ---
 
 ### *isUuid()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`為 UUID。
 
-#### **語法**
-
-```php
-Str::of('5ace9ab9-e9cf-4ec6-a19d-5881212a452c')->isUuid();
-Str::of('Taylor')->isUuid();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('5ace9ab9-e9cf-4ec6-a19d-5881212a452c')->isUuid(); // true
 $result = Str::of('Taylor')->isUuid(); // false
 ```
 
-#### **白話說明**
-- UUID 是一種常見的`唯一識別`碼格式。
+- __白話說明__：UUID 是一種常見的`唯一識別`碼格式。
 
 ---
 
 ### *kebab()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `kebab-case`（小寫加連字號）。
 
-#### **語法**
-
-```php
-Str::of('fooBar')->kebab();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('fooBar')->kebab(); // 'foo-bar'
@@ -2678,16 +2590,11 @@ $converted = Str::of('fooBar')->kebab(); // 'foo-bar'
 
 ### *lcfirst()*
 
-#### **用途**
+- __用途__
+
 將字串`第一個字元`轉小寫。
 
-#### **語法**
-
-```php
-Str::of('Foo Bar')->lcfirst();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Foo Bar')->lcfirst(); // 'foo Bar'
@@ -2697,16 +2604,11 @@ $string = Str::of('Foo Bar')->lcfirst(); // 'foo Bar'
 
 ### *length()*
 
-#### **用途**
+- __用途__
+
 取得字串`長度`。
 
-#### **語法**
-
-```php
-Str::of('Laravel')->length();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $length = Str::of('Laravel')->length(); // 7
@@ -2716,18 +2618,11 @@ $length = Str::of('Laravel')->length(); // 7
 
 ### *limit()*
 
-#### **用途**
-將字串`截斷至指定長度`，可自訂結尾符號，並可選擇保留完整單字。
+- __用途__
 
-#### **語法**
+將字串`截斷至指定長度`，可自訂 __結尾符號__，並可選擇保留完整單字。
 
-```php
-Str::of('The quick brown fox jumps over the lazy dog')->limit(20);
-Str::of('The quick brown fox jumps over the lazy dog')->limit(20, ' (...)');
-Str::of('The quick brown fox')->limit(12, preserveWords: true);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $truncated = Str::of('The quick brown fox jumps over the lazy dog')->limit(20); // 'The quick brown fox...'
@@ -2735,24 +2630,20 @@ $truncated = Str::of('The quick brown fox jumps over the lazy dog')->limit(20, '
 $truncated = Str::of('The quick brown fox')->limit(12, preserveWords: true); // 'The quick...'
 ```
 
-#### **白話說明**
-- 可用於`文章摘要、標題截斷`等。
-- *preserveWords*: `true` 會避免把單字切一半。
+- __白話說明__
+
+  - 可用於`文章摘要、標題截斷`等。
+  - *preserveWords*: `true` 會避免把單字切一半。
 
 ---
 
 ### *lower()*
 
-#### **用途**
+- __用途__
+
 將字串轉`為小寫`。
 
-#### **語法**
-
-```php
-Str::of('LARAVEL')->lower();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('LARAVEL')->lower(); // 'laravel'
@@ -2762,19 +2653,11 @@ $result = Str::of('LARAVEL')->lower(); // 'laravel'
 
 ### *markdown()*
 
-#### **用途**
+- __用途__
+
 將 GitHub 風格 `Markdown` 轉為 HTML。
 
-#### **語法**
-
-```php
-Str::of('# Laravel')->markdown();
-Str::of('# Taylor <b>Otwell</b>')->markdown([
-    'html_input' => 'strip',
-]);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $html = Str::of('# Laravel')->markdown(); // <h1>Laravel</h1>
@@ -2783,16 +2666,15 @@ $html = Str::of('# Taylor <b>Otwell</b>')->markdown([
 ]); // <h1>Taylor Otwell</h1>
 ```
 
-#### **註解**
-- 預設支援 `raw HTML`，建議用 `html_input` 選項避免 XSS。
+- __註解__：預設支援 `raw HTML`，建議用 `html_input` 選項避免 XSS。
 
 ---
 
-#### **Markdown Security 補充**
+__Markdown Security__
+
 - 預設 `Markdown` 支援 `raw HTML`，直接渲染用戶輸入時有 `XSS 風險`。
 - 建議用 `html_input` 選項設為 `strip` 或 `escape`，並可用 `allow_unsafe_links` 控制連結安全。
 - 如需允許部分 HTML，建議再用 `HTML Purifier` 過濾。
-
 
 ```php
 Str::of('Inject: <script>alert("Hello XSS!");</script>')->markdown([
@@ -2806,18 +2688,11 @@ Str::of('Inject: <script>alert("Hello XSS!");</script>')->markdown([
 
 ### *mask()*
 
-#### **用途**
+- __用途__
+
 用指定字元`遮蔽`字串的一部分，常用於隱藏信箱、電話等敏感資訊。
 
-#### **語法**
-
-```php
-Str::of('taylor@example.com')->mask('*', 3);
-Str::of('taylor@example.com')->mask('*', -15, 3);
-Str::of('taylor@example.com')->mask('*', 4, -4);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('taylor@example.com')->mask('*', 3); // tay***************
@@ -2825,77 +2700,59 @@ $string = Str::of('taylor@example.com')->mask('*', -15, 3); // tay***@example.co
 $string = Str::of('taylor@example.com')->mask('*', 4, -4); // tayl**********.com
 ```
 
-#### **註解**
-- `第三、四參數`可用*負數*，代表*從*\字串尾端算起*。
+- __註解__：`第三、四參數`可用*負數*，代表*從*\字串尾端算起*。
 
-#### **白話說明**
-- 適合遮蔽帳號、電話、信箱等部分內容。
+- __白話說明__：適合遮蔽帳號、電話、信箱等部分內容。
 
 ---
 
 ### *match()*
 
-#### **用途**
+- __用途__
+
 用`正則表達式`擷取`第一個符合`的內容。
 
-#### **語法**
-
-```php
-Str::of('foo bar')->match('/bar/');
-Str::of('foo bar')->match('/foo (.*)/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('foo bar')->match('/bar/'); // 'bar'
 $result = Str::of('foo bar')->match('/foo (.*)/'); // 'bar'
 ```
 
-#### **註解**
-- 若有分組，回傳`第一個分組`內容。
-- 找不到時回傳`空字串`。
+- __註解__
+
+  - 若有分組，回傳`第一個分組`內容。
+  - 找不到時回傳`空字串`。
 
 ---
 
 ### *matchAll()*
 
-#### **用途**
+- __用途__
+
 用`正則表達式`擷取所有符合的內容，回傳 Collection。
 
-#### **語法**
-
-```php
-Str::of('bar foo bar')->matchAll('/bar/');
-Str::of('bar fun bar fly')->matchAll('/f(\w*)/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('bar foo bar')->matchAll('/bar/'); // collect(['bar', 'bar'])
 $result = Str::of('bar fun bar fly')->matchAll('/f(\w*)/'); // collect(['un', 'ly'])
 ```
 
-#### **註解**
-- 有分組時只回傳`分組內容`。
-- 沒有符合時回傳空 `Collection。`
+- __註解__
+
+  - 有分組時只回傳`分組內容`。
+  - 沒有符合時回傳空 `Collection`。
 
 ---
 
 ### *isMatch()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`符合正則表達式。
 
-#### **語法**
-
-```php
-Str::of('foo bar')->isMatch('/foo (.*)/');
-Str::of('laravel')->isMatch('/foo (.*)/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('foo bar')->isMatch('/foo (.*)/'); // true
@@ -2906,16 +2763,11 @@ $result = Str::of('laravel')->isMatch('/foo (.*)/'); // false
 
 ### *newLine()*
 
-#### **用途**
+- __用途__
+
 在字串`後面`加上`換行符號`（\n）。
 
-#### **語法**
-
-```php
-Str::of('Laravel')->newLine()->append('Framework');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $padded = Str::of('Laravel')->newLine()->append('Framework');
@@ -2926,17 +2778,11 @@ $padded = Str::of('Laravel')->newLine()->append('Framework');
 
 ### *padBoth()*
 
-#### **用途**
+- __用途__
+
 在字串`左右兩側補滿`指定字元，直到`指定長度`。
 
-#### **語法**
-
-```php
-Str::of('James')->padBoth(10, '_');
-Str::of('James')->padBoth(10);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $padded = Str::of('James')->padBoth(10, '_'); // '__James___'
@@ -2947,17 +2793,11 @@ $padded = Str::of('James')->padBoth(10); // '  James   '
 
 ### *padLeft()*
 
-#### **用途**
+- __用途__
+
 在字串`左側補滿`指定字元，直到指定長度。
 
-#### **語法**
-
-```php
-Str::of('James')->padLeft(10, '-=');
-Str::of('James')->padLeft(10);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $padded = Str::of('James')->padLeft(10, '-='); // '-=-=-James'
@@ -2968,17 +2808,11 @@ $padded = Str::of('James')->padLeft(10); // '     James'
 
 ### *padRight()*
 
-#### **用途**
+- __用途__
+
 在字串`右側補滿`指定字元，直到指定長度。
 
-#### **語法**
-
-```php
-Str::of('James')->padRight(10, '-');
-Str::of('James')->padRight(10);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $padded = Str::of('James')->padRight(10, '-'); // 'James-----'
@@ -2989,42 +2823,28 @@ $padded = Str::of('James')->padRight(10); // 'James     '
 
 ### *pipe()*
 
-#### **用途**
+- __用途__
+
 將字串`傳入`指定函式或閉包進行`轉換`。
 
-#### **語法**
-
-```php
-Str::of('Laravel')->pipe('md5')->prepend('Checksum: ');
-Str::of('foo')->pipe(function (Stringable $str) {
-    return 'bar';
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $hash = Str::of('Laravel')->pipe('md5')->prepend('Checksum: '); // 'Checksum: a5c95b86291ea299fcbe64458ed12702'
-$closure = Str::of('foo')->pipe(function (Stringable $str) { return 'bar'; }); // 'bar'
+$closure = Str::of('foo')->pipe(function (Stringable $str) {
+     return 'bar';
+}); // 'bar'
 ```
 
 ---
 
 ### *plural()*
 
-#### **用途**
+- __用途__
+
 將`單數`字串轉為`複數`，支援多語系。
 
-#### **語法**
-
-```php
-Str::of('car')->plural();
-Str::of('child')->plural();
-Str::of('child')->plural(2);
-Str::of('child')->plural(1);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $plural = Str::of('car')->plural(); // 'cars'
@@ -3033,24 +2853,17 @@ $plural = Str::of('child')->plural(2); // 'children'
 $plural = Str::of('child')->plural(1); // 'child'
 ```
 
-#### **註解**
-- `第二參數`可指定數量，*1* 時回傳`單數`，*其他* 回傳 `複數`。
+- __註解__：`第二參數`可指定數量，*1* 時回傳`單數`，*其他* 回傳 `複數`。
 
 ---
 
 ### *position()*
 
-#### **用途**
+- __用途__
+
 取得子字串在主字串中`第一次出現的位置`，找不到回傳 `false`。
 
-#### **語法**
-
-```php
-Str::of('Hello, World!')->position('Hello');
-Str::of('Hello, World!')->position('W');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $position = Str::of('Hello, World!')->position('Hello'); // 0
@@ -3061,16 +2874,11 @@ $position = Str::of('Hello, World!')->position('W'); // 7
 
 ### *prepend()*
 
-#### **用途**
+- __用途__
+
 在字串`前面加上`指定內容。
 
-#### **語法**
-
-```php
-Str::of('Framework')->prepend('Laravel ');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Framework')->prepend('Laravel '); // 'Laravel Framework'
@@ -3080,18 +2888,11 @@ $string = Str::of('Framework')->prepend('Laravel '); // 'Laravel Framework'
 
 ### *remove()*
 
-#### **用途**
+- __用途__
+
 `移除`字串中的指定內容，`可傳陣列`。
 
-#### **語法**
-
-```php
-Str::of('Arkansas is quite beautiful!')->remove('quite');
-Str::of('Arkansas is quite beautiful!')->remove(['quite', 'is']);
-Str::of('Arkansas is quite beautiful!')->remove('IS', false); // 忽略大小寫
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Arkansas is quite beautiful!')->remove('quite'); // 'Arkansas is beautiful!'
@@ -3099,23 +2900,17 @@ $string = Str::of('Arkansas is quite beautiful!')->remove(['quite', 'is']); // '
 $string = Str::of('Arkansas is quite beautiful!')->remove('IS', false); // 'Arkansas  quite beautiful!'
 ```
 
-#### **註解**
-- `第二參數`設為 `false` 時，會 *忽略大小寫* 。
+- __註解__：`第二參數`設為 `false` 時，會 *忽略大小寫* 。
 
 ---
 
 ### *repeat()*
 
-#### **用途**
+- __用途__
+
 `重複`字串指定次數。
 
-#### **語法**
-
-```php
-Str::of('a')->repeat(5);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $repeated = Str::of('a')->repeat(5); // 'aaaaa'
@@ -3125,121 +2920,94 @@ $repeated = Str::of('a')->repeat(5); // 'aaaaa'
 
 ### *replace()*
 
-#### **用途**
-`取代`字串中的指定內容，可選擇是否`區分大小寫`。
+- __用途__
 
-#### **語法**
+`取代`字串中的指定內容，可選擇 __是否__ `區分大小寫`。
 
-```php
-Str::of('Laravel 6.x')->replace('6.x', '7.x');
-Str::of('macOS 13.x')->replace('macOS', 'iOS', caseSensitive: false);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $replaced = Str::of('Laravel 6.x')->replace('6.x', '7.x'); // 'Laravel 7.x'
 $replaced = Str::of('macOS 13.x')->replace('macOS', 'iOS', caseSensitive: false); // 'iOS 13.x'
 ```
 
-#### **註解**
-- *預設*區分大小寫。
+- __註解__：*預設*區分大小寫。
 
 ---
 
 ### *replaceArray()*
 
-#### **用途**
+- __用途__
+
 依序用`陣列內容`取代字串中的指定符號。
 
-#### **語法**
+- __語法__
 
 ```php
-Str::of('The event will take place between ? and ?')->replaceArray('?', ['8:30', '9:00']);
-```
-
-#### **範例**
-
-```php
-$replaced = Str::of('The event will take place between ? and ?')->replaceArray('?', ['8:30', '9:00']); // 'The event will take place between 8:30 and 9:00'
+$replaced = Str::of('The event will take place between ? and ?')
+          ->replaceArray('?', ['8:30', '9:00']); // 'The event will take place between 8:30 and 9:00'
 ```
 
 ---
 
 ### *replaceFirst()*
 
-#### **用途**
+- __用途__
+
 只取代`第一個`出現的指定內容。
 
-#### **語法**
+- __語法__
 
 ```php
-Str::of('the quick brown fox jumps over the lazy dog')->replaceFirst('the', 'a');
-```
-
-#### **範例**
-
-```php
-$replaced = Str::of('the quick brown fox jumps over the lazy dog')->replaceFirst('the', 'a'); // 'a quick brown fox jumps over the lazy dog'
+$replaced = Str::of('the quick brown fox jumps over the lazy dog')
+          ->replaceFirst('the', 'a'); // 'a quick brown fox jumps over the lazy dog'
 ```
 
 ---
 
 ### *replaceLast()*
 
-#### **用途**
+- __用途__
+
 只取代`最後一個`出現的指定內容。
 
-#### **語法**
+- __語法__
 
 ```php
-Str::of('the quick brown fox jumps over the lazy dog')->replaceLast('the', 'a');
-```
-
-#### **範例**
-
-```php
-$replaced = Str::of('the quick brown fox jumps over the lazy dog')->replaceLast('the', 'a'); // 'the quick brown fox jumps over a lazy dog'
+$replaced = Str::of('the quick brown fox jumps over the lazy dog')
+          ->replaceLast('the', 'a'); // 'the quick brown fox jumps over a lazy dog'
 ```
 
 ---
 
 ### *replaceMatches()*
 
-#### **用途**
+- __用途__
+
 用`正則表達式`取代所有符合的內容，可用字串或閉包。
 
-#### **語法**
+- __語法__
 
 ```php
-Str::of('(+1) 501-555-1000')->replaceMatches('/[^A-Za-z0-9]++/', '');
-Str::of('123')->replaceMatches('/\d/', function (array $matches) {
-    return '['.$matches[0].']';
-});
-```
+$replaced = Str::of('(+1) 501-555-1000')
+          ->replaceMatches('/[^A-Za-z0-9]++/', ''); // '15015551000'
+$replaced = Str::of('123')
+          ->replaceMatches('/\d/', function (array $matches) {
 
-#### **範例**
-
-```php
-$replaced = Str::of('(+1) 501-555-1000')->replaceMatches('/[^A-Za-z0-9]++/', ''); // '15015551000'
-$replaced = Str::of('123')->replaceMatches('/\d/', function (array $matches) { return '['.$matches[0].']'; }); // '[1][2][3]'
+            return '['.$matches[0].']';
+            
+            }); // '[1][2][3]'
 ```
 
 ---
 
 ### *replaceStart()*
 
-#### **用途**
+- __用途__
+
 只有在字串`開頭`是指定內容時才取代。
 
-#### **語法**
-
-```php
-Str::of('Hello World')->replaceStart('Hello', 'Laravel');
-Str::of('Hello World')->replaceStart('World', 'Laravel');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $replaced = Str::of('Hello World')->replaceStart('Hello', 'Laravel'); // 'Laravel World'
@@ -3250,17 +3018,11 @@ $replaced = Str::of('Hello World')->replaceStart('World', 'Laravel'); // 'Hello 
 
 ### *replaceEnd()*
 
-#### **用途**
+- __用途__
+
 只有在字串`結尾`是指定內容時才取代。
 
-#### **語法**
-
-```php
-Str::of('Hello World')->replaceEnd('World', 'Laravel');
-Str::of('Hello World')->replaceEnd('Hello', 'Laravel');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $replaced = Str::of('Hello World')->replaceEnd('World', 'Laravel'); // 'Hello Laravel'
@@ -3271,36 +3033,66 @@ $replaced = Str::of('Hello World')->replaceEnd('Hello', 'Laravel'); // 'Hello Wo
 
 ### *scan()*
 
-#### **用途**
-依照 `sscanf` 格式解析字串，回傳 `Collection。`
+- __用途__
 
-#### **語法**
+依照 `sscanf` 格式解析字串，**回傳 `Collection`**。
 
-```php
-Str::of('filename.jpg')->scan('%[^.].%s');
-```
+<!-- 
+sscanf 是 PHP 的字串解析函式，
+可以根據格式字串，把資料從字串中「拆解」出來，
+常用於從複雜字串中擷取多個欄位。
 
-#### **範例**
+sscanf 可以解析任意多個欄位，
+只要格式字串和變數數量對應即可。
+-->
+
+<!-- 
+sscanf('123 John 45.6', '%d %s %f', $id, $name, $score);
+
+// '123 John 45.6'：原始字串
+
+// '%d %s %f'：格式字串
+//   %d：整數（會對應到 $id）
+//   %s：字串（會對應到 $name）
+//   %f：浮點數（會對應到 $score）
+
+// $id = 123      // 取得第一個欄位（整數）
+// $name = 'John' // 取得第二個欄位（字串）
+// $score = 45.6  // 取得第三個欄位（浮點數） 
+-->
+
+<!-- 
+可以根據需求用不同的格式：
+
+%d：整數
+%s：字串
+%f：浮點數
+還有其他格式（如 %x 十六進位、%c 字元等），
+格式可以自由組合，不是固定的。 
+-->
+
+- __語法__
 
 ```php
 $collection = Str::of('filename.jpg')->scan('%[^.].%s'); // collect(['filename', 'jpg'])
+// 過程：
+// 1. Str::of('filename.jpg') 產生 Fluent String 物件。
+// 2. scan('%[^.].%s') 用 sscanf 格式解析字串：
+//    - %[^.]：匹配所有不是 '.' 的字元（即 'filename'）
+//    - .    ：匹配字元 '.'（分隔符）
+//    - %s   ：匹配剩下的字串（即 'jpg'）
+// 3. 解析結果組成 Collection：collect(['filename', 'jpg'])
 ```
 
 ---
 
 ### *singular()*
 
-#### **用途**
+- __用途__
+
 將字串`轉為單數`，支援多語系。
 
-#### **語法**
-
-```php
-Str::of('cars')->singular();
-Str::of('children')->singular();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $singular = Str::of('cars')->singular(); // 'car'
@@ -3311,16 +3103,11 @@ $singular = Str::of('children')->singular(); // 'child'
 
 ### *slug()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `URL 友善的 slug 格式`。
 
-#### **語法**
-
-```php
-Str::of('Laravel Framework')->slug('-');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $slug = Str::of('Laravel Framework')->slug('-'); // 'laravel-framework'
@@ -3330,16 +3117,11 @@ $slug = Str::of('Laravel Framework')->slug('-'); // 'laravel-framework'
 
 ### *snake()*
 
-#### **用途**
-將字串轉為 `snake_case。`
+- __用途__
 
-#### **語法**
+將字串轉為 `snake_case`。
 
-```php
-Str::of('fooBar')->snake();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('fooBar')->snake(); // 'foo_bar'
@@ -3349,16 +3131,11 @@ $converted = Str::of('fooBar')->snake(); // 'foo_bar'
 
 ### *split()*
 
-#### **用途**
-用`正則表達式分割`字串，回傳 `Collection。`
+- __用途__
 
-#### **語法**
+用`正則表達式分割`字串，**回傳 `Collection`**。
 
-```php
-Str::of('one, two, three')->split('/[\s,]+/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $segments = Str::of('one, two, three')->split('/[\s,]+/'); // collect(["one", "two", "three"])
@@ -3368,16 +3145,11 @@ $segments = Str::of('one, two, three')->split('/[\s,]+/'); // collect(["one", "t
 
 ### *squish()*
 
-#### **用途**
+- __用途__
+
 `移除多餘空白`，單字間只保留一個空白。
 
-#### **語法**
-
-```php
-Str::of('    laravel    framework    ')->squish();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('    laravel    framework    ')->squish(); // 'laravel framework'
@@ -3385,19 +3157,13 @@ $string = Str::of('    laravel    framework    ')->squish(); // 'laravel framewo
 
 ---
 
-### *start()*
+### *start()* vs `finish()`
 
-#### **用途**
+- __用途__
+
 確保字串`開頭`有指定內容，若已存在則不重複加。
 
-#### **語法**
-
-```php
-Str::of('this/string')->start('/');
-Str::of('/this/string')->start('/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $adjusted = Str::of('this/string')->start('/'); // '/this/string'
@@ -3408,16 +3174,11 @@ $adjusted = Str::of('/this/string')->start('/'); // '/this/string'
 
 ### *startsWith()*
 
-#### **用途**
+- __用途__
+
 判斷字串開頭`是否`為指定內容。
 
-#### **語法**
-
-```php
-Str::of('This is my name')->startsWith('This');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('This is my name')->startsWith('This'); // true
@@ -3427,17 +3188,11 @@ $result = Str::of('This is my name')->startsWith('This'); // true
 
 ### *stripTags()*
 
-#### **用途**
+- __用途__
+
 `移除`字串中的所有 HTML 與 PHP 標籤，可指定`保留標籤`。
 
-#### **語法**
-
-```php
-Str::of('<a href="https://laravel.com">Taylor <b>Otwell</b></a>')->stripTags();
-Str::of('<a href="https://laravel.com">Taylor <b>Otwell</b></a>')->stripTags('<b>');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('<a href="https://laravel.com">Taylor <b>Otwell</b></a>')->stripTags(); // 'Taylor Otwell'
@@ -3448,16 +3203,11 @@ $result = Str::of('<a href="https://laravel.com">Taylor <b>Otwell</b></a>')->str
 
 ### *studly()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `StudlyCase`（每個單字首字大寫，無分隔符號）。
 
-#### **語法**
-
-```php
-Str::of('foo_bar')->studly();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('foo_bar')->studly(); // 'FooBar'
@@ -3467,17 +3217,11 @@ $converted = Str::of('foo_bar')->studly(); // 'FooBar'
 
 ### *substr()*
 
-#### **用途**
+- __用途__
+
 回傳字串`從指定位置開始、指定長度的子字串`。
 
-#### **語法**
-
-```php
-Str::of('Laravel Framework')->substr(8);
-Str::of('Laravel Framework')->substr(8, 5);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Laravel Framework')->substr(8); // 'Framework'
@@ -3488,44 +3232,43 @@ $string = Str::of('Laravel Framework')->substr(8, 5); // 'Frame'
 
 ### *substrReplace()*
 
-#### **用途**
+- __用途__
+
 從指定位置開始，`取代指定長度的內容`。長度為 *0* 時代表`插入`。
 
-#### **語法**
-
-```php
-Str::of('1300')->substrReplace(':', 2);
-Str::of('The Framework')->substrReplace(' Laravel', 3, 0);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('1300')->substrReplace(':', 2); // '13:'
 $string = Str::of('The Framework')->substrReplace(' Laravel', 3, 0); // 'The Laravel Framework'
 ```
 
-#### **註解**
-- `第三參數`省略時，會`取代到字串結尾`。
-- 長度為 *0* 時，代表`插入`不取代。
+- __註解__：
+
+  - `第三參數`省略時，會`取代到字串結尾`。
+  - 長度為 *0* 時，代表`插入`不取代。
+
+<!-- 
+replace 依「內容比對」取代，用來取代字串中的「指定內容」（整個子字串）。
+substr_replace 依「位置」取代，是在「指定位置」插入、取代或刪除字串（根據起始位置和長度）。
+
+// replace
+str_replace('abc', 'XYZ', 'abc123'); // "XYZ123"
+
+// substr_replace
+substr_replace('abc123', 'XYZ', 0, 3); // "XYZ123"
+// 從位置 0 開始，取代 3 個字元為 'XYZ' 
+-->
 
 ---
 
 ### *swap()*
 
-#### **用途**
+- __用途__
+
 用陣列`批次取代`多組內容。
 
-#### **語法**
-
-```php
-Str::of('Tacos are great!')->swap([
-    'Tacos' => 'Burritos',
-    'great' => 'fantastic',
-]);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Tacos are great!')->swap([
@@ -3538,16 +3281,11 @@ $string = Str::of('Tacos are great!')->swap([
 
 ### *take()*
 
-#### **用途**
+- __用途__
+
 取出字串`開頭指定數量`的字元。
 
-#### **語法**
-
-```php
-Str::of('Build something amazing!')->take(5);
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $taken = Str::of('Build something amazing!')->take(5); // 'Build'
@@ -3557,18 +3295,11 @@ $taken = Str::of('Build something amazing!')->take(5); // 'Build'
 
 ### *tap()*
 
-#### **用途**
+- __用途__
+
 將字串傳入閉包中操作，無論閉包回傳什麼，原字串會`繼續往下傳遞`。
 
-#### **語法**
-
-```php
-Str::of('Laravel')->append(' Framework')->tap(function (Stringable $string) {
-    dump('String after append: '.$string);
-})->upper();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Laravel')
@@ -3583,16 +3314,11 @@ $string = Str::of('Laravel')
 
 ### *test()*
 
-#### **用途**
+- __用途__
+
 判斷字串`是否`符合`正則表達式`。
 
-#### **語法**
-
-```php
-Str::of('Laravel Framework')->test('/Laravel/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $result = Str::of('Laravel Framework')->test('/Laravel/'); // true
@@ -3602,16 +3328,11 @@ $result = Str::of('Laravel Framework')->test('/Laravel/'); // true
 
 ### *title()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `Title Case`（每個單字首字大寫）。
 
-#### **語法**
-
-```php
-Str::of('a nice title uses the correct case')->title();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $converted = Str::of('a nice title uses the correct case')->title(); // 'A Nice Title Uses The Correct Case'
@@ -3621,16 +3342,11 @@ $converted = Str::of('a nice title uses the correct case')->title(); // 'A Nice 
 
 ### *toBase64()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `Base64` 編碼。
 
-#### **語法**
-
-```php
-Str::of('Laravel')->toBase64();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $base64 = Str::of('Laravel')->toBase64(); // 'TGFyYXZlbA=='
@@ -3640,16 +3356,11 @@ $base64 = Str::of('Laravel')->toBase64(); // 'TGFyYXZlbA=='
 
 ### *toHtmlString()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `HtmlString` 物件，`Blade` 模板渲染時不會被 `escape`。
 
-#### **語法**
-
-```php
-Str::of('Nuno Maduro')->toHtmlString();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $htmlString = Str::of('Nuno Maduro')->toHtmlString();
@@ -3659,16 +3370,11 @@ $htmlString = Str::of('Nuno Maduro')->toHtmlString();
 
 ### *toUri()*
 
-#### **用途**
+- __用途__
+
 將字串轉為 `Uri 物件`。
 
-#### **語法**
-
-```php
-Str::of('https://example.com')->toUri();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $uri = Str::of('https://example.com')->toUri();
@@ -3678,16 +3384,11 @@ $uri = Str::of('https://example.com')->toUri();
 
 ### *transliterate()*
 
-#### **用途**
+- __用途__
+
 將字串轉為最接近的 `ASCII` 形式。
 
-#### **語法**
-
-```php
-Str::of('ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ')->transliterate();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $email = Str::of('ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ')->transliterate(); // 'test@laravel.com'
@@ -3697,17 +3398,11 @@ $email = Str::of('ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ')->transliterate(
 
 ### *trim()*
 
-#### **用途**
+- __用途__
+
 去除字串`前後的空白`或指`定字元`，支援 `Unicode` 空白。
 
-#### **語法**
-
-```php
-Str::of('  Laravel  ')->trim();
-Str::of('/Laravel/')->trim('/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('  Laravel  ')->trim(); // 'Laravel'
@@ -3718,17 +3413,11 @@ $string = Str::of('/Laravel/')->trim('/'); // 'Laravel'
 
 ### *ltrim()*
 
-#### **用途**
+- __用途__
+
 去除字串`左側的空白`或`指定字元`，支援 `Unicode` 空白。
 
-#### **語法**
-
-```php
-Str::of('  Laravel  ')->ltrim();
-Str::of('/Laravel/')->ltrim('/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('  Laravel  ')->ltrim(); // 'Laravel  '
@@ -3739,17 +3428,11 @@ $string = Str::of('/Laravel/')->ltrim('/'); // 'Laravel/'
 
 ### *rtrim()*
 
-#### **用途**
+- __用途__
+
 去除字串`右側的空白`或`指定字元`，支援 `Unicode` 空白。
 
-#### **語法**
-
-```php
-Str::of('  Laravel  ')->rtrim();
-Str::of('/Laravel/')->rtrim('/');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('  Laravel  ')->rtrim(); // '  Laravel'
@@ -3760,16 +3443,11 @@ $string = Str::of('/Laravel/')->rtrim('/'); // '/Laravel'
 
 ### *ucfirst()*
 
-#### **用途**
+- __用途__
+
 將字串的`第一個字元轉為大寫`。
 
-#### **語法**
-
-```php
-Str::of('foo bar')->ucfirst();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('foo bar')->ucfirst(); // 'Foo bar'
@@ -3779,16 +3457,11 @@ $string = Str::of('foo bar')->ucfirst(); // 'Foo bar'
 
 ### *ucsplit()*
 
-#### **用途**
-`依大寫字母分割字串`，回傳 `Collection。`
+- __用途__
 
-#### **語法**
+`依大寫字母分割字串`，**回傳 `Collection`**。
 
-```php
-Str::of('FooBar')->ucsplit();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $segments = Str::of('FooBar')->ucsplit(); // collect(['Foo', 'Bar'])
@@ -3798,17 +3471,11 @@ $segments = Str::of('FooBar')->ucsplit(); // collect(['Foo', 'Bar'])
 
 ### *unwrap()*
 
-#### **用途**
-`去除`字串開頭與結尾的指定字元。
+- __用途__
 
-#### **語法**
+`去除`字串 __開頭與結尾__ 的指定字元。
 
-```php
-Str::of('-Laravel-')->unwrap('-');
-Str::of('{framework: "Laravel"}')->unwrap('{', '}');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 Str::of('-Laravel-')->unwrap('-'); // 'Laravel'
@@ -3819,16 +3486,11 @@ Str::of('{framework: "Laravel"}')->unwrap('{', '}'); // 'framework: "Laravel"'
 
 ### *upper()*
 
-#### **用途**
+- __用途__
+
 將字串轉為`大寫`。
 
-#### **語法**
-
-```php
-Str::of('laravel')->upper();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $adjusted = Str::of('laravel')->upper(); // 'LARAVEL'
@@ -3838,18 +3500,11 @@ $adjusted = Str::of('laravel')->upper(); // 'LARAVEL'
 
 ### *when()*
 
-#### **用途**
+- __用途__
+
 當條件為 `true` 時執行指定閉包，否則可執行另一個閉包。
 
-#### **語法**
-
-```php
-Str::of('Taylor')->when(true, function (Stringable $string) {
-    return $string->append(' Otwell');
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Taylor')
@@ -3862,23 +3517,17 @@ $string = Str::of('Taylor')
 
 ### *whenContains()*
 
-#### **用途**
+- __用途__
+
 當字串`包含`指定內容時執行閉包，可傳陣列。
 
-#### **語法**
+- __語法__
 
 ```php
-Str::of('tony stark')->whenContains('tony', function (Stringable $string) {
-    return $string->title();
-});
 Str::of('tony stark')->whenContains(['tony', 'hulk'], function (Stringable $string) {
     return $string->title();
 });
-```
 
-#### **範例**
-
-```php
 $string = Str::of('tony stark')->whenContains('tony', function (Stringable $string) {
     return $string->title();
 }); // 'Tony Stark'
@@ -3888,18 +3537,11 @@ $string = Str::of('tony stark')->whenContains('tony', function (Stringable $stri
 
 ### *whenContainsAll()*
 
-#### **用途**
+- __用途__
+
 當字串同時`包含所有`指定內容時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('tony stark')->whenContainsAll(['tony', 'stark'], function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('tony stark')->whenContainsAll(['tony', 'stark'], function (Stringable $string) {
@@ -3911,18 +3553,11 @@ $string = Str::of('tony stark')->whenContainsAll(['tony', 'stark'], function (St
 
 ### *whenDoesntEndWith()*
 
-#### **用途**
+- __用途__
+
 當字串`結尾不是指定`內容時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('disney world')->whenDoesntEndWith('land', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('disney world')->whenDoesntEndWith('land', function (Stringable $string) {
@@ -3934,18 +3569,11 @@ $string = Str::of('disney world')->whenDoesntEndWith('land', function (Stringabl
 
 ### *whenDoesntStartWith()*
 
-#### **用途**
+- __用途__
+
 當字串`開頭不是指定`內容時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('disney world')->whenDoesntStartWith('sea', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('disney world')->whenDoesntStartWith('sea', function (Stringable $string) {
@@ -3957,18 +3585,11 @@ $string = Str::of('disney world')->whenDoesntStartWith('sea', function (Stringab
 
 ### *whenEmpty()*
 
-#### **用途**
+- __用途__
+
 當字串`為空時`執行閉包。
 
-#### **語法**
-
-```php
-Str::of('  ')->trim()->whenEmpty(function (Stringable $string) {
-    return $string->prepend('Laravel');
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('  ')->trim()->whenEmpty(function (Stringable $string) {
@@ -3980,18 +3601,11 @@ $string = Str::of('  ')->trim()->whenEmpty(function (Stringable $string) {
 
 ### *whenNotEmpty()*
 
-#### **用途**
+- __用途__
+
 當字串`不為空時`執行閉包。
 
-#### **語法**
-
-```php
-Str::of('Framework')->whenNotEmpty(function (Stringable $string) {
-    return $string->prepend('Laravel ');
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Framework')->whenNotEmpty(function (Stringable $string) {
@@ -4003,18 +3617,11 @@ $string = Str::of('Framework')->whenNotEmpty(function (Stringable $string) {
 
 ### *whenStartsWith()*
 
-#### **用途**
+- __用途__
+
 當字串`開頭是指定內容時`執行閉包。
 
-#### **語法**
-
-```php
-Str::of('disney world')->whenStartsWith('disney', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('disney world')->whenStartsWith('disney', function (Stringable $string) {
@@ -4026,18 +3633,11 @@ $string = Str::of('disney world')->whenStartsWith('disney', function (Stringable
 
 ### *whenEndsWith()*
 
-#### **用途**
+- __用途__
+
 當字串`結尾是指定內容時`執行閉包。
 
-#### **語法**
-
-```php
-Str::of('disney world')->whenEndsWith('world', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('disney world')->whenEndsWith('world', function (Stringable $string) {
@@ -4049,18 +3649,11 @@ $string = Str::of('disney world')->whenEndsWith('world', function (Stringable $s
 
 ### *whenExactly()*
 
-#### **用途**
+- __用途__
+
 當字串`完全等於`指定內容時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('laravel')->whenExactly('laravel', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('laravel')->whenExactly('laravel', function (Stringable $string) {
@@ -4072,18 +3665,11 @@ $string = Str::of('laravel')->whenExactly('laravel', function (Stringable $strin
 
 ### *whenNotExactly()*
 
-#### **用途**
+- __用途__
+
 當字串`不等於`指定內容時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('framework')->whenNotExactly('laravel', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('framework')->whenNotExactly('laravel', function (Stringable $string) {
@@ -4095,18 +3681,11 @@ $string = Str::of('framework')->whenNotExactly('laravel', function (Stringable $
 
 ### *whenIs()*
 
-#### **用途**
+- __用途__
+
 當字串`符合`指定萬用字元模式時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('foo/bar')->whenIs('foo/*', function (Stringable $string) {
-    return $string->append('/baz');
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('foo/bar')->whenIs('foo/*', function (Stringable $string) {
@@ -4118,18 +3697,11 @@ $string = Str::of('foo/bar')->whenIs('foo/*', function (Stringable $string) {
 
 ### *whenIsAscii()*
 
-#### **用途**
+- __用途__
+
 當字串為 `ASCII` 時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('laravel')->whenIsAscii(function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('laravel')->whenIsAscii(function (Stringable $string) {
@@ -4141,18 +3713,11 @@ $string = Str::of('laravel')->whenIsAscii(function (Stringable $string) {
 
 ### *whenIsUlid()*
 
-#### **用途**
+- __用途__
+
 當字串為合法 `ULID` 時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('01gd6r360bp37zj17nxb55yv40')->whenIsUlid(function (Stringable $string) {
-    return $string->substr(0, 8);
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('01gd6r360bp37zj17nxb55yv40')->whenIsUlid(function (Stringable $string) {
@@ -4164,18 +3729,11 @@ $string = Str::of('01gd6r360bp37zj17nxb55yv40')->whenIsUlid(function (Stringable
 
 ### *whenIsUuid()*
 
-#### **用途**
+- __用途__
+
 當字串為合法 `UUID` 時執行閉包。
 
-#### **語法**
-
-```php
-Str::of('a0a2a2d2-0b87-4a18-83f2-2529882be2de')->whenIsUuid(function (Stringable $string) {
-    return $string->substr(0, 8);
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('a0a2a2d2-0b87-4a18-83f2-2529882be2de')->whenIsUuid(function (Stringable $string) {
@@ -4187,18 +3745,11 @@ $string = Str::of('a0a2a2d2-0b87-4a18-83f2-2529882be2de')->whenIsUuid(function (
 
 ### *whenTest()*
 
-#### **用途**
-當字串`符合`正則表達式時執行閉包。
+- __用途__
 
-#### **語法**
+當字串`符合`_正則表達式_ 時執行閉包。
 
-```php
-Str::of('laravel framework')->whenTest('/laravel/', function (Stringable $string) {
-    return $string->title();
-});
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('laravel framework')->whenTest('/laravel/', function (Stringable $string) {
@@ -4210,71 +3761,63 @@ $string = Str::of('laravel framework')->whenTest('/laravel/', function (Stringab
 
 ### *wordCount()*
 
-#### **用途**
+- __用途__
+
 `計算`字串中的`單字數量`。
 
-#### **語法**
-
-```php
-Str::of('Hello, world!')->wordCount();
-```
-
-#### **範例**
+- __語法__
 
 ```php
 Str::of('Hello, world!')->wordCount(); // 2
 ```
 
-#### **註解**
-- 會自動`忽略標點符號`，只計算`單字`。
-- 適合用於`字數統計`、`輸入驗證`等。
+- __註解__：
 
-#### **白話說明**
-- 就是「有幾個單字」會回傳幾。
+  - 會自動`忽略標點符號`，只計算`單字`。
+  - 適合用於`字數統計`、`輸入驗證`等。
+
+- __白話說明__：就是「有幾個單字」會回傳幾。
 
 ---
 
 ### *words()*
 
-#### **用途**
+- __用途__
+
 `限制`字串單字數，超過時`加上結尾字串`。
 
-#### **語法**
-
-```php
-Str::of('Perfectly balanced, as all things should be.')->words(3, ' >>>');
-```
-
-#### **範例**
+- __語法__
 
 ```php
 $string = Str::of('Perfectly balanced, as all things should be.')->words(3, ' >>>'); // 'Perfectly balanced, as >>>'
 ```
 
-#### **註解**
-- `第一參數`為保留的*單字數*。
-- `第二參數`為超過時加上的*結尾字串*（可省略，**預設**為 ...）。
+- __註解__：
 
-#### **白話說明**
-- 適合做文章摘要、標題預覽等。
+  - `第一參數`為保留的*單字數*。
+  - `第二參數`為超過時加上的*結尾字串*（可省略，**預設**為 ...）。
+
+- __白話說明__：適合做文章摘要、標題預覽等。
 
 ---
 
 ### *wrap()*
 
-#### **用途**
-將主體字串`前後加上`指定內容，常用於自動加引號、括號、HTML 標籤、格式化輸出等。
+- __用途__
 
-#### **語法**
+將主體字串`前後加上`指定內容，常用於 __自動加引號、括號、HTML 標籤、格式化輸出__ 等。
+
+- __語法__
 
 ```php
 Str::of($string)->wrap(before: '', after: '');
 ```
-- *$string*：要被包裹的主體字串。
-- *before*：要加在主體字串前面的內容（可省略）。
-- *after*：要加在主體字串後面的內容（可省略）。
 
-#### **範例**
+- _$string_：要被包裹的主體字串。
+- _before_：要加在主體字串前面的內容（可省略）。
+- _after_：要加在主體字串後面的內容（可省略）。
+
+- __範例__
 
 ```php
 Str::of('is')->wrap(before: 'This ', after: ' Laravel!'); // 'This is Laravel!'
@@ -4285,13 +3828,16 @@ Str::of('A')->wrap(before: '(', after: ')'); // '(A)'
 Str::of('Laravel')->wrap('"'); // '"Laravel"'
 ```
 
-#### **圖解**
-假設你呼叫：
+__圖解__
+
+_假設你呼叫_：
 
 ```php
 Str::of('中心')->wrap(before: '【', after: '】');
 ```
-圖解如下：
+
+_圖解如下_：
+
 ```
 before   $string   after
   ↓        ↓        ↓
@@ -4300,27 +3846,29 @@ before   $string   after
       '【中心】'
 ```
 
-#### **巢狀包裹**
-可多次呼叫 wrap 達到多層包裹：
+__巢狀包裹__
+
+可多次呼叫 `wrap` 達到多層包裹：
 
 ```php
 Str::of(Str::of('A')->wrap(before: '[', after: ']'))->wrap(before: '(', after: ')'); // '([A])'
 ```
 
-#### **常見誤區提醒**
-- *具名參數*：`before:`、`after:` 是 PHP 8+ 的語法，舊版 PHP 不能用這種寫法，只能用順序傳參數。
-- *不會自動加空白*：如果你想要有空白，要自己在 before/after 裡加空白。
+__常見誤區提醒__
+
+- _具名參數_：`before:`、`after:` 是 PHP 8+ 的語法，舊版 PHP 不能用這種寫法，只能用順序傳參數。
+- _不會自動加空白_：如果你想要有空白，要自己在 before/after 裡加空白。
   - 例：`before: 'Hello, '`（有空白）
-- *before/after 可為任意字串*：可用於 HTML 標籤、符號、表情符號等。
+- _before/after 可為任意字串_：可用於 HTML 標籤、符號、表情符號等。
 
-#### **應用場景**
-- 產生 HTML 標籤
-- 自動加引號、括號
-- 格式化輸出（如 `[INFO] 訊息`）
-- 產生自訂格式的字串
+- __應用場景__：
 
-#### **白話說明**
-- `wrap` 就是「`自動幫你把字串前後加上你想要的東西`」，不用自己手動拼接，語意更清楚。
+  - 產生 HTML 標籤
+  - 自動加引號、括號
+  - 格式化輸出（如 `[INFO] 訊息`）
+  - 產生自訂格式的字串
+
+- __白話說明__：`wrap` 就是「_自動幫你把字串前後加上你想要的東西_」，不用自己手動拼接，語意更清楚。
 
 ---
 
@@ -4330,7 +3878,7 @@ Laravel 的 `Fluent String`（*Stringable* 物件）有兩種常見建立方式�
 
 ---
 
-### 1. *str() 輔助函式（Laravel 8+ 推薦）*
+### 1. *str() 輔助函式*（Laravel 8+ 推薦）
 
 ```php
 str('hello')->upper()->append(' world');
@@ -4341,7 +3889,7 @@ str('hello')->upper()->append(' world');
 
 ---
 
-### 2. *Str::of() 靜態方法（Laravel 6+）*
+### 2. *Str::of() 靜態方法*（Laravel 6+）
 
 ```php
 use Illuminate\Support\Str;
@@ -4354,29 +3902,32 @@ Str::of('hello')->upper()->append(' world');
 ---
 
 ### *差異與建議*
+
 - 兩種寫法**本質一樣**，都會回傳 `Stringable` 物件，方法完全相同。
 - `str()` 是語法糖，底層其實就是呼叫 `Str::of()`。
-- **新專案建議用 `str()`**，更簡潔、可讀性高。
+- __新專案建議用 `str()`__，更簡潔、可讀性高。
 - 舊專案或文件、筆記常見 `Str::of()`，也完全沒問題。
 
 ---
 
 ### *小結*
-- 只要看到 `str('...')->` 或 `Str::of('...')->`，都代表「**建立一個 Fluent String 物件**」。
+
+- 只要看到 `str('...')->` 或 `Str::of('...')->`，都代表「__建立一個 Fluent String 物件__」。
 - 兩種都能用，選你喜歡的風格即可。
 
 ---
 
 ## **靜態方法 vs 動態方法 比較**
 
----
+### *靜態方法*（Static Method）
 
-### *靜態方法（Static Method）*
-- 屬於「`類別本身`」的方法，**不需建立物件**就能呼叫。
+- 屬於「_類別本身_」的方法，**不需建立物件**就能呼叫。
 - 呼叫方式：`類別::方法()`
-- 不能存取物件的屬性，只能用類別層級的資料。
+- __不能存取`物件的屬性`，只能用`類別層級`的資料__。
 - 適合工具性、全域性、無狀態的操作。
 - Laravel 例子：`Str::upper('abc')`
+
+---
 
 #### **PHP 範例**
 
@@ -4391,26 +3942,34 @@ class MathTool {
 $result = MathTool::add(3, 5); // 8
 ```
 
+---
+
 #### **常見疑問補充**
 
-很多初學者會覺得「`類別就是要 new 物件才能用`」，但 `static` 方法是特例。
-你可以把 `static` 方法想像成「工具箱裡的螺絲起子」：
-- *一般方法（非 static）*＝你要先買一個工具箱（new 物件），才能拿裡面的工具來用。
-- *靜態方法（static）*＝這個工具直接掛在牆上（類別本身），你隨時可以拿來用，不用先買工具箱。
+一般會覺得「_類別就是要 new 物件才能用_」，但 `static` 方法是特例。
 
-**重點**：
+你可以把 `static` 方法想像成「工具箱裡的螺絲起子」：
+
+- _一般方法（非 static）_＝你要先買一個工具箱（`new 物件`），才能拿裡面的工具來用。
+- _靜態方法（static）_＝這個工具直接掛在牆上（類別本身），你隨時可以拿來用，不用先買工具箱。
+
+__重點__：
+
 - `靜態方法不會用到物件的屬性（$this）`，只會用到類別層級的資料。
-- 適合做「工具性、全域性、無狀態」的操作。
+- 適合做「__工具性、全域性、無狀態__」的操作。
 - 例如 Laravel 的 `Str::upper('abc')`，你不需要 `new Str`，直接用就好。
 
 ---
 
-### *動態方法（Instance Method）*
-- 屬於「`物件`」的方法，必須先建立物件（`new`）才能呼叫。
+### *動態方法*（Instance Method）
+
+- 屬於「_物件_」的方法，必須先建立物件（`new`）才能呼叫。
 - 呼叫方式：`$物件->方法()`
 - 可以`存取物件的屬性`，能操作物件的狀態。
-- 適合需要保存狀態、鏈式操作的情境。
+- 適合需要 __保存狀態、鏈式操作__ 的情境。
 - Laravel 例子：`str('abc')->upper()` 或 `Str::of('abc')->upper()`
+
+---
 
 #### **PHP 範例**
 
@@ -4430,22 +3989,24 @@ echo $vincent->sayHello(); // Hello, I am Vincent
 ---
 
 ### *差異整理表*
-| 類型     | 呼叫方式             | 是否要 new 物件 | 能否存取物件屬性 | 例子                        |
-|----------|----------------------|-----------------|------------------|-----------------------------|
-| 靜態方法 | 類別::方法()         | 不用            | 否               | Str::upper('abc')           |
-| 動態方法 | $物件->方法()        | 要              | 可以             | str('abc')->upper()         |
+ 
+| 類型       | 呼叫方式                | 是否要 new 物件   |    能否存取物件屬性 | 例子                         |
+|-----------|------------------------|-----------------|------------------|------------------------------|
+| `靜態方法` | __類別::方法()__         | 不用            | 否               | `Str::upper('abc')`           |
+| `動態方法` | __$物件->方法()__        | 要              | 可以             | `str('abc')->upper()`         |
 
 ---
 
-## **靜態方法與動態方法：實務差異與選用時機**
-
----
+## **`靜態方法`與`動態方法`：實務差異與選用時機**
 
 ### 1. *功能差異*
-- **靜態方法（Str::）**：適合「`單步操作`」或「`一次性處理`」字串，無法鏈式操作。
-- **動態方法（Fluent String, str(), Str::of()）**：適合「`多步驟處理`」或「`需要鏈式操作`」的情境，可連續呼叫多個方法。
 
-#### **範例**比較：
+- __`靜態方法`（`Str::`）__：適合「_單步操作_」或「_一次性處理_」字串，無法鏈式操作。
+- __`動態方法`（Fluent String, `str(), Str::of()`）__：適合「_多步驟處理_」或「_需要鏈式操作_」的情境，可連續呼叫多個方法。
+
+- __範例__
+
+比較：
 
 ```php
 // 靜態方法
@@ -4462,27 +4023,31 @@ str('  hello world  ')
 
 ---
 
-### 2. *什麼時候只能用動態方法？*
-- 需要**多步驟、鏈式處理**字串時。
-- 有些方法**只存在於 Stringable 物件**，如 `append()`、`prepend()`、`pipe()`、`tap()` 等。
-- 某些「條件式」或「狀態保存」的操作，只有動態方法支援。
+### 2. *什麼時候只能用`動態方法`？*
+
+- 需要 __多步驟、鏈式處理__ 字串時。
+- 有些方法 __只存在於 Stringable 物件__，如 `append()`、`prepend()`、`pipe()`、`tap()` 等。
+- 某些「_條件式_」或「_狀態保存_」的操作，只有動態方法支援。
 
 ---
 
-### 3. *什麼時候用靜態方法就夠？*
+### 3. *什麼時候用`靜態方法`就夠？*
+
 - 只需要`單一步驟`處理，或只是單純轉大小寫、取代、判斷等。
 - 不需要鏈式操作，也`不需要保存中間狀態`。
 
 ---
 
 ### 4. *實務選用建議*
-- **簡單處理用靜態方法**，快速、直覺。
-- **複雜、多步驟處理用動態方法**，可讀性高、彈性強。
-- 兩種方法**都很常用**，不是「一種就夠」的關係。
+
+- __簡單處理用靜態方法__，快速、直覺。
+- __複雜、多步驟處理用動態方法__，可讀性高、彈性強。
+- 兩種方法 __都很常用__，不是「一種就夠」的關係。
 
 ---
 
 ### 5. *例子比較表*
+
 | 需求                     | 靜態方法可行 | 動態方法可行 | 推薦用法         |
 |--------------------------|--------------|--------------|------------------|
 | 單步轉大寫               | ✔            | ✔            | 靜態或動態皆可   |
@@ -4493,18 +4058,18 @@ str('  hello world  ')
 ---
 
 ### 6. *小結*
-- **不是所有情境都能只用靜態方法**，尤其是多步驟、鏈式處理時。
+- __不是所有情境都能只用靜態方法__，尤其是多步驟、鏈式處理時。
 - 你可以根據需求選擇，兩種都要會用，這樣寫程式才會又快又彈性！
 
 ---
 
-#### **進階補充：靜態方法與動態方法的本質差異**
+#### **進階補充：`靜態方法`與`動態方法`的本質差異**
 
-1. *靜態方法到底「取用」什麼？*
-   - 靜態方法只能存取「`類別本身`」的靜態屬性和靜態方法，`不能存取物件（instance）`專屬的屬性和方法。
+1. *`靜態方法`到底「取用」什麼？*
+
+   - 靜態方法只能存取「_類別本身_」的`靜態屬性`和`靜態方法`，`不能存取物件（instance）`專屬的屬性和方法。
    - 靜態方法**沒有** `$this`，因為它不是屬於某個物件，而是屬於「類別」這個藍圖本身。
-   - 你可以想像「類別本身」就像一個全域的工具櫃，裡面放著大家都能用的工具（static 屬性/方法）。
-   
+   - 你可以想像「類別本身」就像一個全域的工具櫃，裡面放著大家都能用的工具（_static 屬性/方法_）。
    
 ```php
    class Demo {
@@ -4519,11 +4084,13 @@ str('  hello world  ')
    // Demo::setName('Vincent'); // 錯誤，不能用類別直接呼叫動態方法
    ```
 
-2. *靜態方法「會不會影響」原本的類別內容？*
-   - 靜態方法操作的是「`類別層級`」的資料（`static 屬性`），這些資料是「`所有人共用`」的。
+---
+
+2. *`靜態方法`「會不會影響」原本的類別內容？*
+
+   - 靜態方法操作的是「_類別層級_」的資料（`static 屬性`），這些資料是「_所有人共用_」的。
    - 如果你在`靜態方法`裡改變 `static 屬性`，會影響到所有地方（因為大家共用同一份）。
    - 但它**不會影響到任何物件的屬性**，因為根本沒物件存在。
-   
    
 ```php
    class Counter {
@@ -4534,9 +4101,11 @@ str('  hello world  ')
    Counter::add();
    echo Counter::$count; // 2，因為大家共用同一個 $count
    ```
+---
 
-3. *動態方法（instance method）才會有「獨立的 new」*
-   - 你 new 出來的每個物件，都有自己的屬性、自己的資料，互不影響。
+3. *`動態方法`（instance method）才會有「獨立的 new」*
+
+   - 你 `new` 出來的每個物件，__都有自己的屬性、自己的資料，互不影響__。
    - 動態方法可以操作自己的屬性`（$this->xxx）`，不會動到別的物件或類別本身的 `static` 屬性。
    
 ```php
@@ -4554,19 +4123,23 @@ str('  hello world  ')
    echo $b->name; // B
    ```
 
+---
+
 4. *總結比喻*
-   - **靜態方法**像「`公告欄`」：大家都看同一份，改了就全體都變。
-   - **動態方法**像「`個人記事本`」：每個人有自己的，互不干擾。
+
+   - `靜態方法`像「_公告欄_」：大家都看同一份，改了就全體都變。
+   - `動態方法`像「_個人記事本_」：每個人有自己的，互不干擾。
 
 ---
 
-#### **static 影響範圍與邊界**
+#### **`static` 影響範圍與邊界**
 
-1. *static 影響範圍是什麼？*
-   - `static 屬性/方法`是「**類別本身**」的，不屬於任何一個物件。
+1. *`static` 影響範圍是什麼？*
+
+   - `static 屬性/方法`是「__類別本身__」的，不屬於任何一個物件。
    - 只要是**同一個類別（class）**，不管你在哪裡呼叫、呼叫幾次，大家都共用同一份 `static` 屬性。
 
-**同一個類別，`static` 會共用**
+__同一個類別，`static` 會共用__
    
 ```php
    class Counter {
@@ -4585,9 +4158,11 @@ str('  hello world  ')
    $b->add();
    echo Counter::$count; // 4
    ```
-   - 不管用類別還是 new 出來的物件呼叫，都是改同一份 static 屬性。
+   - 不管用類別還是 `new` 出來的物件呼叫，都是改同一份 static 屬性。
 
-2. *不同類別，各自有自己的 static*
+---
+
+2. *不同類別，各自有自己的 `static`*
    
 ```php
    class A {
@@ -4601,9 +4176,11 @@ str('  hello world  ')
    echo A::$value; // 5
    echo B::$value; // 10
    ```
-   - `static` 屬性是「**每個類別自己有一份**」，不同類別互不影響。
+   - `static` 屬性是「__每個類別自己有一份__」，不同類別互不影響。
 
-3. *繼承的 static 會共用嗎？*
+---
+
+3. *繼承的 `static` 會共用嗎？*
    
 ```php
    class ParentClass {
@@ -4617,26 +4194,32 @@ str('  hello world  ')
    ```
    - 在 PHP 裡，`static` 屬性是繼承下來的，`父子類別共用同一份`（除非子類別自己宣告一個同名 static 屬性）。
 
-4. *static 影響「整個專案」嗎？*
-   - 只會影響「`同一個類別`」的所有地方，不會影響到其他類別。
+---
+
+4. *`static` 影響「整個專案」嗎？*
+
+   - 只會影響「_同一個類別_」的所有地方，不會影響到其他類別。
    - 你在專案任何地方改了這個類別的 static 屬性，所有用到這個類別的地方都會看到最新的值。
 
-5. *static 的「邊界」是什麼？*
-   - 邊界就是「`類別`」本身。
+---
+
+5. *`static` 的「邊界」是什麼？*
+   - 邊界就是「_類別_」本身。
    - 只要是同一個 class，static 屬性/方法就是共用的。
    - 不同 class，static 屬性互不干擾。
    - 如果有繼承，`父子類別預設共用同一份`（除非子類別自己宣告一個同名 static 屬性）。
 
 6. *生活化比喻*
-   - `static` 像「**公司公告欄**」：這家公司（class）所有員工（物件）都看同一個公告欄（static 屬性），公告一改，大家都看到新內容。
-   - `動態屬性`像「**員工個人記事本**」：每個員工（物件）有自己的記事本（屬性），互不干擾。
+
+   - `static` 像「__公司公告欄__」：這家 _公司（class）_ 所有 _員工（物件）_ 都看同一個 _公告欄（static 屬性）_，公告一改，大家都看到新內容。
+   - `動態屬性`像「__員工個人記事本__」：每個 _員工（物件）_ 有自己的 _記事本（屬性）_，互不干擾。
 
 ---
 
 #### **PHP 的傳值與傳址**
 
-1. *傳值（pass by value）*
-   - 傳進去的是「`副本`」，函式裡怎麼改，外面的變數都不會變。
+1. *傳值*（pass by value）
+   - 傳進去的是「_副本_」，函式裡怎麼改，外面的變數都不會變。
    - 例子：
      
      ```php
@@ -4647,10 +4230,12 @@ str('  hello world  ')
      foo($a);
      echo $a; // 5
      ```
-     - foo 裡面改的是 $x 的副本，$a 不受影響。
+     - `foo` 裡面改的是 `$x` 的副本，`$a` 不受影響。
 
-2. *傳址（pass by reference，傳參考）*
-   - 傳進去的是「`原本的位址`」，函式裡怎麼改，外面的變數也會跟著變。
+---
+
+2. *傳址*（pass by reference，傳參考）
+   - 傳進去的是「_原本的位址_」，函式裡怎麼改，外面的變數也會跟著變。
    - 例子：
      
      ```php
@@ -4661,7 +4246,9 @@ str('  hello world  ')
      foo($a);
      echo $a; // 10
      ```
-     - foo 裡面改 $x，其實就是改 $a，因為兩個`指向同一個記憶體位置`。
+     - `foo` 裡面改 `$x`，其實就是改 `$a`，因為兩個`指向同一個記憶體位置`。
+
+---
 
 3. *雙向影響*
    - `傳址`時，不管在裡面改還是外面改，都是同一份資料，彼此都會影響。
@@ -4682,6 +4269,8 @@ str('  hello world  ')
      bar($a); // 會印出 99
      ```
 
+---
+
    **更多雙向影響例子**：
    
    ```php
@@ -4700,6 +4289,8 @@ str('  hello world  ')
    echo $b;      // 99
    ```
 
+---
+
    **陣列、物件的雙向影響**：
    
    ```php
@@ -4716,8 +4307,10 @@ str('  hello world  ')
    echo $data['name'];      // Mr. Mary
    ```
 
-4. *傳值需要回傳才能改變*
-   - `傳值`時，函式裡改的是副本，要改變原本變數必須回傳並重新賦值。
+---
+
+4. *`傳值`需要回傳才能改變*
+   - `傳值`時，__函式裡改的是`副本`，要改變原本變數必須`回傳並重新賦值`__。
    - 例子：
      
      ```php
@@ -4730,6 +4323,8 @@ str('  hello world  ')
      echo $a;        // 15
      ```
 
+---
+
    **比較三種方式**：
    
    ```php
@@ -4741,6 +4336,8 @@ str('  hello world  ')
    foo1($a);        // 直接改 $a
    echo $a;         // 15
 
+---
+
    // 2. 傳值 + 回傳
    function foo2($x) {
        $x = $x + 10;
@@ -4749,6 +4346,8 @@ str('  hello world  ')
    $a = 5;
    $a = foo2($a);   // 回傳並重新賦值
    echo $a;         // 15
+
+---
 
    // 3. 傳值（不處理回傳）
    function foo3($x) {
@@ -4759,14 +4358,20 @@ str('  hello world  ')
    echo $a;         // 5
    ```
 
-5. *生活化比喻*
-   - **傳址**：你和朋友共用一個「`雲端記事本`」，你改內容，朋友馬上看到；朋友改內容，你也馬上看到。
-   - **傳值 + 回傳**：你複製一份給朋友，朋友改完後把改好的內容貼回你的原本。
-   - **傳值（不處理）**：你複製一份給朋友，朋友改他的副本，你的原本沒動。
+---
 
-6. *static 屬性與傳址的類比*
-   - `static 屬性/方法` ≈ **所有人**都用同一份資料（像傳址）
-   - `動態屬性/方法` ≈ **每個人**有自己的資料（像傳值）
-   - 但 static 跟傳值/傳址是不同層次的東西，只是「共用」這個行為有點像「傳址」的效果。
+5. *生活化比喻*
+
+   - __傳址__：你和朋友共用一個「_雲端記事本_」，你改內容，朋友馬上看到；朋友改內容，你也馬上看到。
+   - __傳值 + 回傳__：你複製一份給朋友，朋友改完後把改好的內容`貼回你的原本`。
+   - __傳值（不處理）__：你複製一份給朋友，朋友改他的副本，你的原本沒動。
+
+---
+
+6. *`static 屬性`與`傳址的`類比*
+
+   - `static 屬性/方法` ≈ __所有人__ 都用同一份資料（像 _傳址_）
+   - `動態屬性/方法` ≈ __每個人__ 有自己的資料（像 _傳值_）
+   - 但 `static` 跟`傳值/傳址`是不同層次的東西，只是「_共用_」這個行為有點像「_傳址_」的效果。
 
 ---
